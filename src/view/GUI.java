@@ -16,6 +16,20 @@ import javax.swing.SwingConstants;
 import javax.swing.JLayeredPane;
 import java.awt.GridBagLayout;
 import javax.swing.JToolBar;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JInternalFrame;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JList;
+import javax.swing.JSpinner;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class GUI extends JFrame {
 
@@ -42,7 +56,7 @@ public class GUI extends JFrame {
 	 */
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 405);
+		setBounds(100, 100, 450, 200);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -50,23 +64,45 @@ public class GUI extends JFrame {
 		JButton btnSudoku = new JButton("Sudoku");
 		menuBar.add(btnSudoku);
 		
-		JToolBar toolBar = new JToolBar();
-		menuBar.add(toolBar);
+		JButton btnStr8 = new JButton("Str8");
+		menuBar.add(btnStr8);
 		
-		JButton btnNewButton = new JButton("New button");
-		toolBar.add(btnNewButton);
+		JButton btnKiller = new JButton("Killer");
+		menuBar.add(btnKiller);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Sudoku - Rechner");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel lblNewLabel = new JLabel("Sudoku Rechner");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-		contentPane.add(lblNewLabel, BorderLayout.NORTH);
+		lblNewLabel.setBounds(124, 11, 180, 40);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Sudoku lösen lassen");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNewLabel_1.setBounds(63, 62, 127, 14);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Sudoku erstellen");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_2.setBounds(63, 92, 127, 14);
+		contentPane.add(lblNewLabel_2);
+		
+		JButton btnLeeresOeffnen = new JButton("Feld öffnen");
+		btnLeeresOeffnen.setBounds(315, 59, 102, 23);
+		contentPane.add(btnLeeresOeffnen);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Leicht", "Mittel", "Schwer"}));
+		comboBox.setBounds(200, 89, 89, 22);
+		contentPane.add(comboBox);
+		
+		JButton btnErstellen = new JButton("Erstellen");
+		btnErstellen.setBounds(315, 89, 102, 23);
+		contentPane.add(btnErstellen);
 		
 		
 	}
-
 }
