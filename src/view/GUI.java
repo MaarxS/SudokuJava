@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
 
 public class GUI extends JFrame {
 
@@ -37,42 +39,74 @@ public class GUI extends JFrame {
 	 */
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 200);
+		setBounds(100, 100, 450, 220);
 
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new GridLayout(0, 3, 0, 0));
+		
+		JPanel panel_6 = new JPanel();
+		contentPane.add(panel_6);
 
 		JLabel lblTitle = new JLabel("Sudoku Rechner");
 		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTitle.setBounds(124, 11, 180, 40);
 		contentPane.add(lblTitle);
-
+		
+		JPanel panel_7 = new JPanel();
+		contentPane.add(panel_7);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+		
 		JLabel lblSolveType = new JLabel("Sudoku lösen lassen");
-		lblSolveType.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblSolveType.setBounds(63, 62, 127, 14);
-		contentPane.add(lblSolveType);
-
+		lblSolveType.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSolveType.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblSolveType.setBounds(0, 11, 149, 38);
+		panel_1.add(lblSolveType);
+		
+		JPanel panel_5 = new JPanel();
+		contentPane.add(panel_5);
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JButton btnOpenEmpty = new JButton("Feld öffnen");
+		btnOpenEmpty.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnOpenEmpty.setBounds(10, 11, 100, 30);
+		panel.add(btnOpenEmpty);
+		
+		JPanel panel_2 = new JPanel();
+		contentPane.add(panel_2);
+		panel_2.setLayout(null);
+		
 		JLabel lblCreateType = new JLabel("Sudoku erstellen");
 		lblCreateType.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblCreateType.setBounds(63, 92, 127, 14);
-		contentPane.add(lblCreateType);
-
-		JButton btnLeeresOeffnen = new JButton("Feld öffnen");
-		btnLeeresOeffnen.setBounds(315, 59, 102, 23);
-		contentPane.add(btnLeeresOeffnen);
-
+		lblCreateType.setBounds(10, 0, 110, 38);
+		panel_2.add(lblCreateType);
+		
+		JPanel panel_3 = new JPanel();
+		contentPane.add(panel_3);
+		panel_3.setLayout(null);
+		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Leicht", "Mittel", "Schwer"}));
-		comboBox.setBounds(200, 89, 89, 22);
-		contentPane.add(comboBox);
-
-		JButton btnErstellen = new JButton("Erstellen");
-		btnErstellen.setBounds(315, 89, 102, 23);
-		contentPane.add(btnErstellen);
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		comboBox.setBounds(20, 5, 100, 30);
+		panel_3.add(comboBox);
+		
+		JPanel panel_4 = new JPanel();
+		contentPane.add(panel_4);
+		panel_4.setLayout(null);
+		
+		JButton btnCreate = new JButton("Erstellen");
+		btnCreate.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnCreate.setBounds(10, 5, 100, 30);
+		panel_4.add(btnCreate);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
