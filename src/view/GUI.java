@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.EventQueue;
+import view.EmptyField;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,6 +22,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUI extends JFrame {
 
@@ -47,13 +50,13 @@ public class GUI extends JFrame {
 	 */
 	public GUI() {
 		try {
-			UIManager.setLookAndFeel(new FlatDarculaLaf());
+			UIManager.setLookAndFeel(new FlatDarculaLaf());       
 		} catch (UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 470, 220);
+		setBounds(500, 100, 470, 220);
 
 
 		contentPane = new JPanel();
