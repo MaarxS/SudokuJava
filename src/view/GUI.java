@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
 import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.JLabel;
@@ -13,6 +17,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.BorderLayout;
 
 public class GUI extends JFrame {
@@ -39,6 +46,12 @@ public class GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public GUI() {
+		try {
+			UIManager.setLookAndFeel(new FlatDarculaLaf());
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 470, 220);
 
