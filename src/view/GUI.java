@@ -1,33 +1,31 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import view.EmptyField;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-
-import javax.swing.JButton;
-import javax.swing.JMenuBar;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.GridLayout;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EmptyBorder;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import com.formdev.flatlaf.FlatDarculaLaf;
+
+import controller.Controller;
 
 public class GUI extends JFrame {
 
 	private JPanel contentPane;
+
+	
 
 	/**
 	 * Launch the application.
@@ -201,5 +199,9 @@ public class GUI extends JFrame {
 			lblSolveType.setText("Killer lösen lassen");
 		});
 		menuBar.add(btnModeKiller);
+		
+		Controller controller = new Controller(this);
+		btnOpenEmpty.addActionListener(controller::emptyFieldButtonOnClick);
 	}
+
 }
