@@ -13,12 +13,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import controller.Controller;
+
 public class EmptyField extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblTitleField;
 	private JPanel panel;
-	private JTextField textField;
 	private JPanel panel_1;
 	private JPanel panel_2;
 	private JPanel panel_3;
@@ -28,7 +29,7 @@ public class EmptyField extends JFrame {
 	private JButton btnClearFields;
 
 	public EmptyField() {
-		
+
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
@@ -49,7 +50,7 @@ public class EmptyField extends JFrame {
 
 		panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
-		
+
 		btnClearFields = new JButton("Felder löschen");
 		panel_1.add(btnClearFields);
 
@@ -91,5 +92,13 @@ public class EmptyField extends JFrame {
 			}
 		}
 	}
-
+	public JTextField[] getTextfield() {
+		return tf;
+	}
+	public void setTextfield(int value, int index) {
+		tf[index].setText(String.valueOf(value));;
+	}
 }
+
+
+
