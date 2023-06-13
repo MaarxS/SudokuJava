@@ -16,6 +16,7 @@ import java.awt.Rectangle;
 import java.awt.Component;
 import java.awt.Dimension;
 import com.jgoodies.forms.layout.FormLayout;
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
@@ -28,21 +29,23 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class EmptyField extends JFrame {
 
 	private JPanel contentPane;
-	private JLabel lblNewLabel;
+	private JLabel lblTitleField;
 	private JPanel panel;
 	private JTextField textField;
 	private JPanel panel_1;
 	private JPanel panel_2;
 	private JPanel panel_3;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton_2;
+	private JButton btnSolve;
 	private JTextField[] tf = new JTextField[81];
 	private JPanel[] panels = new JPanel[9];
+	private JButton btnClearFields;
 
 	/**
 	 * Launch the application.
@@ -64,6 +67,12 @@ public class EmptyField extends JFrame {
 	 * Create the frame.
 	 */
 	public EmptyField() {
+		try {
+			UIManager.setLookAndFeel(new FlatDarculaLaf());       
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
@@ -72,9 +81,10 @@ public class EmptyField extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		lblNewLabel = new JLabel("New label");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-		contentPane.add(lblNewLabel, BorderLayout.NORTH);
+		lblTitleField = new JLabel("Sudoku");
+		lblTitleField.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitleField.setFont(new Font("Tahoma", Font.BOLD, 16));
+		contentPane.add(lblTitleField, BorderLayout.NORTH);
 
 		panel = new JPanel();
 		panel.setOpaque(false);
@@ -83,21 +93,18 @@ public class EmptyField extends JFrame {
 
 		panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
+		
+		btnClearFields = new JButton("Felder löschen");
+		panel_1.add(btnClearFields);
 
-		btnNewButton = new JButton("New button");
-		panel_1.add(btnNewButton);
+		btnSolve = new JButton("Sudoku lösen");
+		panel_1.add(btnSolve);
 
 		panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
 
-		btnNewButton_1 = new JButton("New button");
-		panel_2.add(btnNewButton_1);
-
 		panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
-
-		btnNewButton_2 = new JButton("New button");
-		panel_3.add(btnNewButton_2);
 
 		for(int i = 0; i < 9; i++) {
 			panels[i]  = new JPanel();
@@ -111,6 +118,7 @@ public class EmptyField extends JFrame {
 		int j = 0;
 		while (i < 81) {
 			tf[i]  = new JTextField();
+			tf[i].setHorizontalAlignment(JTextField.CENTER);
 			tf[i].setText(String.valueOf(i));
 			panels[j].add(tf[i]);
 			tf[i].setColumns(3);

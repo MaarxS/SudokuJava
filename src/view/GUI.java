@@ -182,6 +182,7 @@ public class GUI extends JFrame {
 			lblTitle.setText("Sudoku Rechner");
 			lblCreateType.setText("Sudoku erstellen");
 			lblSolveType.setText("Sudoku lösen lassen");
+		
 		});
 		menuBar.add(btnModeSudoku);
 
