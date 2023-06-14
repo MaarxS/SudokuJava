@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controller;
+import controller.FieldController;
 
 public class EmptyField extends JFrame {
 
@@ -28,7 +29,7 @@ public class EmptyField extends JFrame {
 	private JPanel[] panels = new JPanel[9];
 	private JButton btnClearFields;
 
-	public EmptyField() {
+	public EmptyField(FieldController fieldController) {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
@@ -53,9 +54,11 @@ public class EmptyField extends JFrame {
 
 		btnClearFields = new JButton("Felder löschen");
 		panel_1.add(btnClearFields);
+		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
 		btnSolve = new JButton("Sudoku lösen");
 		panel_1.add(btnSolve);
+		btnSolve.addActionListener(fieldController::solveOnClick);
 
 		panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
@@ -63,42 +66,40 @@ public class EmptyField extends JFrame {
 		panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
 
-		for(int i = 0; i < 9; i++) {
-			panels[i]  = new JPanel();
+		for (int i = 0; i < 9; i++) {
+			panels[i] = new JPanel();
 			panels[i].setBorder(BorderFactory.createEtchedBorder());
 			panels[i].setLayout(new GridLayout(3, 3, 0, 0));
 			panel.add(panels[i]);
-
 
 		}
 		int i = 0;
 		int j = 0;
 		while (i < 81) {
-			tf[i]  = new JTextField();
+			tf[i] = new JTextField();
 			tf[i].setHorizontalAlignment(JTextField.CENTER);
 			tf[i].setText(String.valueOf(i));
 			panels[j].add(tf[i]);
 			tf[i].setColumns(3);
 			i++;
-			if(i%3 == 0) {
+			if (i % 3 == 0) {
 				j++;
-				if(j==3 && i < 27) {
-					j= 0;
-				}else if (j==6 && i < 54) {
+				if (j == 3 && i < 27) {
+					j = 0;
+				} else if (j == 6 && i < 54) {
 					j = 3;
-				}else if (j == 9 && i < 81){
-					j=6;
+				} else if (j == 9 && i < 81) {
+					j = 6;
 				}
 			}
 		}
 	}
+
 	public JTextField[] getTextfield() {
 		return tf;
 	}
-	public void setTextfield(int value, int index) {
-		tf[index].setText(String.valueOf(value));;
+
+	public void setTextfield(String value, int index) {
+		tf[index].setText(value);
 	}
 }
-
-
-
