@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,7 +8,10 @@ public class FieldGenerator {
 	
 	public static void main(String[] args) {
 		Field field = new SudokuField();
-		new FieldGenerator().generateSimple(field);
+		long nanos = System.nanoTime();
+		new FieldGenerator().generateRecursive(field, 0);
+		long elapsed = System.nanoTime() - nanos;
+		System.out.printf("%.3f%n", elapsed / 1000000f);
 		System.out.println(field);
 	}
 	
@@ -29,8 +31,10 @@ public class FieldGenerator {
 		return field;
 	}
 	
-	public boolean generateRecursive(Field field, int number, int placed) {
-		if (number > 9) return true; // field finished
+	public boolean generateRecursive(Field field, int depth) {
+		final int BACKTRACK_STEP_SIZE = 4; // skips this amount of backtracks
+		if (depth == 81) return true; // field finished
+		int number = (depth / 9) + 1;
 		
 		List<int[]> possible = possibleFields(field, number);
 		if (possible.size() == 0) return false; // if no field is possible, backtrack
@@ -38,16 +42,12 @@ public class FieldGenerator {
 		int[] coordinates = removeRandom(possible);
 		field.set(coordinates[0], coordinates[1], number);
 		
-		// calculate next parameters
-		placed++;
-		int nextNumber = number + placed / 9;
-		int nextPlaced = placed % 9;
-		
-		while (!generateRecursive(field, nextNumber, nextPlaced)) {
+		while (!generateRecursive(field, depth + 1)) {
 			field.set(coordinates[0], coordinates[1], 0); // remove last number
-			if (possible.size() == 0 || placed != 1) { // backtrack 10 at once for performance
+			if (possible.size() == 0 || depth % BACKTRACK_STEP_SIZE != 0) {
 				return false;
 			}
+			// choose random field and set it
 			coordinates = removeRandom(possible);
 			field.set(coordinates[0], coordinates[1], number);
 		}
@@ -55,7 +55,7 @@ public class FieldGenerator {
 	}
 	
 	private List<int[]> possibleFields(Field field, int value) {
-		List<int[]> list = new LinkedList<>();
+		List<int[]> list = new ArrayList<>();
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
 				if (field.get(x, y) != 0) continue;
