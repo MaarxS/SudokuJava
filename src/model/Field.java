@@ -9,5 +9,7 @@ public interface Field {
 	public boolean isEditable(int x, int y);
 	
 	public boolean isCorrect(int x, int y);
+
+	boolean isPossible(int x, int y, int value);
 	
 }

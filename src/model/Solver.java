@@ -75,15 +75,12 @@ public class Solver {
 	}
 	
 	private int countPossibilities(int x, int y) {
-		int temp = field.get(x, y);
 		int count = 0;
 		for (int i = 1; i <= 9; i++) {
-			field.set(x, y, i);
-			if (field.isCorrect(x, y)) {
+			if (field.isPossible(x, y, i)) {
 				count++;
 			}
 		}
-		field.set(x, y, temp);
 		return count;
 	}
 }
