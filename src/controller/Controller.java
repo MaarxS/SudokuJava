@@ -5,12 +5,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 
 import model.Field;
+import model.SudokuField;
 import view.EmptyField;
 import view.GUI;
 
+
 public class Controller {
 	private EmptyField emptyField;
-	private int[][] playerfield = new int[9][9];
 
 	public Controller(GUI gui) {
 	}
@@ -54,8 +55,9 @@ public class Controller {
 		int x = 0;
 		int y = 0;
 		JTextField[] field = emptyField.getTextfield();
+		SudokuField sudoku = new SudokuField();
 		for(int i = 0; i < 81; i++) {
-			playerfield[x][y] = Integer.parseInt(field[i].getText());
+			sudoku.set(x, y, Integer.parseInt(field[i].getText()));
 			if(x == 9) {
 				x = 0;
 				y++;
