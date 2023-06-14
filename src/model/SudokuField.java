@@ -15,34 +15,30 @@ public class SudokuField implements Field {
 
 	@Override
 	public boolean isEditable(int x, int y) {
-		int num = grid[x][y];
-		if (num == 0) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCorrect(int x, int y) {
-
-		int num = grid[x][y];
-		if (num == 0) {
+		int value = grid[x][y];
+		if (value == 0) {
 			return true;
 		}
 		grid[x][y] = 0;
+		boolean result = isPossible(x, y, value);
+		grid[x][y] = value;
+		return result;
+	}
+	
+	@Override
+	public boolean isPossible(int x, int y, int value) {
 		// check rows
-		for (int i = 0; i < 10; i++) {
-			if (num == grid[x][i]) {
-				grid[x][y] = num;
-				return false;
-			}
+		for (int i = 0; i < 9; i++) {
+			if (value == grid[x][i]) return false;
 		}
 		// check columns
-		for (int i = 0; i < 10; i++) {
-			if (num == grid[i][y]) {
-				grid[x][y] = num;
-				return false;
-			}
+		for (int i = 0; i < 9; i++) {
+			if (value == grid[i][y]) return false;
 		}
 
 		// check cells
@@ -50,16 +46,28 @@ public class SudokuField implements Field {
 		int cellY = (y / 3) * 3;
 		for (int i = cellX; i < cellX + 3; i++) {
 			for (int j = cellY; j < cellY + 3; j++) {
-				if (grid[i][j] == num) {
-					grid[x][y] = num;
-					return false;
-				}
+				if (grid[i][j] == value) return false;
 			}
 		}
-		grid[x][y] = num;
 		return true;
-
-		// return false;
 	}
 
+	@Override
+	public String toString() {
+//		final String ANSI_RESET = "\u001B[0m";
+//		final String ANSI_RED = "\u001B[31m";
+//		final String ANSI_GREY = "\u001B[30m";
+		StringBuilder builder = new StringBuilder();
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid.length; x++) {
+//				if (isCorrect(x, y)) builder.append(ANSI_RESET);
+//				else builder.append(ANSI_RED);
+//				if (!isEditable(x, y)) builder.append(ANSI_GREY);
+				builder.append(grid[x][y]);
+				builder.append(" ");
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
+	}
 }
