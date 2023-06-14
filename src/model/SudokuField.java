@@ -31,14 +31,14 @@ public class SudokuField implements Field {
 		}
 		grid[x][y] = 0;
 		// check rows
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			if (num == grid[x][i]) {
 				grid[x][y] = num;
 				return false;
 			}
 		}
 		// check columns
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			if (num == grid[i][y]) {
 				grid[x][y] = num;
 				return false;
@@ -62,4 +62,16 @@ public class SudokuField implements Field {
 		// return false;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid.length; x++) {
+				builder.append(grid[x][y]);
+				builder.append(" ");
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
+	}
 }
