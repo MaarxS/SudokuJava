@@ -14,16 +14,16 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controller;
-import controller.FieldController;
+import controller.SudokuController;
 
-public class EmptyField extends JFrame {
+public class SudokuFieldGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField[] tf = new JTextField[81];
 	private JPanel[] panels = new JPanel[9];
 	private JLabel lblTitleField;
 
-	public EmptyField(FieldController fieldController) {
+	public SudokuFieldGUI(SudokuController fieldController) {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);

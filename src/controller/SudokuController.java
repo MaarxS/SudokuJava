@@ -8,20 +8,20 @@ import javax.swing.JTextField;
 
 import model.Field;
 import model.SudokuField;
-import view.EmptyField;
+import view.SudokuFieldGUI;
 import model.Solver;
 
-public class FieldController {
+public class SudokuController {
 	
 	
-	private EmptyField emptyField;
+	private SudokuFieldGUI emptyField;
 	private Field playerField;
 	private SudokuField playerSudoku;
 	
-	public FieldController(SudokuField sudoku) {
+	public SudokuController(SudokuField sudoku) {
 		playerSudoku = sudoku;
 		try {
-			EmptyField frame = new EmptyField(this);
+			SudokuFieldGUI frame = new SudokuFieldGUI(this);
 			frame.setVisible(true);
 			emptyField = frame;
 		} catch (Exception event) {

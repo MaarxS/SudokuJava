@@ -18,7 +18,7 @@ public class Controller {
 	public void emptyFieldButtonOnClick(ActionEvent e) {
 		
 		SudokuField sudoku = new SudokuField();
-		new FieldController(sudoku);
+		new SudokuController(sudoku);
 	}
 	
 	
