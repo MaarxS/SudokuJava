@@ -19,15 +19,9 @@ import controller.FieldController;
 public class EmptyField extends JFrame {
 
 	private JPanel contentPane;
-	private JLabel lblTitleField;
-	private JPanel panel;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JPanel panel_3;
-	private JButton btnSolve;
 	private JTextField[] tf = new JTextField[81];
 	private JPanel[] panels = new JPanel[9];
-	private JButton btnClearFields;
+	private JLabel lblTitleField;
 
 	public EmptyField(FieldController fieldController) {
 
@@ -44,26 +38,26 @@ public class EmptyField extends JFrame {
 		lblTitleField.setFont(new Font("Tahoma", Font.BOLD, 16));
 		contentPane.add(lblTitleField, BorderLayout.NORTH);
 
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(3, 3, 0, 0));
 
-		panel_1 = new JPanel();
+		JPanel panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
-		btnClearFields = new JButton("Felder löschen");
+		JButton btnClearFields = new JButton("Felder löschen");
 		panel_1.add(btnClearFields);
 		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
-		btnSolve = new JButton("Sudoku lösen");
+		JButton btnSolve = new JButton("Sudoku lösen");
 		panel_1.add(btnSolve);
 		btnSolve.addActionListener(fieldController::solveOnClick);
 
-		panel_2 = new JPanel();
+		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
 
-		panel_3 = new JPanel();
+		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
 
 		for (int i = 0; i < 9; i++) {
