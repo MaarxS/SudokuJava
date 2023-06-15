@@ -78,7 +78,7 @@ public class EmptyField extends JFrame {
 		while (i < 81) {
 			tf[i] = new JTextField();
 			tf[i].setHorizontalAlignment(JTextField.CENTER);
-			tf[i].setText(String.valueOf(i));
+			tf[i].setFont(new Font("Tahoma", Font.BOLD, 11));
 			panels[j].add(tf[i]);
 			tf[i].setColumns(3);
 			i++;

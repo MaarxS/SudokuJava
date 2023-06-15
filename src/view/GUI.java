@@ -24,6 +24,7 @@ import controller.Controller;
 public class GUI extends JFrame {
 
 	private JPanel contentPane;
+	private JLabel[] labelList = new JLabel[9];
 
 	
 
@@ -70,10 +71,10 @@ public class GUI extends JFrame {
 		contentPane.add(panel_24);
 		panel_24.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblTitle = new JLabel("Sudoku Rechner");
-		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
-		panel_24.add(lblTitle, BorderLayout.CENTER);
+		labelList[0] = new JLabel("Sudoku Rechner");
+		labelList[0].setHorizontalAlignment(SwingConstants.CENTER);
+		labelList[0].setFont(new Font("Tahoma", Font.BOLD, 16));
+		panel_24.add(labelList[0], BorderLayout.CENTER);
 		
 		JPanel panel_7 = new JPanel();
 		contentPane.add(panel_7);
@@ -82,10 +83,10 @@ public class GUI extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblSolveType = new JLabel("Sudoku lösen lassen");
-		lblSolveType.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblSolveType.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblSolveType);
+		labelList[1] = new JLabel("Sudoku lösen lassen");
+		labelList[1].setFont(new Font("Tahoma", Font.BOLD, 13));
+		labelList[1].setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(labelList[1]);
 		
 		JPanel panel_22 = new JPanel();
 		panel_1.add(panel_22, BorderLayout.NORTH);
@@ -120,10 +121,10 @@ public class GUI extends JFrame {
 		contentPane.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblCreateType = new JLabel("Sudoku erstellen");
-		lblCreateType.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCreateType.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panel_2.add(lblCreateType);
+		labelList[2] = new JLabel("Sudoku erstellen");
+		labelList[2].setHorizontalAlignment(SwingConstants.CENTER);
+		labelList[2].setFont(new Font("Tahoma", Font.BOLD, 13));
+		panel_2.add(labelList[2]);
 		
 		JPanel panel_20 = new JPanel();
 		panel_2.add(panel_20, BorderLayout.NORTH);
@@ -171,37 +172,28 @@ public class GUI extends JFrame {
 		
 		JPanel panel_15 = new JPanel();
 		panel_4.add(panel_15, BorderLayout.SOUTH);
+		
+		Controller controller = new Controller(this);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		JButton btnModeSudoku = new JButton("Sudoku");
-		btnModeSudoku.addActionListener(event -> {
-			lblTitle.setText("Sudoku Rechner");
-			lblCreateType.setText("Sudoku erstellen");
-			lblSolveType.setText("Sudoku lösen lassen");
-		
-		});
+		btnModeSudoku.addActionListener(controller:: modeSudokuOnClick);		
 		menuBar.add(btnModeSudoku);
 
 		JButton btnModeStr8 = new JButton("Str8");
-		btnModeStr8.addActionListener(event -> {
-			lblTitle.setText("Str8 Rechner");
-			lblCreateType.setText("Str8 erstellen");
-			lblSolveType.setText("Str8 lösen lassen");
-		});
+		btnModeStr8.addActionListener(controller::modeStr8OnClick);
 		menuBar.add(btnModeStr8);
 
 		JButton btnModeKiller = new JButton("Killer");
-		btnModeKiller.addActionListener(event -> {
-			lblTitle.setText("Killer Rechner");
-			lblCreateType.setText("Killer erstellen");
-			lblSolveType.setText("Killer lösen lassen");
-		});
+		btnModeKiller.addActionListener(controller::modeKillerOnClick);
 		menuBar.add(btnModeKiller);
 		
-		Controller controller = new Controller(this);
 		btnOpenEmpty.addActionListener(controller::emptyFieldButtonOnClick);
+	}
+	public void setLabelList(int index, String text) {
+		labelList[index].setText(text);
 	}
 
 }
