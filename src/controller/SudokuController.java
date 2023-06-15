@@ -16,10 +16,9 @@ public class SudokuController {
 	
 	private SudokuFieldGUI emptyField;
 	private Field playerField;
-	private SudokuField playerSudoku;
 	
 	public SudokuController(SudokuField sudoku) {
-		playerSudoku = sudoku;
+		playerField = sudoku;
 		try {
 			SudokuFieldGUI frame = new SudokuFieldGUI(this);
 			frame.setVisible(true);
@@ -27,6 +26,7 @@ public class SudokuController {
 		} catch (Exception event) {
 			event.printStackTrace();
 		}
+		setEmptyField(sudoku);
 
 	}
 	public void clearFieldOnClick(ActionEvent e) {
@@ -70,7 +70,6 @@ public class SudokuController {
 		boolean isCorrect = true;
 		JTextField[] field = emptyField.getTextfield();
 		
-		playerField = playerSudoku;
 		for(int i = 0; i < 81; i++) {
 
 			if(field[i].getText().equals("0")) {
@@ -78,14 +77,14 @@ public class SudokuController {
 				isCorrect = false;
 			}
 			else if(field[i].getText().equals("")) {
-				playerSudoku.set(x, y, 0);
+				playerField.set(x, y, 0);
 				field[i].setBackground(new Color(70, 73, 75));
 			}else {
 
 				try {
-					playerSudoku.set(x, y, Integer.parseInt(field[i].getText()));
+					playerField.set(x, y, Integer.parseInt(field[i].getText()));
 					field[i].setBackground(new Color(70, 73, 75));
-					if(playerSudoku.get(x, y) > 9) {
+					if(playerField.get(x, y) > 9) {
 						field[i].setBackground(new Color(148, 46, 46));
 						isCorrect = false;
 					}

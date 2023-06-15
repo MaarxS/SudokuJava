@@ -48,6 +48,8 @@ public class GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public GUI() {
+		Controller controller = new Controller(this);
+		
 		try {
 			UIManager.setLookAndFeel(new FlatDarculaLaf());       
 		} catch (UnsupportedLookAndFeelException e) {
@@ -159,6 +161,7 @@ public class GUI extends JFrame {
 		
 		JButton btnCreate = new JButton("Erstellen");
 		btnCreate.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnCreate.addActionListener(controller::onClickCreate);
 		panel_4.add(btnCreate);
 		
 		JPanel panel_12 = new JPanel();
@@ -173,8 +176,6 @@ public class GUI extends JFrame {
 		JPanel panel_15 = new JPanel();
 		panel_4.add(panel_15, BorderLayout.SOUTH);
 		
-		Controller controller = new Controller(this);
-
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 

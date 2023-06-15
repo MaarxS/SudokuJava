@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 
+import model.FieldGenerator;
 import model.SudokuField;
 import view.GUI;
 
@@ -9,6 +10,7 @@ import view.GUI;
 public class Controller {
 	
 	private GUI mainGUI;
+	private FieldGenerator fieldGenerator = new FieldGenerator();
 	
 	public Controller(GUI gui) {
 		mainGUI = gui;
@@ -21,6 +23,11 @@ public class Controller {
 		new SudokuController(sudoku);
 	}
 	
+	public void onClickCreate(ActionEvent e) {
+		SudokuField sudoku = new SudokuField();
+		fieldGenerator.generateSolvable(sudoku);
+		new SudokuController(sudoku);
+	}
 	
 	public void modeSudokuOnClick(ActionEvent e) {
 		
