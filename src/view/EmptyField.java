@@ -102,4 +102,8 @@ public class EmptyField extends JFrame {
 	public void setTextfield(String value, int index) {
 		tf[index].setText(value);
 	}
+	
+	public void setTitle(String title) {
+		lblTitleField.setText(title);
+	}
 }

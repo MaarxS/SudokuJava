@@ -12,9 +12,14 @@ import view.EmptyField;
 import model.Solver;
 
 public class FieldController {
+	
+	
 	private EmptyField emptyField;
 	private Field playerField;
-	public FieldController() {
+	private SudokuField playerSudoku;
+	
+	public FieldController(SudokuField sudoku) {
+		playerSudoku = sudoku;
 		try {
 			EmptyField frame = new EmptyField(this);
 			frame.setVisible(true);
@@ -64,8 +69,8 @@ public class FieldController {
 		int y = 0;
 		boolean isCorrect = true;
 		JTextField[] field = emptyField.getTextfield();
-		SudokuField sudoku = new SudokuField();
-		playerField = sudoku;
+		
+		playerField = playerSudoku;
 		for(int i = 0; i < 81; i++) {
 
 			if(field[i].getText().equals("0")) {
@@ -73,14 +78,14 @@ public class FieldController {
 				isCorrect = false;
 			}
 			else if(field[i].getText().equals("")) {
-				sudoku.set(x, y, 0);
+				playerSudoku.set(x, y, 0);
 				field[i].setBackground(new Color(70, 73, 75));
 			}else {
 
 				try {
-					sudoku.set(x, y, Integer.parseInt(field[i].getText()));
+					playerSudoku.set(x, y, Integer.parseInt(field[i].getText()));
 					field[i].setBackground(new Color(70, 73, 75));
-					if(sudoku.get(x, y) > 9) {
+					if(playerSudoku.get(x, y) > 9) {
 						field[i].setBackground(new Color(148, 46, 46));
 						isCorrect = false;
 					}

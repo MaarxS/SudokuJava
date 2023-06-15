@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 
+import model.SudokuField;
 import view.GUI;
 
 
@@ -16,7 +17,8 @@ public class Controller {
 	
 	public void emptyFieldButtonOnClick(ActionEvent e) {
 		
-		new FieldController();
+		SudokuField sudoku = new SudokuField();
+		new FieldController(sudoku);
 	}
 	
 	
