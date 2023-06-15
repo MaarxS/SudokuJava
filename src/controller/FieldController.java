@@ -1,7 +1,9 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import model.Field;
@@ -28,7 +30,10 @@ public class FieldController {
 		}
 	}
 	public void solveOnClick(ActionEvent e) {
-		getEmptyField();
+		boolean inputCorrect = getEmptyField();
+		if(!inputCorrect) {
+			return;
+		}
 		Solver solver = new Solver(playerField);
 		solver.solve();
 		setEmptyField(playerField);
@@ -50,29 +55,51 @@ public class FieldController {
 				x = 0;
 				y++;
 			}
-			
+
 		}
 	}
-	public void getEmptyField() {
+	public boolean getEmptyField() {
 
 		int x = 0;
 		int y = 0;
+		boolean isCorrect = true;
 		JTextField[] field = emptyField.getTextfield();
 		SudokuField sudoku = new SudokuField();
 		playerField = sudoku;
 		for(int i = 0; i < 81; i++) {
-			if(field[i].getText().equals("")) {
+
+			if(field[i].getText().equals("0")) {
+				field[i].setBackground(new Color(148, 46, 46));
+				isCorrect = false;
+			}
+			else if(field[i].getText().equals("")) {
 				sudoku.set(x, y, 0);
+				field[i].setBackground(new Color(70, 73, 75));
 			}else {
-				sudoku.set(x, y, Integer.parseInt(field[i].getText()));
+
+				try {
+					sudoku.set(x, y, Integer.parseInt(field[i].getText()));
+					field[i].setBackground(new Color(70, 73, 75));
+					if(sudoku.get(x, y) > 9) {
+						field[i].setBackground(new Color(148, 46, 46));
+						isCorrect = false;
+					}
+				}catch(NumberFormatException e) {
+					field[i].setBackground(new Color(148, 46, 46));
+					isCorrect = false;
+				}
 			}
 			x++;
 			if(x == 9) {
 				x = 0;
 				y++;
 			}
-			
+
 		}
+		if(!isCorrect) {
+			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
+		}
+		return isCorrect;
 	}
 
 }
