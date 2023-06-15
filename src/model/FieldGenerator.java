@@ -9,6 +9,7 @@ public class FieldGenerator {
 	public static void main(String[] args) {
 		Field field = new SudokuField();
 		long nanos = System.nanoTime();
+		
 		new FieldGenerator().generateRecursive(field, 0);
 		long elapsed = System.nanoTime() - nanos;
 		System.out.printf("%.3f%n", elapsed / 1000000f);
@@ -16,6 +17,16 @@ public class FieldGenerator {
 	}
 	
 	private Random random = new Random();
+	
+	public Field generateSolvable(Field field) {
+		generateRecursive(field, 0);
+		for (int i = 0; i < 80; i++) {
+			int x = random.nextInt(9);
+			int y = random.nextInt(9);
+			field.set(x, y, 0);
+		}
+		return field;
+	}
 	
 	public Field generateSimple(Field field) {
 		for (int number = 1; number <= 9; number++) {
@@ -31,10 +42,10 @@ public class FieldGenerator {
 		return field;
 	}
 	
-	public boolean generateRecursive(Field field, int depth) {
+	public boolean generateRecursive(Field field, int iteration) {
 		final int BACKTRACK_STEP_SIZE = 4; // skips this amount of backtracks
-		if (depth == 81) return true; // field finished
-		int number = (depth / 9) + 1;
+		if (iteration == 81) return true; // field finished
+		int number = (iteration / 9) + 1;
 		
 		List<int[]> possible = possibleFields(field, number);
 		if (possible.size() == 0) return false; // if no field is possible, backtrack
@@ -42,9 +53,9 @@ public class FieldGenerator {
 		int[] coordinates = removeRandom(possible);
 		field.set(coordinates[0], coordinates[1], number);
 		
-		while (!generateRecursive(field, depth + 1)) {
+		while (!generateRecursive(field, iteration + 1)) {
 			field.set(coordinates[0], coordinates[1], 0); // remove last number
-			if (possible.size() == 0 || depth % BACKTRACK_STEP_SIZE != 0) {
+			if (possible.size() == 0 || iteration % BACKTRACK_STEP_SIZE != 0) {
 				return false;
 			}
 			// choose random field and set it
