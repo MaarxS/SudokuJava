@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTextField;
 
-import model.SudokuField;
+import model.Str8tsField;
 import view.Str8tsFieldGUI;
 
 
@@ -15,8 +15,8 @@ public class Str8tsController extends SudokuController{
 
 	private Str8tsFieldGUI fieldGUI;
 
-	public Str8tsController(SudokuField str8) {
-		super(str8);
+	public Str8tsController(Str8tsField str8tsField) {
+		super(str8tsField);
 	}
 	
 	public void setGUI(Str8tsFieldGUI str8tsFieldGUI) {

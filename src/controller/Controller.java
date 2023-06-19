@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 
 import model.FieldGenerator;
+import model.Str8tsField;
 import model.SudokuField;
 import view.GUI;
 import view.Str8tsFieldGUI;
@@ -43,7 +44,7 @@ public class Controller {
 			break;
 			
 		case "Str8":
-			SudokuField str8tsField = new SudokuField();
+			Str8tsField str8tsField = new Str8tsField();
 			if (!isNewFieldEmpty) {
 				fieldGenerator.generateSolvable(str8tsField);
 			}

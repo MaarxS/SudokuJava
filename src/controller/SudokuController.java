@@ -20,7 +20,7 @@ public class SudokuController {
 	private Field playerField;
 	protected JTextField[] field;
 	
-	public SudokuController(SudokuField sudoku) {
+	public SudokuController(Field sudoku) {
 		playerField = sudoku;
 	}
 	

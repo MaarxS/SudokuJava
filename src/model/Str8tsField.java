@@ -9,45 +9,24 @@ public class Str8tsField implements Field {
 	// Double digits are black fields
 	// Value of the black fields is calculated with mod 10
 	// 0 means blank fields
-		private int[][] fields=
-		{{10,10,1,2,10,7,6,10,18},
-		{4,3,2,1,10,6,8,7,5},
-		{5,4,10,3,2,19,7,8,6},
-		{10,5,4,10,3,2,10,16,7},
-		{10,10,5,6,10,1,2,3,4},
-		{6,7,3,5,4,10,1,2,10},
-		{7,8,10,10,6,5,3,4,10},
-		{13,9,8,17,5,4,10,1,2},
-		{10,6,9,8,7,10,4,5,3}};
+	private int[][] fields = new int[9][9];
 		
-		private int[][] fieldsEmpty=
-			{{10,10,0,2,10,7,0,10,18},
-				{4,0,0,0,10,0,8,0,0},
-				{0,0,10,0,2,19,0,0,0},
-				{10,0,0,10,3,2,10,16,7},
-				{10,10,0,0,10,1,0,3,4},
-				{0,0,3,0,0,10,0,2,10},
-				{7,0,10,10,0,0,0,0,10},
-				{13,9,0,17,0,0,10,1,0},
-				{10,0,9,0,0,10,4,0,0}};
-
-//	private int[][] fields = new int[9][9];
-//	public Str8tsField() {
-//		for (int i = 0; i < fields.length; i++) {
-//			for (int j = 0; j < fields[i].length; j++) {
-//				fields[i][j] = 0;
-//			}
-//		}
-//	}
+	public Str8tsField() {
+		for (int i = 0; i < fields.length; i++) {
+			for (int j = 0; j < fields[i].length; j++) {
+				fields[i][j] = 0;
+			}
+		}
+	}
 	
 	@Override
 	public void set(int x, int y, int value) {
-		fields[x][y] = value;
+		fields[x][y] = value + (fields[x][y] / 10) * 10;
 	}
 
 	@Override
 	public int get(int x, int y) {
-		return fields[x][y];
+		return fields[x][y] % 10;
 	}
 
 	@Override
@@ -163,5 +142,14 @@ public class Str8tsField implements Field {
 		}
 		return true;
 }
+
+	@Override
+	public boolean isPossible(int x, int y, int value) {
+		int temp = fields[x][y];
+		fields[x][y] = value;
+		boolean result = isCorrect(x, y);
+		fields[x][y] = temp;
+		return result;
+	}
 
 }
