@@ -31,10 +31,7 @@ public class Str8tsField implements Field {
 
 	@Override
 	public boolean isEditable(int x, int y) {
-		if (fields[x][y] == 0) {
-			return true;
-		} 
-		return false;
+		return true;
 	}
 	
 	public boolean isBlack(int x, int y) {
