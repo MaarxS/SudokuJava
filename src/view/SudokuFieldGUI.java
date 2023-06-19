@@ -87,7 +87,6 @@ public class SudokuFieldGUI extends JFrame {
 				}
 			}
 		}
-		System.out.println(addOn);
 		if(!addOn) {
 			btnSolve.setText("Lösung überprüfen");
 			

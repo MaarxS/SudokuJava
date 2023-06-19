@@ -18,18 +18,8 @@ public class SudokuController {
 	private Field playerField;
 	JTextField[] field = new JTextField[81];
 	
-	public SudokuController(SudokuField sudoku, boolean extraButton) {
+	public SudokuController(SudokuField sudoku) {
 		playerField = sudoku;
-		boolean addOn = extraButton;
-		System.out.println(addOn);
-		try {
-			SudokuFieldGUI frame = new SudokuFieldGUI(this, addOn);
-			frame.setVisible(true);
-			emptyField = frame;
-		} catch (Exception event) {
-			event.printStackTrace();
-		}
-		setEmptyField(sudoku);
 
 	}
 	public void clearFieldOnClick(ActionEvent e) {
@@ -112,6 +102,9 @@ public class SudokuController {
 			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
 		}
 		return isCorrect;
+	}
+	public void setGUI(SudokuFieldGUI input) {
+		emptyField = input;
 	}
 
 }
