@@ -17,20 +17,21 @@ public class SudokuController {
 	
 	
 	protected SudokuFieldGUI emptyField;
-	protected Field playerField;
+	private Field playerField;
 	protected JTextField[] field;
 	
-	public SudokuController(SudokuField sudoku, boolean isNewFieldEmpty) {
+	public SudokuController(SudokuField sudoku) {
 		playerField = sudoku;
+	}
+	
+	public void setGUI(SudokuFieldGUI frame) {
+		emptyField = frame;
 		try {
-			SudokuFieldGUI frame = new SudokuFieldGUI(this, isNewFieldEmpty);
 			frame.setVisible(true);
-			emptyField = frame;
 		} catch (Exception event) {
 			event.printStackTrace();
 		}
-		setEmptyField(sudoku);
-		
+		setEmptyField(playerField);
 	}
 	
 	protected SudokuController(SudokuFieldGUI emptyField, SudokuField sudoku) {

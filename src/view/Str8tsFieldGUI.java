@@ -11,14 +11,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
-import controller.Str8Controller;
+import controller.Str8tsController;
 import view.SudokuFieldGUI;
 
-public class Str8FieldGUI extends SudokuFieldGUI {
+public class Str8tsFieldGUI extends SudokuFieldGUI {
 
 	protected JCheckBox cbPaintBlack;
 	
-	public Str8FieldGUI(Str8Controller controller, boolean addOn) {
+	public Str8tsFieldGUI(Str8tsController controller, boolean addOn) {
 		super(controller, addOn);
 		
 		lblTitleField.setText("Str8ts");

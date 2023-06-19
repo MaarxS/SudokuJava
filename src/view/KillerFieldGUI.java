@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controller.KillerController;
-import controller.Str8Controller;
+import controller.Str8tsController;
 
 public class KillerFieldGUI extends SudokuFieldGUI {
 
