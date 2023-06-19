@@ -18,10 +18,12 @@ public class SudokuController {
 	private Field playerField;
 	JTextField[] field = new JTextField[81];
 	
-	public SudokuController(SudokuField sudoku) {
+	public SudokuController(SudokuField sudoku, boolean extraButton) {
 		playerField = sudoku;
+		boolean addOn = extraButton;
+		System.out.println(addOn);
 		try {
-			SudokuFieldGUI frame = new SudokuFieldGUI(this);
+			SudokuFieldGUI frame = new SudokuFieldGUI(this, addOn);
 			frame.setVisible(true);
 			emptyField = frame;
 		} catch (Exception event) {
@@ -31,6 +33,7 @@ public class SudokuController {
 
 	}
 	public void clearFieldOnClick(ActionEvent e) {
+		getEmptyField();
 		for(int i = 0; i < 81; i++) {
 			emptyField.setTextfield("", i);
 			field[i].setBackground(new Color(70, 73, 75));
@@ -44,6 +47,9 @@ public class SudokuController {
 		Solver solver = new Solver(playerField);
 		solver.solve();
 		setEmptyField(playerField);
+	}
+	public void showTippOnClick(ActionEvent e) {
+		
 	}
 	public void setEmptyField(Field field) {
 

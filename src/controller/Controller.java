@@ -12,6 +12,7 @@ public class Controller {
 	private GUI mainGUI;
 	private FieldGenerator fieldGenerator = new FieldGenerator();
 	private String gameMode = "Sudoku";
+	private Boolean isNewFieldEmpty = true;
 	
 	public Controller(GUI gui) {
 		mainGUI = gui;
@@ -19,12 +20,13 @@ public class Controller {
 
 	
 	public void emptyFieldButtonOnClick(ActionEvent e) {
-		
+		isNewFieldEmpty = true;
 		switch(gameMode)
 		{
 		case "Sudoku":
 			SudokuField sudoku = new SudokuField();
-			new SudokuController(sudoku);
+			new SudokuController(sudoku, isNewFieldEmpty);
+			
 			
 		case "Str8":
 			
@@ -37,9 +39,10 @@ public class Controller {
 	}
 	
 	public void onClickCreate(ActionEvent e) {
+		isNewFieldEmpty = false;
 		SudokuField sudoku = new SudokuField();
 		fieldGenerator.generateSolvable(sudoku);
-		new SudokuController(sudoku);
+		new SudokuController(sudoku, isNewFieldEmpty);
 	}
 	
 	public void modeSudokuOnClick(ActionEvent e) {

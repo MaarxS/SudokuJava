@@ -23,7 +23,7 @@ public class SudokuFieldGUI extends JFrame {
 	private JPanel[] panels = new JPanel[9];
 	private JLabel lblTitleField;
 
-	public SudokuFieldGUI(SudokuController fieldController) {
+	public SudokuFieldGUI(SudokuController fieldController, boolean addOn) {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
@@ -86,6 +86,14 @@ public class SudokuFieldGUI extends JFrame {
 					j = 6;
 				}
 			}
+		}
+		System.out.println(addOn);
+		if(!addOn) {
+			btnSolve.setText("Lösung überprüfen");
+			
+			JButton btnTipp = new JButton("Lösungstipp");
+			panel_1.add(btnTipp);
+			btnTipp.addActionListener(fieldController::showTippOnClick);
 		}
 	}
 
