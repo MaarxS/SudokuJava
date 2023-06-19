@@ -6,36 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class KillerFieldGUI extends JFrame {
+import controller.KillerController;
+import controller.Str8Controller;
 
-	private JPanel contentPane;
+public class KillerFieldGUI extends SudokuFieldGUI {
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					KillerFieldGUI frame = new KillerFieldGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public KillerFieldGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
+	
+	public KillerFieldGUI(KillerController controller, boolean addOn) {
+		super(controller, addOn);
+		
+		lblTitleField.setText("Killer");
 	}
 
 }

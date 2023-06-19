@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -14,13 +16,26 @@ import model.Solver;
 public class SudokuController {
 	
 	
-	private SudokuFieldGUI emptyField;
-	private Field playerField;
-	JTextField[] field = new JTextField[81];
+	protected SudokuFieldGUI emptyField;
+	protected Field playerField;
+	protected JTextField[] field;
 	
-	public SudokuController(SudokuField sudoku) {
+	public SudokuController(SudokuField sudoku, boolean isNewFieldEmpty) {
 		playerField = sudoku;
-
+		try {
+			SudokuFieldGUI frame = new SudokuFieldGUI(this, isNewFieldEmpty);
+			frame.setVisible(true);
+			emptyField = frame;
+		} catch (Exception event) {
+			event.printStackTrace();
+		}
+		setEmptyField(sudoku);
+		
+	}
+	
+	protected SudokuController(SudokuFieldGUI emptyField, SudokuField sudoku) {
+		this.emptyField = emptyField;
+		playerField = sudoku;
 	}
 	public void clearFieldOnClick(ActionEvent e) {
 		getEmptyField();
@@ -69,6 +84,13 @@ public class SudokuController {
 		field = emptyField.getTextfield();
 		
 		for(int i = 0; i < 81; i++) {
+			JTextField currentField = field[i];
+			currentField.addMouseListener(new MouseAdapter(){
+				public void mouseClicked(MouseEvent e){
+						currentField.setBackground(new Color(70, 73, 75));
+						System.out.println("is done");
+				}
+			});
 
 			if(field[i].getText().equals("0")) {
 				field[i].setBackground(new Color(148, 46, 46));
@@ -103,8 +125,4 @@ public class SudokuController {
 		}
 		return isCorrect;
 	}
-	public void setGUI(SudokuFieldGUI input) {
-		emptyField = input;
-	}
-
 }

@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import model.FieldGenerator;
 import model.SudokuField;
 import view.GUI;
-import view.SudokuFieldGUI;
+
 
 
 public class Controller {
@@ -26,21 +26,19 @@ public class Controller {
 		{
 		case "Sudoku":
 			SudokuField sudoku = new SudokuField();
-			SudokuController controller = new SudokuController(sudoku);
-			try {
-				SudokuFieldGUI frame = new SudokuFieldGUI(controller, isNewFieldEmpty);
-				frame.setVisible(true);
-				controller.setGUI(frame);
-			} catch (Exception event) {
-				event.printStackTrace();
-			}
-
-		case "Str8":
+			new SudokuController(sudoku, isNewFieldEmpty);
 			
-
+			break;
+			
+			
+		case "Str8":
+			SudokuField str8 = new SudokuField();
+			new Str8Controller(str8, isNewFieldEmpty);
+			
+			break;
 		case "Killer":
 
-
+			break;
 		}
 
 	}
@@ -50,18 +48,26 @@ public class Controller {
 		switch(gameMode) {
 		
 		case "Sudoku":
+			
 			SudokuField sudoku = new SudokuField();
 			fieldGenerator.generateSolvable(sudoku);
-			SudokuController controller = new SudokuController(sudoku);
-			try {
-				SudokuFieldGUI frame = new SudokuFieldGUI(controller, isNewFieldEmpty);
-				frame.setVisible(true);
-				controller.setGUI(frame);
-			} catch (Exception event) {
-				event.printStackTrace();
-			}
+			new SudokuController(sudoku, isNewFieldEmpty);
+
+			break;
+			
+			
 		case "Str8":
+			
+			SudokuField str8 = new SudokuField();
+			new Str8Controller(str8, isNewFieldEmpty);
+			
+			break;
+			
+			
 		case "Killer":
+			SudokuField killer = new SudokuField();
+			new KillerController(killer, isNewFieldEmpty);
+			break;
 		}
 	}
 

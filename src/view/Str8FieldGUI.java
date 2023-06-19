@@ -1,42 +1,39 @@
 package view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
+import controller.Str8Controller;
+import view.SudokuFieldGUI;
 
-public class Str8FieldGUI extends JFrame {
+public class Str8FieldGUI extends SudokuFieldGUI {
 
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Str8FieldGUI frame = new Str8FieldGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Str8FieldGUI() {
+	protected JCheckBox cbPaintBlack;
+	
+	public Str8FieldGUI(Str8Controller controller, boolean addOn) {
+		super(controller, addOn);
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		lblTitleField.setText("Str8ts");
+		btnSolve.setText("Str8ts lösen");
+		
+		if(addOn) {
+			cbPaintBlack = new JCheckBox("Schwarze Felder");
+			panel_1.add(cbPaintBlack);
+			cbPaintBlack.addItemListener(controller::setBlack);
+		}
 
-		setContentPane(contentPane);
+		
+	}
+	public JCheckBox getCheckBox() {
+		return cbPaintBlack;
 	}
 
 }

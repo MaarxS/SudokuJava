@@ -15,13 +15,25 @@ import javax.swing.border.EmptyBorder;
 
 import controller.Controller;
 import controller.SudokuController;
+import javax.swing.JToolBar;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JMenuBar;
+import java.awt.Color;
+import javax.swing.JCheckBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SudokuFieldGUI extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField[] tf = new JTextField[81];
-	private JPanel[] panels = new JPanel[9];
-	private JLabel lblTitleField;
+	protected JPanel contentPane;
+	protected JTextField[] tf = new JTextField[81];
+	protected JPanel[] panels = new JPanel[9];
+	protected JButton btnSolve;
+	protected JPanel panel_1;
+	protected JPanel panel_4;
+	protected JLabel lblTitleField;
 
 	public SudokuFieldGUI(SudokuController fieldController, boolean addOn) {
 
@@ -33,24 +45,19 @@ public class SudokuFieldGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		lblTitleField = new JLabel("Sudoku");
-		lblTitleField.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitleField.setFont(new Font("Tahoma", Font.BOLD, 16));
-		contentPane.add(lblTitleField, BorderLayout.NORTH);
-
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new GridLayout(3, 3, 0, 0));
 
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 
 		JButton btnClearFields = new JButton("Felder löschen");
 		panel_1.add(btnClearFields);
 		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
-		JButton btnSolve = new JButton("Sudoku lösen");
+		btnSolve = new JButton("Sudoku lösen");
 		panel_1.add(btnSolve);
 		btnSolve.addActionListener(fieldController::solveOnClick);
 
@@ -59,6 +66,15 @@ public class SudokuFieldGUI extends JFrame {
 
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
+		
+		panel_4 = new JPanel();
+		contentPane.add(panel_4, BorderLayout.NORTH);
+		panel_4.setLayout(new BorderLayout(0, 0));
+		
+		lblTitleField = new JLabel("Sudoku");
+		lblTitleField.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblTitleField.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_4.add(lblTitleField);
 
 		for (int i = 0; i < 9; i++) {
 			panels[i] = new JPanel();
