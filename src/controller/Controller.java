@@ -11,6 +11,7 @@ public class Controller {
 	
 	private GUI mainGUI;
 	private FieldGenerator fieldGenerator = new FieldGenerator();
+	private String gameMode = "Sudoku";
 	
 	public Controller(GUI gui) {
 		mainGUI = gui;
@@ -19,8 +20,20 @@ public class Controller {
 	
 	public void emptyFieldButtonOnClick(ActionEvent e) {
 		
-		SudokuField sudoku = new SudokuField();
-		new SudokuController(sudoku);
+		switch(gameMode)
+		{
+		case "Sudoku":
+			SudokuField sudoku = new SudokuField();
+			new SudokuController(sudoku);
+			
+		case "Str8":
+			
+			
+		case "Killer":
+			
+			
+		}
+		
 	}
 	
 	public void onClickCreate(ActionEvent e) {
@@ -31,6 +44,7 @@ public class Controller {
 	
 	public void modeSudokuOnClick(ActionEvent e) {
 		
+		gameMode = "Sudoku";
 		mainGUI.setLabelList(0, "Sudoku Rechner");
 		mainGUI.setLabelList(1, "Sudoku lösen lassen");
 		mainGUI.setLabelList(2, "Sudoku erstellen");		
@@ -39,6 +53,7 @@ public class Controller {
 	
 	public void modeStr8OnClick(ActionEvent e) {
 		
+		gameMode = "Str8";
 		mainGUI.setLabelList(0, "Str8 Rechner");
 		mainGUI.setLabelList(1, "Str8 lösen lassen");
 		mainGUI.setLabelList(2, "Str8 erstellen");
@@ -47,6 +62,7 @@ public class Controller {
 	
 	public void modeKillerOnClick(ActionEvent e) {
 		
+		gameMode = "Killer";
 		mainGUI.setLabelList(0, "Killer Rechner");
 		mainGUI.setLabelList(1, "Killer lösen lassen");
 		mainGUI.setLabelList(2, "Killer erstellen");
