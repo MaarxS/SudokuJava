@@ -9,59 +9,40 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import model.Field;
+import model.Solver;
 import model.SudokuField;
 import view.SudokuFieldGUI;
-import model.Solver;
 
-public class SudokuController {
-	
-	
+public abstract class FieldController {
 	protected SudokuFieldGUI emptyField;
-	private Field playerField;
+	protected Field playerField;
 	protected JTextField[] field;
 	
-	public SudokuController(Field sudoku) {
+	public FieldController(SudokuField sudoku) {
 		playerField = sudoku;
-	}
-	
-	public void setGUI(SudokuFieldGUI frame) {
-		emptyField = frame;
-		try {
-			frame.setVisible(true);
-		} catch (Exception event) {
-			event.printStackTrace();
-		}
-		setEmptyField(playerField);
-	}
-	
-	protected SudokuController(SudokuFieldGUI emptyField, SudokuField sudoku) {
-		this.emptyField = emptyField;
-		playerField = sudoku;
+		setEmptyField(sudoku);
+		
 	}
 	
 	public void clearFieldOnClick(ActionEvent e) {
+		getEmptyField();
 		for(int i = 0; i < 81; i++) {
 			emptyField.setTextfield("", i);
 			field[i].setBackground(new Color(70, 73, 75));
 		}
 	}
-	
 	public void solveOnClick(ActionEvent e) {
 		boolean inputCorrect = getEmptyField();
 		if(!inputCorrect) {
 			return;
 		}
-		new Thread(() ->{
-			Solver solver = new Solver(playerField);
-			solver.solve();
-			setEmptyField(playerField);
-		}).start();
+		Solver solver = new Solver(playerField);
+		solver.solve();
+		setEmptyField(playerField);
 	}
-	
 	public void showTippOnClick(ActionEvent e) {
 		
 	}
-	
 	public void setEmptyField(Field field) {
 
 		int fieldValue = 0;
@@ -82,7 +63,6 @@ public class SudokuController {
 
 		}
 	}
-	
 	public boolean getEmptyField() {
 
 		int x = 0;
@@ -95,8 +75,7 @@ public class SudokuController {
 			currentField.addMouseListener(new MouseAdapter(){
 				public void mouseClicked(MouseEvent e){
 						currentField.setBackground(new Color(70, 73, 75));
-					System.out.println(currentField.getBackground());
-						
+						System.out.println("is done");
 				}
 			});
 
@@ -132,17 +111,5 @@ public class SudokuController {
 			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
 		}
 		return isCorrect;
-	}
-	
-	public void showMistakesOnClick(ActionEvent e) {
-		getEmptyField();
-		for (int i = 0; i < 81; i++) {
-			int x = i % 9;
-			int y = i / 9;
-			boolean t = playerField.isCorrect(x, y);
-			if (playerField.isEditable(x, y) && !playerField.isCorrect(x, y)) {
-				field[i].setBackground(new Color(148, 46, 46));
-			}
-		}
 	}
 }
