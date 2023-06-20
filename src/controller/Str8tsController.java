@@ -15,6 +15,8 @@ public class Str8tsController extends SudokuController{
 
 	private Str8tsFieldGUI fieldGUI;
 	private Str8tsField playerField;
+	
+	public static final Color COLOR_BLACK = new Color(0, 0, 0);
 
 	public Str8tsController(Str8tsField str8tsField) {
 		super(str8tsField);
@@ -35,10 +37,10 @@ public class Str8tsController extends SudokuController{
 			field[i].addMouseListener(new MouseAdapter(){
 				public void mousePressed(MouseEvent e){
 					if(fieldGUI.getCheckBox().isSelected()) {
-						currentField.setBackground(new Color(0, 0, 0));
+						currentField.setBackground(COLOR_BLACK);
 						playerField.setBlack(x, y, true);
 					} else {
-						currentField.setBackground(new Color(70, 73, 75));
+						currentField.setBackground(COLOR_BACKGROUND);
 						playerField.setBlack(x, y, false);
 					}
 				}

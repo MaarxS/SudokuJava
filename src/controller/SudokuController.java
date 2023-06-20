@@ -20,8 +20,8 @@ public class SudokuController {
 	private Field playerField;
 	protected JTextField[] field;
 	
-	public final Color COLOR_RED = new Color(148, 46, 46);
-	public final Color COLOR_BACKGROUND = new Color(148, 46, 46);
+	public static final Color COLOR_RED = new Color(148, 46, 46);
+	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
 	
 	public SudokuController(Field sudoku) {
 		playerField = sudoku;
@@ -56,6 +56,9 @@ public class SudokuController {
 		}
 		new Thread(() ->{
 			Solver solver = new Solver(playerField);
+			solver.setUpdateListener((field) -> {
+				System.out.println(field);
+			});
 			solver.solve();
 			setEmptyField(playerField);
 		}).start();

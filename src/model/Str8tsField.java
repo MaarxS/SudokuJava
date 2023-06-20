@@ -38,7 +38,7 @@ public class Str8tsField implements Field {
 
 	@Override
 	public boolean isEditable(int x, int y) {
-		return editable[x][y];
+		return editable[x][y] && fields[x][y] <= 9; // TODO
 	}
 	
 	public void setBlack(int x, int y, boolean isBlack) {
@@ -163,4 +163,21 @@ public class Str8tsField implements Field {
 		return result;
 	}
 
+	public String toString() {
+//		final String ANSI_RESET = "\u001B[0m";
+//		final String ANSI_RED = "\u001B[31m";
+//		final String ANSI_GREY = "\u001B[30m";
+		StringBuilder builder = new StringBuilder();
+		for (int y = 0; y < fields.length; y++) {
+			for (int x = 0; x < fields.length; x++) {
+//				if (isCorrect(x, y)) builder.append(ANSI_RESET);
+//				else builder.append(ANSI_RED);
+//				if (!isEditable(x, y)) builder.append(ANSI_GREY);
+				builder.append(fields[x][y] % 10);
+				builder.append(" ");
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
+	}
 }
