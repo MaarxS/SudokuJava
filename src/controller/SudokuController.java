@@ -20,6 +20,9 @@ public class SudokuController {
 	private Field playerField;
 	protected JTextField[] field;
 	
+	public final Color COLOR_RED = new Color(148, 46, 46);
+	public final Color COLOR_BACKGROUND = new Color(148, 46, 46);
+	
 	public SudokuController(Field sudoku) {
 		playerField = sudoku;
 	}
@@ -42,7 +45,7 @@ public class SudokuController {
 	public void clearFieldOnClick(ActionEvent e) {
 		for(int i = 0; i < 81; i++) {
 			emptyField.setTextfield("", i);
-			field[i].setBackground(new Color(70, 73, 75));
+			field[i].setBackground(COLOR_BACKGROUND);
 		}
 	}
 	
@@ -93,14 +96,15 @@ public class SudokuController {
 		for(int i = 0; i < 81; i++) {
 			JTextField currentField = field[i];
 			currentField.addMouseListener(new MouseAdapter(){
-				public void mouseClicked(MouseEvent e){
-						currentField.setBackground(new Color(70, 73, 75));
-						
+				public void mousePressed(MouseEvent e){
+					if (currentField.getBackground().equals(COLOR_RED)) {
+						currentField.setBackground(COLOR_BACKGROUND);
+					}
 				}
 			});
 
 			if(field[i].getText().equals("0")) {
-				field[i].setBackground(new Color(148, 46, 46));
+				field[i].setBackground(COLOR_RED);
 				isCorrect = false;
 			}
 			else if(field[i].getText().equals("")) {
@@ -110,11 +114,11 @@ public class SudokuController {
 				try {
 					playerField.set(x, y, Integer.parseInt(field[i].getText()));
 					if(playerField.get(x, y) > 9) {
-						field[i].setBackground(new Color(148, 46, 46));
+						field[i].setBackground(COLOR_RED);
 						isCorrect = false;
 					}
 				}catch(NumberFormatException e) {
-					field[i].setBackground(new Color(148, 46, 46));
+					field[i].setBackground(COLOR_RED);
 					isCorrect = false;
 				}
 			}
@@ -136,9 +140,8 @@ public class SudokuController {
 		for (int i = 0; i < 81; i++) {
 			int x = i % 9;
 			int y = i / 9;
-			boolean t = playerField.isCorrect(x, y);
 			if (playerField.isEditable(x, y) && !playerField.isCorrect(x, y)) {
-				field[i].setBackground(new Color(148, 46, 46));
+				field[i].setBackground(COLOR_RED);
 			}
 		}
 	}
