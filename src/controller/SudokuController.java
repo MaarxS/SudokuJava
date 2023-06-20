@@ -95,7 +95,6 @@ public class SudokuController {
 			currentField.addMouseListener(new MouseAdapter(){
 				public void mouseClicked(MouseEvent e){
 						currentField.setBackground(new Color(70, 73, 75));
-					System.out.println(currentField.getBackground());
 						
 				}
 			});
@@ -106,12 +105,10 @@ public class SudokuController {
 			}
 			else if(field[i].getText().equals("")) {
 				playerField.set(x, y, 0);
-				field[i].setBackground(new Color(70, 73, 75));
 			}else {
 
 				try {
 					playerField.set(x, y, Integer.parseInt(field[i].getText()));
-					field[i].setBackground(new Color(70, 73, 75));
 					if(playerField.get(x, y) > 9) {
 						field[i].setBackground(new Color(148, 46, 46));
 						isCorrect = false;
