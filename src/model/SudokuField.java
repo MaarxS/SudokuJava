@@ -2,6 +2,7 @@ package model;
 
 public class SudokuField implements Field {
 	private int[][] grid = new int[9][9];
+	private boolean[][] editable = new boolean[9][9];
 
 	@Override
 	public void set(int x, int y, int value) {
@@ -14,8 +15,13 @@ public class SudokuField implements Field {
 	}
 
 	@Override
+	public void setEditable(int x, int y, boolean isEditable) {
+		editable[x][y] = isEditable;
+	}
+
+	@Override
 	public boolean isEditable(int x, int y) {
-		return true;
+		return editable[x][y];
 	}
 
 	@Override
