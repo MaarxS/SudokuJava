@@ -10,13 +10,11 @@ public class Str8tsField implements Field {
 	// Value of the black fields is calculated with mod 10
 	// 0 means blank fields
 	private int[][] fields = new int[9][9];
-	private boolean[][] editable = new boolean[9][9];
 		
 	public Str8tsField() {
 		for (int i = 0; i < fields.length; i++) {
 			for (int j = 0; j < fields[i].length; j++) {
 				fields[i][j] = 0;
-				editable[i][j] = true;
 			}
 		}
 	}
@@ -32,13 +30,8 @@ public class Str8tsField implements Field {
 	}
 
 	@Override
-	public void setEditable(int x, int y, boolean isEditable) {
-		editable[x][y] = isEditable;
-	}
-
-	@Override
 	public boolean isEditable(int x, int y) {
-		return editable[x][y] && fields[x][y] <= 9; // TODO
+		return fields[x][y] <= 9; // TODO
 	}
 	
 	public void setBlack(int x, int y, boolean isBlack) {

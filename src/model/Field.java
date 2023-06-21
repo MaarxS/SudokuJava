@@ -6,8 +6,6 @@ public interface Field {
 	
 	public int get(int x, int y);
 	
-	public void setEditable(int x, int y, boolean isEditable);
-	
 	public boolean isEditable(int x, int y);
 	
 	public boolean isCorrect(int x, int y);

@@ -36,6 +36,7 @@ public class SudokuController {
 		}
 		setTextFields(playerField);
 		initializeTextFields();
+		setInitalValuesUneditable();
 	}
 	
 	protected SudokuController(SudokuFieldGUI emptyField, SudokuField sudoku) {
@@ -45,8 +46,10 @@ public class SudokuController {
 	
 	public void clearFieldOnClick(ActionEvent e) {
 		for(int i = 0; i < 81; i++) {
-			emptyField.setTextfield("", i);
-			textFields[i].setBackground(COLOR_BACKGROUND);
+			if (textFields[i].isEditable()) {
+				emptyField.setTextfield("", i);
+				textFields[i].setBackground(COLOR_BACKGROUND);
+			}
 		}
 	}
 	
@@ -90,6 +93,14 @@ public class SudokuController {
 		}
 	}
 	
+	private void setInitalValuesUneditable() {
+		for (JTextField textField : textFields) {
+			if (!textField.getText().equals("")) {
+				textField.setEditable(false);
+			}
+		}
+	}
+
 	public void initializeTextFields() {
 		textFields = emptyField.getTextfield();
 		
@@ -144,10 +155,11 @@ public class SudokuController {
 	}
 	
 	public void showMistakesOnClick(ActionEvent e) {
+		readTextFields();
 		for (int i = 0; i < 81; i++) {
 			int x = i % 9;
 			int y = i / 9;
-			if (playerField.isEditable(x, y) && !playerField.isCorrect(x, y)) {
+			if (textFields[i].isEditable() && !playerField.isCorrect(x, y)) {
 				textFields[i].setBackground(COLOR_RED);
 			}
 		}
