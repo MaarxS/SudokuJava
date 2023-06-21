@@ -13,7 +13,7 @@ public class KillerController extends SudokuController{
 		} catch (Exception event) {
 			event.printStackTrace();
 		}
-		setEmptyField(killer);
+		setTextFields(killer);
 	}
 
 }

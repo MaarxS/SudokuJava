@@ -18,7 +18,7 @@ public class SudokuController {
 	
 	protected SudokuFieldGUI emptyField;
 	private Field playerField;
-	protected JTextField[] field;
+	protected JTextField[] textFields;
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
@@ -34,7 +34,8 @@ public class SudokuController {
 		} catch (Exception event) {
 			event.printStackTrace();
 		}
-		setEmptyField(playerField);
+		setTextFields(playerField);
+		initializeTextFields();
 	}
 	
 	protected SudokuController(SudokuFieldGUI emptyField, SudokuField sudoku) {
@@ -45,30 +46,30 @@ public class SudokuController {
 	public void clearFieldOnClick(ActionEvent e) {
 		for(int i = 0; i < 81; i++) {
 			emptyField.setTextfield("", i);
-			field[i].setBackground(COLOR_BACKGROUND);
+			textFields[i].setBackground(COLOR_BACKGROUND);
 		}
 	}
 	
 	public void solveOnClick(ActionEvent e) {
-		boolean inputCorrect = getEmptyField();
+		boolean inputCorrect = readTextFields();
 		if(!inputCorrect) {
 			return;
 		}
 		new Thread(() ->{
 			Solver solver = new Solver(playerField);
 			solver.setUpdateListener((field) -> {
-				System.out.println(field);
+				setTextFields(field);
 			});
 			solver.solve();
-			setEmptyField(playerField);
+			setTextFields(playerField);
 		}).start();
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
-		
+		// TODO
 	}
 	
-	public void setEmptyField(Field field) {
+	public void setTextFields(Field field) {
 
 		int fieldValue = 0;
 		int x = 0;
@@ -89,15 +90,11 @@ public class SudokuController {
 		}
 	}
 	
-	public boolean getEmptyField() {
-
-		int x = 0;
-		int y = 0;
-		boolean isCorrect = true;
-		field = emptyField.getTextfield();
+	public void initializeTextFields() {
+		textFields = emptyField.getTextfield();
 		
 		for(int i = 0; i < 81; i++) {
-			JTextField currentField = field[i];
+			JTextField currentField = textFields[i];
 			currentField.addMouseListener(new MouseAdapter(){
 				public void mousePressed(MouseEvent e){
 					if (currentField.getBackground().equals(COLOR_RED)) {
@@ -105,23 +102,31 @@ public class SudokuController {
 					}
 				}
 			});
-
-			if(field[i].getText().equals("0")) {
-				field[i].setBackground(COLOR_RED);
+		}
+	}
+	
+	public boolean readTextFields() {
+		int x = 0;
+		int y = 0;
+		boolean isCorrect = true;
+		
+		for (int i = 0; i < 81; i++) {
+			if(textFields[i].getText().equals("0")) {
+				textFields[i].setBackground(COLOR_RED);
 				isCorrect = false;
 			}
-			else if(field[i].getText().equals("")) {
+			else if(textFields[i].getText().equals("")) {
 				playerField.set(x, y, 0);
 			}else {
 
 				try {
-					playerField.set(x, y, Integer.parseInt(field[i].getText()));
+					playerField.set(x, y, Integer.parseInt(textFields[i].getText()));
 					if(playerField.get(x, y) > 9) {
-						field[i].setBackground(COLOR_RED);
+						textFields[i].setBackground(COLOR_RED);
 						isCorrect = false;
 					}
 				}catch(NumberFormatException e) {
-					field[i].setBackground(COLOR_RED);
+					textFields[i].setBackground(COLOR_RED);
 					isCorrect = false;
 				}
 			}
@@ -139,12 +144,11 @@ public class SudokuController {
 	}
 	
 	public void showMistakesOnClick(ActionEvent e) {
-		getEmptyField();
 		for (int i = 0; i < 81; i++) {
 			int x = i % 9;
 			int y = i / 9;
 			if (playerField.isEditable(x, y) && !playerField.isCorrect(x, y)) {
-				field[i].setBackground(COLOR_RED);
+				textFields[i].setBackground(COLOR_RED);
 			}
 		}
 	}

@@ -22,11 +22,9 @@ public class Str8tsFieldGUI extends SudokuFieldGUI {
 		super(controller, addOn);
 		
 		lblTitleField.setText("Str8ts");
-		if (addOn) {
-			btnSolve.setText("Str8ts lösen");
-		}
 		
 		if(addOn) {
+			btnSolve.setText("Str8ts lösen");
 			cbPaintBlack = new JCheckBox("Schwarze Felder");
 			panel_1.add(cbPaintBlack);
 			cbPaintBlack.addItemListener(controller::setBlack);
