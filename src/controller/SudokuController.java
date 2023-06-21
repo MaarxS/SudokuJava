@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import model.Field;
+import model.FieldGenerator;
 import model.SudokuField;
 import view.SudokuFieldGUI;
 import model.Solver;
@@ -22,6 +24,8 @@ public class SudokuController {
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
+	public static final Color COLOR_GREEN = new Color(11, 120, 11);
+	
 	
 	public SudokuController(Field sudoku) {
 		playerField = sudoku;
@@ -69,8 +73,45 @@ public class SudokuController {
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
-		// TODO
+		readTextFields();
+		Random random = new Random();
+		int i = random.nextInt(81);
+		//System.out.println(i);
+		if (textFields[i].getText().equals("")){
+			textFields[i].setBackground(COLOR_GREEN);
+
+			Solver solver = new Solver(playerField);
+			solver.setUpdateListener((field2) -> {
+
+				int x = 0;
+				int y = 0;
+
+				for(int ii = 0; ii < 81; ii++) {
+					if(i == ii) {
+						textFields[i].setText(Integer.toString(field2.get(x,y)));
+					}
+					x++;
+
+					if(x == 9) {
+						x = 0;
+						y++;
+					}
+
+				}
+			});
+
+			solver.solve();
+		}
+		else {
+			for(int ii = 0; ii < 81; ii++) {
+				if(textFields[ii].getText().equals("")) {
+					showTippOnClick(e);
+					break;
+				}
+			}
+		}
 	}
+	
 	
 	public void setTextFields(Field field) {
 
