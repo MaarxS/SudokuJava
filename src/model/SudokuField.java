@@ -3,6 +3,14 @@ package model;
 public class SudokuField implements Field {
 	private int[][] grid = new int[9][9];
 
+	public SudokuField() {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				grid[x][y] = 0;
+			}
+		}
+	}
+	
 	@Override
 	public void set(int x, int y, int value) {
 		grid[x][y] = value;
