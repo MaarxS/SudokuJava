@@ -19,6 +19,15 @@ public class Str8tsField implements Field {
 		}
 	}
 	
+	/** Constructor for copying this object.*/
+	private Str8tsField(int[][] fields) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				this.fields[x][y] = fields[x][y];
+			}
+		}
+	}
+	
 	@Override
 	public void set(int x, int y, int value) {
 		fields[x][y] = value + (fields[x][y] / 10) * 10;
@@ -172,5 +181,10 @@ public class Str8tsField implements Field {
 			builder.append("\n");
 		}
 		return builder.toString();
+	}
+	
+	@Override
+	public Str8tsField copy() {
+		return new Str8tsField(fields);
 	}
 }

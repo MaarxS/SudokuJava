@@ -38,7 +38,7 @@ public class FieldGenerator {
 			} while (field.get(x, y) != 0);
 			field.set(x, y, number);
 		}
-		new Solver(field).solve();
+		new Solver().solve(field);
 		return field;
 	}
 	

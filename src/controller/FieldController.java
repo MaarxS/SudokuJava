@@ -36,8 +36,8 @@ public abstract class FieldController {
 		if(!inputCorrect) {
 			return;
 		}
-		Solver solver = new Solver(playerField);
-		solver.solve();
+		Solver solver = new Solver();
+		playerField = solver.solve(playerField);
 		setEmptyField(playerField);
 	}
 	public void showTippOnClick(ActionEvent e) {

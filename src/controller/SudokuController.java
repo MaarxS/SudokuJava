@@ -19,6 +19,7 @@ public class SudokuController {
 	
 	
 	protected SudokuFieldGUI emptyField;
+	private Solver solver;
 	private Field playerField;
 	protected JTextField[] textFields;
 	
@@ -29,6 +30,8 @@ public class SudokuController {
 	
 	public SudokuController(Field sudoku) {
 		playerField = sudoku;
+		solver = new Solver();
+		// TODO pass solved Field as parameter
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
@@ -59,57 +62,27 @@ public class SudokuController {
 	
 	public void solveOnClick(ActionEvent e) {
 		boolean inputCorrect = readTextFields();
-		if(!inputCorrect) {
+		if(!inputCorrect) {// TODO check if fields correct
 			return;
 		}
-		new Thread(() ->{
-			Solver solver = new Solver(playerField);
-			solver.setUpdateListener((field) -> {
-				setTextFields(field);
-			});
-			solver.solve();
-			setTextFields(playerField);
-		}).start();
+		
+		playerField = solver.solve(playerField);
+		setTextFields(playerField);
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
 		readTextFields();
 		Random random = new Random();
-		int i = random.nextInt(81);
-		//System.out.println(i);
-		if (textFields[i].getText().equals("")){
-			textFields[i].setBackground(COLOR_GREEN);
-
-			Solver solver = new Solver(playerField);
-			solver.setUpdateListener((field2) -> {
-
-				int x = 0;
-				int y = 0;
-
-				for(int ii = 0; ii < 81; ii++) {
-					if(i == ii) {
-						textFields[i].setText(Integer.toString(field2.get(x,y)));
-					}
-					x++;
-
-					if(x == 9) {
-						x = 0;
-						y++;
-					}
-
-				}
-			});
-
-			solver.solve();
-		}
-		else {
-			for(int ii = 0; ii < 81; ii++) {
-				if(textFields[ii].getText().equals("")) {
-					showTippOnClick(e);
-					break;
-				}
-			}
-		}
+		int index;
+		do {
+			index = random.nextInt(81);
+		} while (!textFields[index].getText().equals(""));
+		textFields[index].setBackground(COLOR_GREEN);
+		int x = index % 9;
+		int y = index / 9;
+		Field solvedField = solver.solve(playerField);
+		playerField.set(x, y, solvedField.get(x, y));
+		setTextFields(playerField);
 	}
 	
 	

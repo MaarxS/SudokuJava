@@ -2,5 +2,5 @@ package model;
 
 public interface UpdateListener {
 
-	public void onUpdate(Field field);
+	public void onUpdate(int x, int y, int value);
 }

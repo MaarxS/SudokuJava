@@ -10,6 +10,9 @@ public interface Field {
 	
 	public boolean isCorrect(int x, int y);
 
-	boolean isPossible(int x, int y, int value);
+	public boolean isPossible(int x, int y, int value);
+	
+	/** Create an independent copy of this object.*/
+	public Field copy();
 	
 }

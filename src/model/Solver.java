@@ -2,20 +2,21 @@ package model;
 
 public class Solver {
 	
-	private Field field;
-	private UpdateListener updateListener = field -> {};
+	private UpdateListener updateListener = (x, y, value) -> {};
 	
-	public Solver(Field field) {
-		this.field = field;
-	}
-	
+	/** Updatelistener is called on every solving step.*/
 	public void setUpdateListener(UpdateListener listener) {
 		updateListener = listener;
 	}
 	
-	/** Backtracking algorithm */
-	public boolean solve() {
-		int[] r = fieldWithLeastPossibilities();
+	public Field solve(Field field) {
+		field = field.copy();
+		solveBacktracking(field);
+		return field;
+	}
+	
+	public boolean solveBacktracking(Field field) {
+		int[] r = fieldWithLeastPossibilities(field);
 		int x = r[0];
 		int y = r[1];
 		if (x == -1) { // finished solving
@@ -23,9 +24,9 @@ public class Solver {
 		}
 		for (int i = 1; i <= 9; i++) {
 			field.set(x, y, i);
-			updateListener.onUpdate(field);
+			updateListener.onUpdate(x, y, i);
 			if (field.isCorrect(x, y)) {
-				if (solve()) {
+				if (solveBacktracking(field)) {
 					return true;
 				}
 			}
@@ -34,17 +35,17 @@ public class Solver {
 		return false;
 	}
 	
-	public int[] fieldWithLeastPossibilities() {
+	public int[] fieldWithLeastPossibilities(Field field) {
 		int x = 0;
 		int y = 0;
 		int minCount = 10;
 		int[] result = new int[] {-1, -1};
 		while (y < 9) {
-			int[] coordinates = findNextEditable(x, y);
+			int[] coordinates = findNextEditable(field, x, y);
 			x = coordinates[0];
 			y = coordinates[1];
 			if (!(y < 9)) break;
-			int count = countPossibilities(x, y);
+			int count = countPossibilities(field, x, y);
 			if (count < minCount) {
 				result = new int[] {x, y};
 				minCount = count;
@@ -57,7 +58,7 @@ public class Solver {
 	}
 
 	/** Calls nextIndex until a Field is editable and empty */
-	private int[] findNextEditable(int x, int y) {
+	private int[] findNextEditable(Field field, int x, int y) {
 	while (y < 9 && !(field.get(x, y) == 0 && field.isEditable(x, y))) {
 			int[] r = nextIndex(x, y);
 			x = r[0];
@@ -74,7 +75,8 @@ public class Solver {
 		return new int[] {x, y};
 	}
 	
-	private int countPossibilities(int x, int y) {
+	/** Returns the amount of possible solutions for the given position.*/
+	private int countPossibilities(Field field, int x, int y) {
 		int count = 0;
 		for (int i = 1; i <= 9; i++) {
 			if (field.isPossible(x, y, i)) {

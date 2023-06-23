@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class SudokuField implements Field {
 	private int[][] grid = new int[9][9];
 
@@ -7,6 +9,15 @@ public class SudokuField implements Field {
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
 				grid[x][y] = 0;
+			}
+		}
+	}
+	
+	/** Constructor for copying this object.*/
+	private SudokuField(int[][] grid) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				this.grid[x][y] = grid[x][y];
 			}
 		}
 	}
@@ -77,5 +88,10 @@ public class SudokuField implements Field {
 			builder.append("\n");
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public SudokuField copy() {
+		return new SudokuField(grid);
 	}
 }
