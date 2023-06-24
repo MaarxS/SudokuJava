@@ -33,14 +33,13 @@ public class Str8tsController extends SudokuController{
 		textFields = fieldGUI.getTextfield();
 		for(int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
-			JTextField currentField = textFields[i];
 			textFields[i].addMouseListener(new MouseAdapter(){
 				public void mousePressed(MouseEvent e){
 					if(fieldGUI.getCheckBox().isSelected()) {
-						currentField.setBackground(COLOR_BLACK);
+						fieldGUI.setColor(pos, COLOR_BLACK);
 						playerField.setBlack(pos, true);
 					} else {
-						currentField.setBackground(COLOR_BACKGROUND);
+						fieldGUI.setColor(pos, COLOR_BACKGROUND);
 						playerField.setBlack(pos, false);
 					}
 				}

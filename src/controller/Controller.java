@@ -15,12 +15,12 @@ public class Controller {
 
 	private GUI mainGUI;
 	private FieldGenerator fieldGenerator = new FieldGenerator();
-	private enum gameMode {
+	private enum GameMode {
 		SUDOKU,
 		STR8TS,
 		KILLER;
 	}
-	private gameMode mode = gameMode.SUDOKU;
+	private GameMode mode = GameMode.SUDOKU;
 
 	public Controller(GUI gui) {
 		mainGUI = gui;
@@ -65,7 +65,7 @@ public class Controller {
 	}
 
 	public void modeSudokuOnClick(ActionEvent e) {
-		mode = gameMode.SUDOKU;
+		mode = GameMode.SUDOKU;
 		mainGUI.setLabelList(0, "Sudoku Rechner");
 		mainGUI.setLabelList(1, "Sudoku lösen lassen");
 		mainGUI.setLabelList(2, "Sudoku erstellen");		
@@ -73,7 +73,7 @@ public class Controller {
 
 
 	public void modeStr8OnClick(ActionEvent e) {
-		mode = gameMode.STR8TS;
+		mode = GameMode.STR8TS;
 		mainGUI.setLabelList(0, "Str8 Rechner");
 		mainGUI.setLabelList(1, "Str8 lösen lassen");
 		mainGUI.setLabelList(2, "Str8 erstellen");
@@ -81,7 +81,7 @@ public class Controller {
 
 
 	public void modeKillerOnClick(ActionEvent e) {
-		mode = gameMode.KILLER;
+		mode = GameMode.KILLER;
 		mainGUI.setLabelList(0, "Killer Rechner");
 		mainGUI.setLabelList(1, "Killer lösen lassen");
 		mainGUI.setLabelList(2, "Killer erstellen");

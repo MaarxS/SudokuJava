@@ -2,17 +2,13 @@ package controller;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 import model.Field;
 import model.Position;
 import model.Solver;
-import model.SudokuField;
 import view.SudokuFieldGUI;
 
 public class SudokuController {
@@ -21,7 +17,7 @@ public class SudokuController {
 	protected SudokuFieldGUI emptyField;
 	private Solver solver;
 	private Field playerField;
-	protected JTextField[] textFields;
+//	protected JTextField[] textFields;
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
@@ -42,21 +38,19 @@ public class SudokuController {
 			event.printStackTrace();
 		}
 		setTextFields(playerField);
-		initializeTextFields();
+//		initializeTextFields();
 		setInitalValuesUneditable();
 	}
 	
-	protected SudokuController(SudokuFieldGUI emptyField, SudokuField sudoku) {
-		this.emptyField = emptyField;
-		playerField = sudoku;
-	}
 	
 	public void clearFieldOnClick(ActionEvent e) {
 		for(int i = 0; i < 81; i++) {
-			if (textFields[i].isEditable()) {
-				emptyField.setTextfield("", i);
-				textFields[i].setBackground(COLOR_BACKGROUND);
+			Position pos = new Position(i % 9, i / 9);
+			if (emptyField.isEditable(pos)) {
+				emptyField.setTextfield(pos, "");
+				emptyField.setColor(pos, COLOR_BACKGROUND);
 			}
+
 		}
 	}
 	
@@ -75,11 +69,13 @@ public class SudokuController {
 		Random random = new Random();
 
 		int index;
+		Position pos;
 		do {
 			index = random.nextInt(81);
-		} while (!textFields[index].getText().equals(""));
-		textFields[index].setBackground(COLOR_GREEN);
-		Position pos = new Position(index % 9, index / 9);
+			pos = new Position(index % 9, index / 9);
+		} while (!emptyField.getTextfield(pos).equals(""));
+		emptyField.setColor(pos, COLOR_GREEN);
+		
 		Field solvedField = solver.solve(playerField);
 		playerField.set(pos, solvedField.get(pos));
 		setTextFields(playerField);
@@ -93,57 +89,46 @@ public class SudokuController {
 			Position pos = new Position(i % 9, i / 9);
 			fieldValue = field.get(pos);
 			if(fieldValue == 0) {
-				emptyField.setTextfield("", i);
+				emptyField.setTextfield(pos, "");
 			}else {
-				emptyField.setTextfield(String.valueOf(fieldValue), i);
+				emptyField.setTextfield(pos, String.valueOf(fieldValue));
 			}
 		}
 	}
 	
 	private void setInitalValuesUneditable() {
-		for (JTextField textField : textFields) {
-			if (!textField.getText().equals("")) {
-				textField.setEditable(false);
+		for (int i = 0; i < 81; i++) {
+			Position pos = new Position(i % 9, i / 9);
+
+			if (!emptyField.getTextfield(pos).equals("")) {
+				emptyField.setEditable(pos, false);
 			}
 		}
 	}
 
-	public void initializeTextFields() {
-		textFields = emptyField.getTextfield();
-		
-		for(int i = 0; i < 81; i++) {
-			JTextField currentField = textFields[i];
-			currentField.addMouseListener(new MouseAdapter(){
-				public void mousePressed(MouseEvent e){
-					if (currentField.getBackground().equals(COLOR_RED)) {
-						currentField.setBackground(COLOR_BACKGROUND);
-					}
-				}
-			});
-		}
-	}
+
 	
 	public boolean readTextFields() {
 		boolean isCorrect = true;
 		
 		for (int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
-			if(textFields[i].getText().equals("0")) {
-				textFields[i].setBackground(COLOR_RED);
+			if(emptyField.getTextfield(pos).equals("0")) {
+				emptyField.setColor(pos, COLOR_BACKGROUND);
 				isCorrect = false;
 			}
-			else if(textFields[i].getText().equals("")) {
+			else if(emptyField.getTextfield(pos).equals("")) {
 				playerField.set(pos, 0);
 			}else {
 
 				try {
-					playerField.set(pos, Integer.parseInt(textFields[i].getText()));
+					playerField.set(pos, Integer.parseInt(emptyField.getTextfield(pos)));
 					if(playerField.get(pos) > 9) {
-						textFields[i].setBackground(COLOR_RED);
+						emptyField.setColor(pos, COLOR_BACKGROUND);
 						isCorrect = false;
 					}
 				}catch(NumberFormatException e) {
-					textFields[i].setBackground(COLOR_RED);
+					emptyField.setColor(pos, COLOR_RED);
 					isCorrect = false;
 				}
 			}
@@ -158,8 +143,8 @@ public class SudokuController {
 		readTextFields();
 		for (int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
-			if (textFields[i].isEditable() && !playerField.isCorrect(pos)) {
-				textFields[i].setBackground(COLOR_RED);
+			if (emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
+				emptyField.setColor(pos, COLOR_RED);
 			}
 		}
 	}

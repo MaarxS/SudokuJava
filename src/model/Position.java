@@ -13,4 +13,9 @@ public class Position {
 		this.y = y;
 	}
 	
+	/** Return value is Index for an 1D Array. */
+	public int position1Dimensional() {	  
+		return x + y * 9;
+	}
+	
 }

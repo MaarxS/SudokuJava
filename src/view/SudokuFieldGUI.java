@@ -2,30 +2,19 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import controller.Controller;
 import controller.SudokuController;
-import javax.swing.JToolBar;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JMenuBar;
-import java.awt.Color;
-import java.awt.Component;
+import model.Position;
 
-import javax.swing.JCheckBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.Color;
+
 
 public class SudokuFieldGUI extends JFrame {
 
@@ -35,10 +24,13 @@ public class SudokuFieldGUI extends JFrame {
 	protected JPanel controlPanel;
 	protected JPanel titlePanel;
 	protected JLabel lblTitleField;
-	SudokuGUI sudoku = new SudokuGUI();
+	private SudokuGUI sudoku;
+	
 
 
 	public SudokuFieldGUI(SudokuController fieldController, boolean addOn) {
+		
+		sudoku = new SudokuGUI();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
@@ -95,11 +87,28 @@ public class SudokuFieldGUI extends JFrame {
 	public void setTitle(String title) {
 		lblTitleField.setText(title);
 	}
-	public JTextField[] getTextfield() {
-		return sudoku.tf;
-	}
+	
 
-	public void setTextfield(String value, int index) {
-		sudoku.tf[index].setText(value);
+	public void setTextfield(Position position, String text) {
+		sudoku.setTextfield(position, text);
+	}
+	
+	public String getTextfield(Position position) {
+		return sudoku.getTextfield(position);
+	}
+	
+	public void setColor(Position position, Color color){
+		sudoku.setColor(position, color);
+	}
+	
+	public Color getColor(Position position){
+		return sudoku.getColor(position);
+	}
+	public boolean isEditable(Position position) {
+		return sudoku.isEditable(position);
+	}
+	
+	public void setEditable(Position position, Boolean value) {
+		sudoku.setEditable(position, value);
 	}
 }
