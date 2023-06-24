@@ -10,15 +10,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import model.Field;
-import model.FieldGenerator;
+import model.Position;
+import model.Solver;
 import model.SudokuField;
 import view.SudokuFieldGUI;
-import model.Solver;
 
 public class SudokuController {
 	
 	
 	protected SudokuFieldGUI emptyField;
+	private Solver solver;
 	private Field playerField;
 	protected JTextField[] textFields;
 	
@@ -29,6 +30,8 @@ public class SudokuController {
 	
 	public SudokuController(Field sudoku) {
 		playerField = sudoku;
+		solver = new Solver();
+		// TODO pass solved Field as parameter
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
@@ -59,78 +62,40 @@ public class SudokuController {
 	
 	public void solveOnClick(ActionEvent e) {
 		boolean inputCorrect = readTextFields();
-		if(!inputCorrect) {
+		if(!inputCorrect) {// TODO check if fields correct
 			return;
 		}
-		new Thread(() ->{
-			Solver solver = new Solver(playerField);
-			solver.setUpdateListener((field) -> {
-				setTextFields(field);
-			});
-			solver.solve();
-			setTextFields(playerField);
-		}).start();
+		
+		playerField = solver.solve(playerField);
+		setTextFields(playerField);
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
 		readTextFields();
 		Random random = new Random();
-		int i = random.nextInt(81);
-		//System.out.println(i);
-		if (textFields[i].getText().equals("")){
-			textFields[i].setBackground(COLOR_GREEN);
-
-			Solver solver = new Solver(playerField);
-			solver.setUpdateListener((field2) -> {
-
-				int x = 0;
-				int y = 0;
-
-				for(int ii = 0; ii < 81; ii++) {
-					if(i == ii) {
-						textFields[i].setText(Integer.toString(field2.get(x,y)));
-					}
-					x++;
-
-					if(x == 9) {
-						x = 0;
-						y++;
-					}
-
-				}
-			});
-
-			solver.solve();
-		}
-		else {
-			for(int ii = 0; ii < 81; ii++) {
-				if(textFields[ii].getText().equals("")) {
-					showTippOnClick(e);
-					break;
-				}
-			}
-		}
+		int index;
+		do {
+			index = random.nextInt(81);
+		} while (!textFields[index].getText().equals(""));
+		textFields[index].setBackground(COLOR_GREEN);
+		Position pos = new Position(index % 9, index / 9);
+		Field solvedField = solver.solve(playerField);
+		playerField.set(pos, solvedField.get(pos));
+		setTextFields(playerField);
 	}
 	
 	
 	public void setTextFields(Field field) {
 
 		int fieldValue = 0;
-		int x = 0;
-		int y = 0;
 		for(int i = 0; i < 81; i++) {
-			fieldValue = field.get(x, y);
+			Position pos = new Position(i % 9, i / 9);
+			fieldValue = field.get(pos);
 			if(fieldValue == 0) {
 				emptyField.setTextfield("", i);
 			}else {
 				emptyField.setTextfield(String.valueOf(fieldValue), i);
 			}
-			x++;
-			if(x == 9) {
-				x = 0;
-				y++;
-			}
-
 		}
 	}
 	
@@ -158,22 +123,21 @@ public class SudokuController {
 	}
 	
 	public boolean readTextFields() {
-		int x = 0;
-		int y = 0;
 		boolean isCorrect = true;
 		
 		for (int i = 0; i < 81; i++) {
+			Position pos = new Position(i % 9, i / 9);
 			if(textFields[i].getText().equals("0")) {
 				textFields[i].setBackground(COLOR_RED);
 				isCorrect = false;
 			}
 			else if(textFields[i].getText().equals("")) {
-				playerField.set(x, y, 0);
+				playerField.set(pos, 0);
 			}else {
 
 				try {
-					playerField.set(x, y, Integer.parseInt(textFields[i].getText()));
-					if(playerField.get(x, y) > 9) {
+					playerField.set(pos, Integer.parseInt(textFields[i].getText()));
+					if(playerField.get(pos) > 9) {
 						textFields[i].setBackground(COLOR_RED);
 						isCorrect = false;
 					}
@@ -182,12 +146,6 @@ public class SudokuController {
 					isCorrect = false;
 				}
 			}
-			x++;
-			if(x == 9) {
-				x = 0;
-				y++;
-			}
-
 		}
 		if(!isCorrect) {
 			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
@@ -198,9 +156,8 @@ public class SudokuController {
 	public void showMistakesOnClick(ActionEvent e) {
 		readTextFields();
 		for (int i = 0; i < 81; i++) {
-			int x = i % 9;
-			int y = i / 9;
-			if (textFields[i].isEditable() && !playerField.isCorrect(x, y)) {
+			Position pos = new Position(i % 9, i / 9);
+			if (textFields[i].isEditable() && !playerField.isCorrect(pos)) {
 				textFields[i].setBackground(COLOR_RED);
 			}
 		}
