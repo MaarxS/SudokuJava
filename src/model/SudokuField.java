@@ -11,47 +11,56 @@ public class SudokuField implements Field {
 		}
 	}
 	
+	/** Constructor for copying this object.*/
+	private SudokuField(int[][] grid) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				this.grid[x][y] = grid[x][y];
+			}
+		}
+	}
+	
 	@Override
-	public void set(int x, int y, int value) {
-		grid[x][y] = value;
+	public void set(Position pos, int value) {
+		grid[pos.x][pos.y] = value;
 	}
 
 	@Override
-	public int get(int x, int y) {
-		return grid[x][y];
+	public int get(Position pos) {
+		return grid[pos.x][pos.y];
 	}
 
 	@Override
-	public boolean isEditable(int x, int y) {
+	public boolean isEditable(Position pos) {
 		return true;
 	}
 
 	@Override
-	public boolean isCorrect(int x, int y) {
-		int value = grid[x][y];
+	public boolean isCorrect(Position pos) {
+		int value = grid[pos.x][pos.y];
 		if (value == 0) {
 			return true;
 		}
-		grid[x][y] = 0;
-		boolean result = isPossible(x, y, value);
-		grid[x][y] = value;
+		grid[pos.x][pos.y] = 0;
+		boolean result = isPossible(pos, value);
+		grid[pos.x][pos.y] = value;
 		return result;
 	}
 	
 	@Override
-	public boolean isPossible(int x, int y, int value) {
+	public boolean isPossible(Position pos, int value) {
 		// check rows
 		for (int i = 0; i < 9; i++) {
-			if (value == grid[x][i]) return false;
+			if (value == grid[pos.x][i]) return false;
 		}
 		// check columns
 		for (int i = 0; i < 9; i++) {
-			if (value == grid[i][y]) return false;
+			if (value == grid[i][pos.y]) return false;
 		}
 
 		// check cells
-		int cellX = (x / 3) * 3;
-		int cellY = (y / 3) * 3;
+		int cellX = (pos.x / 3) * 3;
+		int cellY = (pos.y / 3) * 3;
 		for (int i = cellX; i < cellX + 3; i++) {
 			for (int j = cellY; j < cellY + 3; j++) {
 				if (grid[i][j] == value) return false;
@@ -77,5 +86,10 @@ public class SudokuField implements Field {
 			builder.append("\n");
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public SudokuField copy() {
+		return new SudokuField(grid);
 	}
 }

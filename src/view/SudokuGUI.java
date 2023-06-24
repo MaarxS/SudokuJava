@@ -9,6 +9,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.Position;
+
+
 public class SudokuGUI extends JPanel{
 	
 	protected JTextField[] tf = new JTextField[81];

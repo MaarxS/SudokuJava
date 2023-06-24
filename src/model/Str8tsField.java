@@ -19,30 +19,39 @@ public class Str8tsField implements Field {
 		}
 	}
 	
-	@Override
-	public void set(int x, int y, int value) {
-		fields[x][y] = value + (fields[x][y] / 10) * 10;
-	}
-
-	@Override
-	public int get(int x, int y) {
-		return fields[x][y] % 10;
-	}
-
-	@Override
-	public boolean isEditable(int x, int y) {
-		return fields[x][y] <= 9; // TODO
-	}
-	
-	public void setBlack(int x, int y, boolean isBlack) {
-		fields[x][y] = fields[x][y] % 10;
-		if (isBlack) {
-			fields[x][y] += 10;
+	/** Constructor for copying this object.*/
+	private Str8tsField(int[][] fields) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				this.fields[x][y] = fields[x][y];
+			}
 		}
 	}
 	
-	public boolean isBlack(int x, int y) {
-		if (fields[x][y] > 9) {
+	@Override
+	public void set(Position pos, int value) {
+		fields[pos.x][pos.y] = value + (fields[pos.x][pos.y] / 10) * 10;
+	}
+
+	@Override
+	public int get(Position pos) {
+		return fields[pos.x][pos.y] % 10;
+	}
+
+	@Override
+	public boolean isEditable(Position pos) {
+		return fields[pos.x][pos.y] <= 9; // TODO
+	}
+	
+	public void setBlack(Position pos, boolean isBlack) {
+		fields[pos.x][pos.y] = fields[pos.x][pos.y] % 10;
+		if (isBlack) {
+			fields[pos.x][pos.y] += 10;
+		}
+	}
+	
+	public boolean isBlack(Position pos) {
+		if (fields[pos.x][pos.y] > 9) {
 			return true;
 		}
 		return false;
@@ -50,17 +59,17 @@ public class Str8tsField implements Field {
 	
 
 	@Override
-	public boolean isCorrect(int x, int y) {
-		int digit = fields[x][y];
+	public boolean isCorrect(Position pos) {
+		int digit = fields[pos.x][pos.y];
 		// checking row
 		for (int i = 0; i < 9; i++) {
-			if (i != y && digit != 0 && digit == (fields[x][i] % 10)) {
+			if (i != pos.y && digit != 0 && digit == (fields[pos.x][i] % 10)) {
 				return false;
 			}
 		}
 		// checking column
 		for (int j = 0; j < 9; j++) {
-				if (j != x && digit != 0 && digit == (fields[j][y] % 10)) {
+				if (j != pos.x && digit != 0 && digit == (fields[j][pos.y] % 10)) {
 					return false;
 				}
 		}
@@ -68,40 +77,40 @@ public class Str8tsField implements Field {
 		List<Integer> verticalStraight = new ArrayList<Integer>();
 		List<Integer> horizontalStraight = new ArrayList<Integer>();
 
-		int i = y;
-		int j = x;
-		if (!isBlack(x,y)) {
-			horizontalStraight.add(fields[x][y]);
+		int i = pos.y;
+		int j = pos.x;
+		if (!isBlack(pos)) {
+			horizontalStraight.add(fields[pos.x][pos.y]);
 			while (i < 8) {
-				if (!isBlack(x, i+1)) {
-					horizontalStraight.add(fields[x][i+1]);
+				if (!isBlack(new Position(pos.x, i+1))) {
+					horizontalStraight.add(fields[pos.x][i+1]);
 					i++;
 				} else {
 					break;
 				}
 			}
-			i = y;
+			i = pos.y;
 			while (i > 0){
-				if (!isBlack(x, i-1)) {
-				horizontalStraight.add(fields[x][i-1]);
+				if (!isBlack(new Position(pos.x, i-1))) {
+				horizontalStraight.add(fields[pos.x][i-1]);
 				i--;
 				} else {
 					break;
 				}
 			}
-			verticalStraight.add(fields[x][y]);
+			verticalStraight.add(fields[pos.x][pos.y]);
 			while (j < 8){
-				if (!isBlack(j+1, y)) {
-				verticalStraight.add(fields[j+1][y]);
+				if (!isBlack(new Position(j+1, pos.y))) {
+				verticalStraight.add(fields[j+1][pos.y]);
 				j++;
 				} else {
 					break;
 				}
 			}
-			j = x;
+			j = pos.x;
 			while (j > 0) {
-				if (!isBlack(j-1, y)) {
-				verticalStraight.add(fields[j-1][y]);
+				if (!isBlack(new Position(j-1, pos.y))) {
+				verticalStraight.add(fields[j-1][pos.y]);
 				j--;
 				} else {
 					break;
@@ -148,11 +157,11 @@ public class Str8tsField implements Field {
 }
 
 	@Override
-	public boolean isPossible(int x, int y, int value) {
-		int temp = fields[x][y];
-		fields[x][y] = value;
-		boolean result = isCorrect(x, y);
-		fields[x][y] = temp;
+	public boolean isPossible(Position pos, int value) {
+		int temp = fields[pos.x][pos.y];
+		fields[pos.x][pos.y] = value;
+		boolean result = isCorrect(pos);
+		fields[pos.x][pos.y] = temp;
 		return result;
 	}
 
@@ -172,5 +181,10 @@ public class Str8tsField implements Field {
 			builder.append("\n");
 		}
 		return builder.toString();
+	}
+	
+	@Override
+	public Str8tsField copy() {
+		return new Str8tsField(fields);
 	}
 }
