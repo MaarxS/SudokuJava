@@ -1,8 +1,10 @@
 package model;
 
+import java.util.Optional;
+
 public class Solver {
 	
-	private UpdateListener updateListener = (x, y, value) -> {};
+	private UpdateListener updateListener = (pos, value) -> {};
 	
 	/** Updatelistener is called on every solving step.*/
 	public void setUpdateListener(UpdateListener listener) {
@@ -16,70 +18,64 @@ public class Solver {
 	}
 	
 	public boolean solveBacktracking(Field field) {
-		int[] r = fieldWithLeastPossibilities(field);
-		int x = r[0];
-		int y = r[1];
-		if (x == -1) { // finished solving
+		Optional<Position> optionalPos = fieldWithLeastPossibilities(field);
+
+		if (optionalPos.isEmpty()) { // finished solving
 			return true;
 		}
+		Position pos = optionalPos.get();
 		for (int i = 1; i <= 9; i++) {
-			field.set(x, y, i);
-			updateListener.onUpdate(x, y, i);
-			if (field.isCorrect(x, y)) {
+			field.set(pos, i);
+			updateListener.onUpdate(pos, i);
+			if (field.isCorrect(pos)) {
 				if (solveBacktracking(field)) {
 					return true;
 				}
 			}
 		}
-		field.set(x, y, 0);
+		field.set(pos, 0);
 		return false;
 	}
 	
-	public int[] fieldWithLeastPossibilities(Field field) {
-		int x = 0;
-		int y = 0;
+	public Optional<Position> fieldWithLeastPossibilities(Field field) {
+		Position pos = new Position(0, 0);
 		int minCount = 10;
-		int[] result = new int[] {-1, -1};
-		while (y < 9) {
-			int[] coordinates = findNextEditable(field, x, y);
-			x = coordinates[0];
-			y = coordinates[1];
-			if (!(y < 9)) break;
-			int count = countPossibilities(field, x, y);
+		Optional<Position> result = Optional.empty();
+		
+		while (pos.y < 9) {
+			pos = findNextEditable(field, pos);
+			if (!(pos.y < 9)) break;
+			int count = countPossibilities(field, pos);
 			if (count < minCount) {
-				result = new int[] {x, y};
+				result = Optional.of(pos);
 				minCount = count;
 			}
-			coordinates = nextIndex(x, y);
-			x = coordinates[0];
-			y = coordinates[1];
+			pos = nextIndex(pos.x, pos.y);
 		}
 		return result;
 	}
 
 	/** Calls nextIndex until a Field is editable and empty */
-	private int[] findNextEditable(Field field, int x, int y) {
-	while (y < 9 && !(field.get(x, y) == 0 && field.isEditable(x, y))) {
-			int[] r = nextIndex(x, y);
-			x = r[0];
-			y = r[1];
+	private Position findNextEditable(Field field, Position pos) {
+	while (pos.y < 9 && !(field.get(pos) == 0 && field.isEditable(pos))) {
+			pos = nextIndex(pos.x, pos.y);
 		}
-		return new int[] {x, y};
+		return pos;
 	}
 	
 	/** Get the next number, if x is at the end of the row, get the first item of the next row.*/
-	private int[] nextIndex(int x, int y) {
+	private Position nextIndex(int x, int y) {
 		x++;
 		y += x / 9;
 		x = x % 9;
-		return new int[] {x, y};
+		return new Position(x, y);
 	}
 	
 	/** Returns the amount of possible solutions for the given position.*/
-	private int countPossibilities(Field field, int x, int y) {
+	private int countPossibilities(Field field, Position pos) {
 		int count = 0;
 		for (int i = 1; i <= 9; i++) {
-			if (field.isPossible(x, y, i)) {
+			if (field.isPossible(pos, i)) {
 				count++;
 			}
 		}

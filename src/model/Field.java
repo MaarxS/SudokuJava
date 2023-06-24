@@ -2,15 +2,18 @@ package model;
 
 public interface Field {
 	
-	public void set(int x, int y, int value);
+	public void set(Position pos, int value);
 	
-	public int get(int x, int y);
+	public int get(Position pos);
 	
-	public boolean isEditable(int x, int y);
+	/** Return whether the solver should edit this Position. */
+	public boolean isEditable(Position pos);
 	
-	public boolean isCorrect(int x, int y);
+	/** Checks if the value at this position complies to the rules of this Field. */
+	public boolean isCorrect(Position pos);
 
-	public boolean isPossible(int x, int y, int value);
+	/** Checks if the value would comply to the rules of this Field on this Position. */
+	public boolean isPossible(Position pos, int value);
 	
 	/** Create an independent copy of this object.*/
 	public Field copy();

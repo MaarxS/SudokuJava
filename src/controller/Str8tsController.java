@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTextField;
 
+import model.Position;
 import model.Str8tsField;
 import view.Str8tsFieldGUI;
 
@@ -31,17 +32,16 @@ public class Str8tsController extends SudokuController{
 	public void setBlack(ItemEvent e) {
 		textFields = fieldGUI.getTextfield();
 		for(int i = 0; i < 81; i++) {
-			int x = i % 9;
-			int y = i / 9;
+			Position pos = new Position(i % 9, i / 9);
 			JTextField currentField = textFields[i];
 			textFields[i].addMouseListener(new MouseAdapter(){
 				public void mousePressed(MouseEvent e){
 					if(fieldGUI.getCheckBox().isSelected()) {
 						currentField.setBackground(COLOR_BLACK);
-						playerField.setBlack(x, y, true);
+						playerField.setBlack(pos, true);
 					} else {
 						currentField.setBackground(COLOR_BACKGROUND);
-						playerField.setBlack(x, y, false);
+						playerField.setBlack(pos, false);
 					}
 				}
 			});
