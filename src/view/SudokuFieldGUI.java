@@ -21,6 +21,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JMenuBar;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -28,12 +30,13 @@ import java.awt.event.ActionEvent;
 public class SudokuFieldGUI extends JFrame {
 
 	protected JPanel contentPane;
-	protected JTextField[] tf = new JTextField[81];
-	protected JPanel[] panels = new JPanel[9];
+
 	protected JButton btnSolve;
-	protected JPanel panel_1;
-	protected JPanel panel_4;
+	protected JPanel controlPanel;
+	protected JPanel titlePanel;
 	protected JLabel lblTitleField;
+	SudokuGUI sudoku = new SudokuGUI();
+
 
 	public SudokuFieldGUI(SudokuController fieldController, boolean addOn) {
 
@@ -45,20 +48,17 @@ public class SudokuFieldGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new GridLayout(3, 3, 0, 0));
+		
 
-		panel_1 = new JPanel();
-		contentPane.add(panel_1, BorderLayout.SOUTH);
+		controlPanel = new JPanel();
+		contentPane.add(controlPanel, BorderLayout.SOUTH);
 
 		JButton btnClearFields = new JButton("Felder löschen");
-		panel_1.add(btnClearFields);
+		controlPanel.add(btnClearFields);
 		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
 		btnSolve = new JButton("Sudoku lösen");
-		panel_1.add(btnSolve);
+		controlPanel.add(btnSolve);
 
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
@@ -66,63 +66,40 @@ public class SudokuFieldGUI extends JFrame {
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
 		
-		panel_4 = new JPanel();
-		contentPane.add(panel_4, BorderLayout.NORTH);
-		panel_4.setLayout(new BorderLayout(0, 0));
+		titlePanel = new JPanel();
+		contentPane.add(titlePanel, BorderLayout.NORTH);
+		titlePanel.setLayout(new BorderLayout(0, 0));
 		
 		lblTitleField = new JLabel("Sudoku");
 		lblTitleField.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblTitleField.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_4.add(lblTitleField);
-
-		for (int i = 0; i < 9; i++) {
-			panels[i] = new JPanel();
-			panels[i].setBorder(BorderFactory.createEtchedBorder());
-			panels[i].setLayout(new GridLayout(3, 3, 0, 0));
-			panel.add(panels[i]);
-
-		}
-		int i = 0;
-		int j = 0;
-		while (i < 81) {
-			tf[i] = new JTextField();
-			tf[i].setHorizontalAlignment(JTextField.CENTER);
-			tf[i].setFont(new Font("Tahoma", Font.BOLD, 11));
-			panels[j].add(tf[i]);
-			tf[i].setColumns(3);
-			i++;
-			if (i % 3 == 0) {
-				j++;
-				if (j == 3 && i < 27) {
-					j = 0;
-				} else if (j == 6 && i < 54) {
-					j = 3;
-				} else if (j == 9 && i < 81) {
-					j = 6;
-				}
-			}
-		}
+		titlePanel.add(lblTitleField);
+		
+		
+		contentPane.add(sudoku, BorderLayout.CENTER);
+		
 		if(!addOn) {
 			btnSolve.setText("Lösung überprüfen");
 			btnSolve.addActionListener(fieldController::showMistakesOnClick);
 			
 			JButton btnTipp = new JButton("Lösungstipp");
-			panel_1.add(btnTipp);
+			controlPanel.add(btnTipp);
 			btnTipp.addActionListener(fieldController::showTippOnClick);
 		} else {
 			btnSolve.addActionListener(fieldController::solveOnClick);
 		}
+		
 	}
 
-	public JTextField[] getTextfield() {
-		return tf;
-	}
-
-	public void setTextfield(String value, int index) {
-		tf[index].setText(value);
-	}
 	
 	public void setTitle(String title) {
 		lblTitleField.setText(title);
+	}
+	public JTextField[] getTextfield() {
+		return sudoku.tf;
+	}
+
+	public void setTextfield(String value, int index) {
+		sudoku.tf[index].setText(value);
 	}
 }

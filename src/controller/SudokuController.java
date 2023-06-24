@@ -76,7 +76,7 @@ public class SudokuController {
 		readTextFields();
 		Random random = new Random();
 		int i = random.nextInt(81);
-		//System.out.println(i);
+//		System.out.println(i);
 		if (textFields[i].getText().equals("")){
 			textFields[i].setBackground(COLOR_GREEN);
 
