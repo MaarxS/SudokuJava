@@ -15,10 +15,16 @@ public class Controller {
 
 	private GUI mainGUI;
 	private FieldGenerator fieldGenerator = new FieldGenerator();
-	private String gameMode = "Sudoku";
+	private enum gameMode {
+		SUDOKU,
+		STR8TS,
+		KILLER;
+	}
+	private gameMode mode = gameMode.SUDOKU;
 
 	public Controller(GUI gui) {
 		mainGUI = gui;
+		
 	}
 
 
@@ -31,9 +37,9 @@ public class Controller {
 	}
 	
 	private void createNewField(boolean isNewFieldEmpty) {
-		switch(gameMode)
+		switch(mode)
 		{
-		case "Sudoku":
+		case SUDOKU:
 			SudokuField sudoku = new SudokuField();
 			if (!isNewFieldEmpty) {
 				fieldGenerator.generateSolvable(sudoku);
@@ -43,7 +49,7 @@ public class Controller {
 			sudokuController.setGUI(sudokuGui);
 			break;
 			
-		case "Str8":
+		case STR8TS:
 			Str8tsField str8tsField = new Str8tsField();
 			if (!isNewFieldEmpty) {
 				fieldGenerator.generateSolvable(str8tsField);
@@ -52,14 +58,14 @@ public class Controller {
 			Str8tsFieldGUI gui = new Str8tsFieldGUI(str8tsController, isNewFieldEmpty);
 			str8tsController.setGUI(gui);
 			break;
-		case "Killer":
+		case KILLER:
 
 			break;
 		}
 	}
 
 	public void modeSudokuOnClick(ActionEvent e) {
-		gameMode = "Sudoku";
+		mode = gameMode.SUDOKU;
 		mainGUI.setLabelList(0, "Sudoku Rechner");
 		mainGUI.setLabelList(1, "Sudoku lösen lassen");
 		mainGUI.setLabelList(2, "Sudoku erstellen");		
@@ -67,7 +73,7 @@ public class Controller {
 
 
 	public void modeStr8OnClick(ActionEvent e) {
-		gameMode = "Str8";
+		mode = gameMode.STR8TS;
 		mainGUI.setLabelList(0, "Str8 Rechner");
 		mainGUI.setLabelList(1, "Str8 lösen lassen");
 		mainGUI.setLabelList(2, "Str8 erstellen");
@@ -75,7 +81,7 @@ public class Controller {
 
 
 	public void modeKillerOnClick(ActionEvent e) {
-		gameMode = "Killer";
+		mode = gameMode.KILLER;
 		mainGUI.setLabelList(0, "Killer Rechner");
 		mainGUI.setLabelList(1, "Killer lösen lassen");
 		mainGUI.setLabelList(2, "Killer erstellen");
