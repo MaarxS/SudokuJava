@@ -166,15 +166,16 @@ public class Str8tsField implements Field {
 	}
 
 	public String toString() {
-//		final String ANSI_RESET = "\u001B[0m";
+		final String ANSI_RESET = "\u001B[0m";
 //		final String ANSI_RED = "\u001B[31m";
-//		final String ANSI_GREY = "\u001B[30m";
+		final String ANSI_GREY = "\u001B[30m";
 		StringBuilder builder = new StringBuilder();
 		for (int y = 0; y < fields.length; y++) {
 			for (int x = 0; x < fields.length; x++) {
-//				if (isCorrect(x, y)) builder.append(ANSI_RESET);
+				Position pos = new Position(x, y);
+				if (isCorrect(pos)) builder.append(ANSI_RESET);
 //				else builder.append(ANSI_RED);
-//				if (!isEditable(x, y)) builder.append(ANSI_GREY);
+				if (!isEditable(pos)) builder.append(ANSI_GREY);
 				builder.append(fields[x][y] % 10);
 				builder.append(" ");
 			}

@@ -40,10 +40,16 @@ public class Controller {
 		switch(mode)
 		{
 		case SUDOKU:
-			SudokuField sudoku = new SudokuField();
-			if (!isNewFieldEmpty) {
-				fieldGenerator.generateSolvable(sudoku);
+			SudokuField sudoku;
+			if (isNewFieldEmpty) {
+				sudoku = new SudokuField();
+				
+			} else {
+
+				int difficulty = mainGUI.getComboBoxIndex();
+				sudoku  = fieldGenerator.generate(difficulty);
 			}
+			
 			SudokuController sudokuController = new SudokuController(sudoku);
 			SudokuFieldGUI sudokuGui = new SudokuFieldGUI(sudokuController, isNewFieldEmpty);
 			sudokuController.setGUI(sudokuGui);

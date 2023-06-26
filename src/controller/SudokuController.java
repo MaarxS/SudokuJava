@@ -59,9 +59,10 @@ public class SudokuController {
 		if(!inputCorrect) {// TODO check if fields correct
 			return;
 		}
-		
+		System.out.println(playerField);
 		playerField = solver.solve(playerField);
 		setTextFields(playerField);
+		System.out.println(playerField);
 	}
 	
 	public void showTippOnClick(ActionEvent e) {

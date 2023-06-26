@@ -42,7 +42,7 @@ public class Str8tsFieldGUI extends SudokuFieldGUI {
 					});
 				}	
 			});
-	
+
 		}
 
 
@@ -50,6 +50,6 @@ public class Str8tsFieldGUI extends SudokuFieldGUI {
 	public JCheckBox getCheckBox() {
 		return cbPaintBlack;
 	}
-	
+
 
 }
