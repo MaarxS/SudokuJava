@@ -69,11 +69,11 @@ public class SudokuController {
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
+		readTextFields();
 		if(playerField.isSolved()) {
 			JOptionPane.showMessageDialog(null, "Es sind bereits alle Felder ausgefüllt!");
 			return;
 		}
-		readTextFields();
 		Random random = new Random();
 
 		int index;
@@ -158,7 +158,7 @@ public class SudokuController {
 				emptyField.setColor(pos, COLOR_RED);
 				isValid = false;
 			}else {
-				isValid = false;
+				isValid = true;
 			}
 			
 		}

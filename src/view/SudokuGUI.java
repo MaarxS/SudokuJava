@@ -19,6 +19,7 @@ public class SudokuGUI extends JPanel{
 	protected JPanel[] panels = new JPanel[9];
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
+	public static final Color COLOR_GREEN = new Color(11, 120, 11);
 	
 	public SudokuGUI() {
 		this.setLayout(new GridLayout(3, 3, 0, 0));
@@ -39,7 +40,7 @@ public class SudokuGUI extends JPanel{
 			tf[i].setFont(new Font("Tahoma", Font.BOLD, 11));
 			tf[i].addMouseListener(new MouseAdapter(){		
 				public void mousePressed(MouseEvent e){
-					if (getColor(pos).equals(COLOR_RED)) {
+					if (getColor(pos).equals(COLOR_RED) || getColor(pos).equals(COLOR_GREEN)) {
 						setColor(pos, COLOR_BACKGROUND);
 					}
 				}
