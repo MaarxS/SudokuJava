@@ -18,7 +18,6 @@ public class SudokuController {
 	private Solver solver;
 	private Field playerField;
 	private Field solvedField;
-//	protected JTextField[] textFields;
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
@@ -29,7 +28,6 @@ public class SudokuController {
 		playerField = sudoku;
 		solver = new Solver();
 		solvedField = solvedSudoku;
-		// TODO pass solved Field as parameter
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
@@ -40,7 +38,6 @@ public class SudokuController {
 			event.printStackTrace();
 		}
 		setTextFields(playerField);
-//		initializeTextFields();
 		setInitalValuesUneditable();
 	}
 	
@@ -62,11 +59,10 @@ public class SudokuController {
 			JOptionPane.showMessageDialog(null, "Es sind bereits alle Felder ausgefüllt!");
 			return;
 		}
-		boolean inputCorrect = readTextFields();
+		boolean inputCorrect = showMistakesOnClick(e);
 		if(!inputCorrect) {// TODO check if fields correct
 			return;
 		}
-		System.out.println(playerField);
 		playerField = solver.solve(playerField);
 		setTextFields(playerField);
 		System.out.println(playerField);
@@ -125,17 +121,23 @@ public class SudokuController {
 		for (int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
 			if(emptyField.getTextfield(pos).equals("0")) {
-				emptyField.setColor(pos, COLOR_BACKGROUND);
+				emptyField.setColor(pos, COLOR_RED);
 				isCorrect = false;
 			}
 			else if(emptyField.getTextfield(pos).equals("")) {
 				playerField.set(pos, 0);
+				
+				
+			}else if(emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
+				emptyField.setColor(pos, COLOR_RED);
+				isCorrect = false;
+				
 			}else {
 
 				try {
 					playerField.set(pos, Integer.parseInt(emptyField.getTextfield(pos)));
 					if(playerField.get(pos) > 9) {
-						emptyField.setColor(pos, COLOR_BACKGROUND);
+						emptyField.setColor(pos, COLOR_RED);
 						isCorrect = false;
 					}
 				}catch(NumberFormatException e) {
@@ -144,19 +146,25 @@ public class SudokuController {
 				}
 			}
 		}
-		if(!isCorrect) {
-			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
-		}
 		return isCorrect;
 	}
 	
-	public void showMistakesOnClick(ActionEvent e) {
+	public boolean showMistakesOnClick(ActionEvent e) {
 		readTextFields();
+		boolean isValid = true;
 		for (int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
 			if (emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
 				emptyField.setColor(pos, COLOR_RED);
+				isValid = false;
+			}else {
+				isValid = false;
 			}
+			
 		}
+		if(!isValid) {
+			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
+		}
+		return isValid;
 	}
 }
