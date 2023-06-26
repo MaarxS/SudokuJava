@@ -145,8 +145,9 @@ public class SudokuController {
 	}
 	
 	public boolean showMistakesOnClick(ActionEvent e) {
-		readTextFields();
 		boolean isValid = true;
+		isValid = readTextFields();
+		
 		for (int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
 			if (emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
