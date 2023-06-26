@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 
 import model.FieldGenerator;
+import model.Pair;
 import model.Str8tsField;
 import model.SudokuField;
 import view.GUI;
@@ -41,16 +42,21 @@ public class Controller {
 		{
 		case SUDOKU:
 			SudokuField sudoku;
+			SudokuField solvedSudoku;
+			
 			if (isNewFieldEmpty) {
 				sudoku = new SudokuField();
-				
+				solvedSudoku = null;
 			} else {
-
+				
 				int difficulty = mainGUI.getComboBoxIndex();
-				sudoku  = fieldGenerator.generate(difficulty);
+				Pair<SudokuField, SudokuField> solvedAndUnsolved = fieldGenerator.generate(difficulty);
+				sudoku = solvedAndUnsolved.unsolved;
+				solvedSudoku = solvedAndUnsolved.solved;
+				
 			}
 			
-			SudokuController sudokuController = new SudokuController(sudoku);
+			SudokuController sudokuController = new SudokuController(sudoku, solvedSudoku);
 			SudokuFieldGUI sudokuGui = new SudokuFieldGUI(sudokuController, isNewFieldEmpty);
 			sudokuController.setGUI(sudokuGui);
 			break;

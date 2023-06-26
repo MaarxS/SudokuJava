@@ -17,6 +17,7 @@ public class SudokuController {
 	protected SudokuFieldGUI emptyField;
 	private Solver solver;
 	private Field playerField;
+	private Field solvedField;
 //	protected JTextField[] textFields;
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
@@ -24,9 +25,10 @@ public class SudokuController {
 	public static final Color COLOR_GREEN = new Color(11, 120, 11);
 	
 	
-	public SudokuController(Field sudoku) {
+	public SudokuController(Field sudoku, Field solvedSudoku) {
 		playerField = sudoku;
 		solver = new Solver();
+		solvedField = solvedSudoku;
 		// TODO pass solved Field as parameter
 	}
 	
@@ -55,6 +57,9 @@ public class SudokuController {
 	}
 	
 	public void solveOnClick(ActionEvent e) {
+		if(playerField.isSolved()) {
+			return;
+		}
 		boolean inputCorrect = readTextFields();
 		if(!inputCorrect) {// TODO check if fields correct
 			return;
@@ -66,6 +71,9 @@ public class SudokuController {
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
+		if(playerField.isSolved()) {
+			return;
+		}
 		readTextFields();
 		Random random = new Random();
 
@@ -77,7 +85,6 @@ public class SudokuController {
 		} while (!emptyField.getTextfield(pos).equals(""));
 		emptyField.setColor(pos, COLOR_GREEN);
 		
-		Field solvedField = solver.solve(playerField);
 		playerField.set(pos, solvedField.get(pos));
 		setTextFields(playerField);
 	}

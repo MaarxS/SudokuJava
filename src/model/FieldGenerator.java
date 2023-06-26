@@ -86,9 +86,10 @@ public class FieldGenerator {
 		int i = random.nextInt(list.size());
 		return list.remove(i);
 	}
-	public SudokuField generate(int difficulty) {
+	public Pair<SudokuField,SudokuField> generate(int difficulty) {
 		SudokuField unsolvedSudoku = new SudokuField();
 		generateRecursive(unsolvedSudoku, 0);
+		SudokuField solvedSudoku = unsolvedSudoku.copy();
 
 		int count = 0;
 		int limit = 0;
@@ -114,6 +115,6 @@ public class FieldGenerator {
 			}
 		}
 
-		return unsolvedSudoku;
+		return new Pair<SudokuField, SudokuField>(unsolvedSudoku, solvedSudoku);
 	}
 }

@@ -188,4 +188,15 @@ public class Str8tsField implements Field {
 	public Str8tsField copy() {
 		return new Str8tsField(fields);
 	}
+	
+	@Override
+	public boolean isSolved() {
+		for(int i = 0; i < 81; i++) {
+			Position pos = new Position(i % 9, i / 9);
+			if(fields[pos.x][pos.y] == 0 && !isBlack(pos)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

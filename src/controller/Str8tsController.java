@@ -14,7 +14,7 @@ public class Str8tsController extends SudokuController{
 
 
 	public Str8tsController(Str8tsField str8tsField) {
-		super(str8tsField);
+		super(str8tsField, null);
 		playerField = str8tsField;
 	}
 	
