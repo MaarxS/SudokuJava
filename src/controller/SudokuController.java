@@ -51,6 +51,7 @@ public class SudokuController {
 			if (emptyField.isEditable(pos)) {
 				emptyField.setTextfield(pos, "");
 				emptyField.setColor(pos, COLOR_BACKGROUND);
+				playerField.set(pos, 0);
 			}
 
 		}
@@ -58,6 +59,7 @@ public class SudokuController {
 	
 	public void solveOnClick(ActionEvent e) {
 		if(playerField.isSolved()) {
+			JOptionPane.showMessageDialog(null, "Es sind bereits alle Felder ausgefüllt!");
 			return;
 		}
 		boolean inputCorrect = readTextFields();
@@ -72,6 +74,7 @@ public class SudokuController {
 	
 	public void showTippOnClick(ActionEvent e) {
 		if(playerField.isSolved()) {
+			JOptionPane.showMessageDialog(null, "Es sind bereits alle Felder ausgefüllt!");
 			return;
 		}
 		readTextFields();
