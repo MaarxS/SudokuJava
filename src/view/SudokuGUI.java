@@ -84,6 +84,9 @@ public class SudokuGUI extends JPanel{
 	public void setEditable(Position position, Boolean value) {
 		tf[position.position1Dimensional()].setEditable(value);
 	}
+	public JTextField getTextFieldForListener(int index) {
+		return tf[index];
+	}
 
 	
 

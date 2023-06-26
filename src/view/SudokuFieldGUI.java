@@ -24,7 +24,7 @@ public class SudokuFieldGUI extends JFrame {
 	protected JPanel controlPanel;
 	protected JPanel titlePanel;
 	protected JLabel lblTitleField;
-	private SudokuGUI sudoku;
+	protected SudokuGUI sudoku;
 	
 
 
