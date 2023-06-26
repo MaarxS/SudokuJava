@@ -60,7 +60,7 @@ public class SudokuController {
 			return;
 		}
 		boolean inputCorrect = showMistakesOnClick(e);
-		if(!inputCorrect) {// TODO check if fields correct
+		if(!inputCorrect) {
 			return;
 		}
 		playerField = solver.solve(playerField);
@@ -69,9 +69,8 @@ public class SudokuController {
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
-		readTextFields();
+		showMistakesOnClick(null);
 		if(playerField.isSolved()) {
-			JOptionPane.showMessageDialog(null, "Es sind bereits alle Felder ausgefüllt!");
 			return;
 		}
 		Random random = new Random();
@@ -128,11 +127,7 @@ public class SudokuController {
 				playerField.set(pos, 0);
 				
 				
-			}else if(emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
-				emptyField.setColor(pos, COLOR_RED);
-				isCorrect = false;
-				
-			}else {
+			} else {
 
 				try {
 					playerField.set(pos, Integer.parseInt(emptyField.getTextfield(pos)));
@@ -157,13 +152,13 @@ public class SudokuController {
 			if (emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
 				emptyField.setColor(pos, COLOR_RED);
 				isValid = false;
-			}else {
-				isValid = true;
 			}
 			
 		}
 		if(!isValid) {
 			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");
+		}else if(playerField.isSolved()) {
+			JOptionPane.showMessageDialog(null,"Das gesamte Feld wurde richtig gelöst.");
 		}
 		return isValid;
 	}
