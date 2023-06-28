@@ -24,9 +24,17 @@ public class Str8tsController extends SudokuController{
 		playerField = str8tsField;
 	}
 	
+	
 	public void setGUI(Str8tsFieldGUI str8tsFieldGUI) {
 		super.setGUI(str8tsFieldGUI);
 		fieldGUI = str8tsFieldGUI;
+		for (int i = 0; i < 81; i++) {
+			Position pos = new Position(i % 9, i / 9);
+			if (playerField.isBlack(pos)) {
+				textFields[i].setBackground(COLOR_BLACK);
+				textFields[i].setEditable(false);
+			}
+		}
 	}
 
 	public void setBlack(ItemEvent e) {
@@ -47,4 +55,5 @@ public class Str8tsController extends SudokuController{
 			});
 		}
 	}
+	
 }

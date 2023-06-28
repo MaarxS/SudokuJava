@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import model.FieldGenerator;
 import model.Str8tsField;
+import model.Str8tsGenerator;
 import model.SudokuField;
 import view.GUI;
 import view.Str8tsFieldGUI;
@@ -44,9 +45,11 @@ public class Controller {
 			break;
 			
 		case "Str8":
-			Str8tsField str8tsField = new Str8tsField();
-			if (!isNewFieldEmpty) {
-				fieldGenerator.generateSolvable(str8tsField);
+			Str8tsField str8tsField;
+			if (isNewFieldEmpty) {
+				str8tsField =  new Str8tsField();
+			} else {
+				str8tsField = new Str8tsGenerator().generate(0);
 			}
 			Str8tsController str8tsController = new Str8tsController(str8tsField);
 			Str8tsFieldGUI gui = new Str8tsFieldGUI(str8tsController, isNewFieldEmpty);

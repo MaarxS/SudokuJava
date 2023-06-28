@@ -5,6 +5,8 @@ import java.util.Optional;
 public class Solver {
 	
 	private UpdateListener updateListener = (pos, value) -> {};
+	private long startTime = 0;
+	private int steps = 0;
 	
 	/** Updatelistener is called on every solving step.*/
 	public void setUpdateListener(UpdateListener listener) {
@@ -13,11 +15,28 @@ public class Solver {
 	
 	public Field solve(Field field) {
 		field = field.copy();
-		solveBacktracking(field);
+		startTime = System.nanoTime();
+		solveBacktracking(field, 0);
+		System.out.printf("solved in %.3fms\n", (System.nanoTime() - startTime) / 1000000f);
 		return field;
 	}
 	
-	public boolean solveBacktracking(Field field) {
+	public Field solve(Field field, int maxSteps) {
+		field = field.copy();
+		startTime = System.nanoTime();
+		steps = 0;
+		solveBacktracking(field, maxSteps);
+		System.out.printf("solved in %.3fms\n", (System.nanoTime() - startTime) / 1000000f);
+		return field;
+	}
+	
+	private void stepsUpdate(int steps) {
+		if (steps % 1000000 == 0) {
+			System.out.printf("executed %dM steps in %.3fs\n", steps / 1000000, (System.nanoTime() - startTime) / 1000000000f);
+		}
+	}
+	
+	private boolean solveBacktracking(Field field, int maxSteps) {
 		Optional<Position> optionalPos = fieldWithLeastPossibilities(field);
 
 		if (optionalPos.isEmpty()) { // finished solving
@@ -26,9 +45,11 @@ public class Solver {
 		Position pos = optionalPos.get();
 		for (int i = 1; i <= 9; i++) {
 			field.set(pos, i);
+			stepsUpdate(++steps);
 			updateListener.onUpdate(pos, i);
 			if (field.isCorrect(pos)) {
-				if (solveBacktracking(field)) {
+				if (maxSteps > 0 && steps >= maxSteps) return true;
+				if (solveBacktracking(field, maxSteps)) {
 					return true;
 				}
 			}
