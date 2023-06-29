@@ -9,8 +9,15 @@ public class Str8tsGenerator {
 	private Random random = new Random();
 	
 	public Str8tsField generate(int difficulty) {
-		// TODO make solvable
-		return generateSolved();
+		// TODO implement difficulty
+		Str8tsField field = generateSolved();
+		for (int i = 0; i < 65; i++) {
+			int x = random.nextInt(9);
+			int y = random.nextInt(9);
+			Position pos = new Position(x, y);
+			field.set(pos, 0);
+		}
+		return field;
 	}
 	
 	/**
