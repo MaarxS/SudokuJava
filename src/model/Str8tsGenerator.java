@@ -9,6 +9,7 @@ public class Str8tsGenerator {
 	private Random random = new Random();
 	
 	public Str8tsField generate(int difficulty) {
+		// TODO make solvable
 		return generateSolved();
 	}
 	
@@ -21,11 +22,12 @@ public class Str8tsGenerator {
 	public Str8tsField generateSolved() {
 		final int MAX_STEPS = 10000;
 		final int AMOUNT_BLACKS = 40;
-		Str8tsField field;
-		Optional<Field> optField;
-		field = new Str8tsField();
 		int tries = 0;
 		long startTime = System.nanoTime();
+
+		Str8tsField field;
+		Optional<Str8tsField> optField;
+		field = new Str8tsField();
 		do {
 			tries++;
 			field = new Str8tsField();
@@ -37,20 +39,17 @@ public class Str8tsGenerator {
 			removeShortStr8ts(field);
 			optField = solver.solve(field, MAX_STEPS);
 		} while (optField.isEmpty());
+		field = optField.get();
+		
 		float time = (System.nanoTime() - startTime) / 1000000000f;
 		System.out.printf("Str8tsGenerator.generate: generated with %d " + (tries == 1 ? "try" : "tries") + " in %.3fs\n", tries, time);
-		field = (Str8tsField) optField.get();
 
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
-				Position pos = new Position(x, y);
-				if (field.isBlack(pos)) {
-					int i;
-					for (i = 1; i <= 9; i++) {
-						if (field.isPossible(pos, i)) {
-							field.set(pos, i);
-							break;
-						}
+		for (Position pos : Position.iterateAll()) {
+			if (field.isBlack(pos)) {
+				for (int i = 1; i <= 9; i++) {
+					if (field.isPossible(pos, i)) {
+						field.set(pos, i);
+						break;
 					}
 				}
 			}

@@ -11,7 +11,7 @@ public class Solver {
 		updateListener = listener;
 	}
 	
-	public Field solve(Field field) {
+	public <T extends Field> T solve(T field) {
 		return solve(field, 0).orElse(field);
 	}
 	
@@ -23,12 +23,20 @@ public class Solver {
 	 * @return an empty Optional container if it could not be solved otherwise returns 
 	 * an Optional container with the solved Field.
 	 */
-	public Optional<Field> solve(Field field, int maxSteps) {
-		field = field.copy();
+	@SuppressWarnings("unchecked")
+	public <T extends Field> Optional<T> solve(T field, int maxSteps) {
+		field = (T) field.copy();
 		long startTime = System.nanoTime();
 		ValueHolder<Integer> step = new ValueHolder<>(0);
 		solveBacktracking(field, maxSteps, step);
-		if (findNextEditable(field, new Position(0, 0)).y < 9) return Optional.empty(); 
+		boolean isSolved = true;
+		for (Position pos : Position.iterateAll()) {
+			if (field.get(pos) == 0 && field.isEditable(pos)) {
+				isSolved = false;
+				break;
+			}
+		}
+		if (!isSolved) return Optional.empty(); 
 		System.out.printf("Solver.solve: solved with %d steps in %.3fms\n", step.value, (System.nanoTime() - startTime) / 1000000f);
 		return Optional.of(field);
 	}
@@ -64,37 +72,16 @@ public class Solver {
 	}
 	
 	public Optional<Position> fieldWithLeastPossibilities(Field field) {
-		Position pos = new Position(0, 0);
 		int minCount = 10;
 		Optional<Position> result = Optional.empty();
-		
-		while (pos.y < 9) {
-			pos = findNextEditable(field, pos);
-			if (!(pos.y < 9)) break;
+		for (Position pos : Position.iterateAll()) {
+			if (field.get(pos) != 0 || !field.isEditable(pos)) continue;
 			int count = countPossibilities(field, pos);
 			if (count < minCount) {
 				result = Optional.of(pos);
-				minCount = count;
 			}
-			pos = nextIndex(pos.x, pos.y);
 		}
 		return result;
-	}
-
-	/** Calls nextIndex until a Field is editable and empty */
-	private Position findNextEditable(Field field, Position pos) {
-	while (pos.y < 9 && !(field.get(pos) == 0 && field.isEditable(pos))) {
-			pos = nextIndex(pos.x, pos.y);
-		}
-		return pos;
-	}
-	
-	/** Get the next number, if x is at the end of the row, get the first item of the next row.*/
-	private Position nextIndex(int x, int y) {
-		x++;
-		y += x / 9;
-		x = x % 9;
-		return new Position(x, y);
 	}
 	
 	/** Returns the amount of possible solutions for the given position.*/
