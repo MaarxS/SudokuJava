@@ -5,8 +5,6 @@ import java.util.Optional;
 public class Solver {
 	
 	private UpdateListener updateListener = (pos, value) -> {};
-	private int steps = 0;
-	// TODO remove attribute
 	
 	/** Updatelistener is called on every solving step.*/
 	public void setUpdateListener(UpdateListener listener) {
@@ -28,10 +26,10 @@ public class Solver {
 	public Optional<Field> solve(Field field, int maxSteps) {
 		field = field.copy();
 		long startTime = System.nanoTime();
-		steps = 0;
-		solveBacktracking(field, maxSteps);
+		ValueHolder<Integer> step = new ValueHolder<>(0);
+		solveBacktracking(field, maxSteps, step);
 		if (findNextEditable(field, new Position(0, 0)).y < 9) return Optional.empty(); 
-		System.out.printf("Solver.solve: solved with %d steps in %.3fms\n", steps, (System.nanoTime() - startTime) / 1000000f);
+		System.out.printf("Solver.solve: solved with %d steps in %.3fms\n", step.value, (System.nanoTime() - startTime) / 1000000f);
 		return Optional.of(field);
 	}
 	
@@ -43,7 +41,7 @@ public class Solver {
 	 * {@link #steps} is incremented every time a number is entered
 	 * @return true if its finished or stopped, false if its not solvable
 	 */
-	private boolean solveBacktracking(Field field, int maxSteps) {
+	private boolean solveBacktracking(Field field, int maxSteps, ValueHolder<Integer> step) {
 		Optional<Position> optionalPos = fieldWithLeastPossibilities(field);
 
 		if (optionalPos.isEmpty()) { // finished solving
@@ -52,11 +50,11 @@ public class Solver {
 		Position pos = optionalPos.get();
 		for (int i = 1; i <= 9; i++) {
 			field.set(pos, i);
-			steps++;
+			step.value++;
 			updateListener.onUpdate(pos, i);
 			if (field.isCorrect(pos)) {
-				if (maxSteps > 0 && steps >= maxSteps) return true;
-				if (solveBacktracking(field, maxSteps)) {
+				if (maxSteps > 0 && step.value >= maxSteps) return true;
+				if (solveBacktracking(field, maxSteps, step)) {
 					return true;
 				}
 			}
