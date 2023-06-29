@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Optional;
 import java.util.Random;
 
 public class Str8tsGenerator {
@@ -8,30 +9,56 @@ public class Str8tsGenerator {
 	private Random random = new Random();
 	
 	public Str8tsField generate(int difficulty) {
-		Str8tsField field = new Str8tsField();
-		for (int i = 0; i < 40; i++) {
-			int x = random.nextInt(9);
-			int y = random.nextInt(9);
-			field.setBlack(new Position(x, y), true);
-		}
-		System.out.println(field);
-		removeShortStr8ts(field);
-		System.out.println(field);
-		field = (Str8tsField) solver.solve(field, 3000000);
+		return generateSolved();
+	}
+	
+	/**
+	 * Generates a solved Field by randomly placing black squares and trying to solve it.
+	 * 
+	 * If the solver fails after MAX_STEPS it starts again.
+	 * @returns a solved {@link Str8tsField}
+	 */
+	public Str8tsField generateSolved() {
+		final int MAX_STEPS = 10000;
+		final int AMOUNT_BLACKS = 40;
+		Str8tsField field;
+		Optional<Field> optField;
+		field = new Str8tsField();
+		int tries = 0;
+		long startTime = System.nanoTime();
+		do {
+			tries++;
+			field = new Str8tsField();
+			for (int i = 0; i < AMOUNT_BLACKS; i++) {
+				int x = random.nextInt(9);
+				int y = random.nextInt(9);
+				field.setBlack(new Position(x, y), true);
+			}
+			removeShortStr8ts(field);
+			optField = solver.solve(field, MAX_STEPS);
+		} while (optField.isEmpty());
+		float time = (System.nanoTime() - startTime) / 1000000000f;
+		System.out.printf("Str8tsGenerator.generate: generated with %d " + (tries == 1 ? "try" : "tries") + " in %.3fs\n", tries, time);
+		field = (Str8tsField) optField.get();
+
 		for (int x = 0; x < 9; x++) {
 			for (int y = 0; y < 9; y++) {
 				Position pos = new Position(x, y);
-				if (field.isBlack(pos) && random.nextInt(3) == 0) {
+				if (field.isBlack(pos)) {
 					int i;
-					for (i = 1; i <= 9 && field.isPossible(pos, i); i++);
-					// field.set(pos, i);
+					for (i = 1; i <= 9; i++) {
+						if (field.isPossible(pos, i)) {
+							field.set(pos, i);
+							break;
+						}
+					}
 				}
 			}
 		}
-		System.out.println(field);
 		return field;
 	}
-	
+
+	/** Removes neighboring black squares for every str8t with length 1. */
 	private void removeShortStr8ts(Str8tsField field) {
 		for (int x = 0; x < 9; x++) {
 			int length = 0;

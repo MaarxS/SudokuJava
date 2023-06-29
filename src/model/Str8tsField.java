@@ -30,9 +30,6 @@ public class Str8tsField implements Field {
 	
 	@Override
 	public void set(Position pos, int value) {
-		if (isBlack(pos)) {
-			throw new RuntimeException("Setz doch kein schwarzes Feld, bist du behindert?");
-		}
 		fields[pos.x][pos.y] = value + (fields[pos.x][pos.y] / 10) * 10;
 	}
 
