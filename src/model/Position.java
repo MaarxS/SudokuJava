@@ -78,4 +78,10 @@ public class Position implements Iterable<Position> {
 	public String toString() {
 		return "Position(%d, %d)".formatted(x, y);
 	}
+
+	/** Return value is Index for an 1D Array. */
+	public int position1Dimensional() {	  
+		return x + y * 9;
+	}
+	
 }

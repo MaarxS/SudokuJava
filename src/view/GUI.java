@@ -25,6 +25,7 @@ public class GUI extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel[] labelList = new JLabel[9];
+	private JComboBox comboB;
 
 	
 
@@ -142,6 +143,7 @@ public class GUI extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Leicht", "Mittel", "Schwer"}));
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		panel_3.add(comboBox);
+		comboB = comboBox;
 		
 		JPanel panel_16 = new JPanel();
 		panel_3.add(panel_16, BorderLayout.NORTH);
@@ -195,6 +197,9 @@ public class GUI extends JFrame {
 	}
 	public void setLabelList(int index, String text) {
 		labelList[index].setText(text);
+	}
+	public int getComboBoxIndex() {
+		return comboB.getSelectedIndex();
 	}
 
 }

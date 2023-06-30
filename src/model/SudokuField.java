@@ -92,4 +92,15 @@ public class SudokuField implements Field {
 	public SudokuField copy() {
 		return new SudokuField(grid);
 	}
+	
+	@Override
+	public boolean isSolved() {
+		for(int i = 0; i < 81; i++) {
+			Position pos = new Position(i % 9, i / 9);
+			if(grid[pos.x][pos.y] == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
