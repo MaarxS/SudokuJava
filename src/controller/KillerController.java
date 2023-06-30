@@ -6,7 +6,7 @@ import view.KillerFieldGUI;
 public class KillerController extends SudokuController{
 
 	public KillerController(SudokuField killer, boolean isNewFieldEmpty) {
-		super(killer);
+		super(killer, null);
 		try {
 			KillerFieldGUI frame = new KillerFieldGUI(this, isNewFieldEmpty);
 			frame.setVisible(true);

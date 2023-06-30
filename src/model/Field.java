@@ -17,5 +17,7 @@ public interface Field {
 	
 	/** Create an independent copy of this object.*/
 	public Field copy();
+	/** Checks if Field is already solved.*/
+	public boolean isSolved();
 	
 }
