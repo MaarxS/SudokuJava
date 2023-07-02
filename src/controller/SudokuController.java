@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.Random;
 
@@ -13,16 +12,10 @@ import view.SudokuFieldGUI;
 
 public class SudokuController {
 	
-	
-	protected SudokuFieldGUI emptyField;
+	protected SudokuFieldGUI gui;
 	private Solver solver;
 	private Field playerField;
 	private Field solvedField;
-	
-	public static final Color COLOR_RED = new Color(148, 46, 46);
-	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
-	public static final Color COLOR_GREEN = new Color(11, 120, 11);
-	
 	
 	public SudokuController(Field sudoku, Field solvedSudoku) {
 		playerField = sudoku;
@@ -31,7 +24,7 @@ public class SudokuController {
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
-		emptyField = frame;
+		gui = frame;
 		try {
 			frame.setVisible(true);
 		} catch (Exception event) {
@@ -43,14 +36,12 @@ public class SudokuController {
 	
 	
 	public void clearFieldOnClick(ActionEvent e) {
-		for(int i = 0; i < 81; i++) {
-			Position pos = new Position(i % 9, i / 9);
-			if (emptyField.isEditable(pos)) {
-				emptyField.setTextfield(pos, "");
-				emptyField.setColor(pos, COLOR_BACKGROUND);
+		for(Position pos : Position.iterateAll()) {
+			if (gui.isEditable(pos)) {
+				gui.setTextfield(pos, "");
+				gui.setColor(pos, SudokuFieldGUI.COLOR_BACKGROUND);
 				playerField.set(pos, 0);
 			}
-
 		}
 	}
 	
@@ -80,8 +71,8 @@ public class SudokuController {
 		do {
 			index = random.nextInt(81);
 			pos = new Position(index % 9, index / 9);
-		} while (!emptyField.getTextfield(pos).equals(""));
-		emptyField.setColor(pos, COLOR_GREEN);
+		} while (!gui.getTextfield(pos).equals("") || !gui.isEditable(pos));
+		gui.setColor(pos, SudokuFieldGUI.COLOR_GREEN);
 		
 		playerField.set(pos, solvedField.get(pos));
 		setTextFields(playerField);
@@ -91,52 +82,43 @@ public class SudokuController {
 	public void setTextFields(Field field) {
 
 		int fieldValue = 0;
-		for(int i = 0; i < 81; i++) {
-			Position pos = new Position(i % 9, i / 9);
+		for(Position pos : Position.iterateAll()) {
 			fieldValue = field.get(pos);
 			if(fieldValue == 0) {
-				emptyField.setTextfield(pos, "");
+				gui.setTextfield(pos, "");
 			}else {
-				emptyField.setTextfield(pos, String.valueOf(fieldValue));
+				gui.setTextfield(pos, String.valueOf(fieldValue));
 			}
 		}
 	}
 	
 	private void setInitalValuesUneditable() {
-		for (int i = 0; i < 81; i++) {
-			Position pos = new Position(i % 9, i / 9);
-
-			if (!emptyField.getTextfield(pos).equals("")) {
-				emptyField.setEditable(pos, false);
+		for (Position pos : Position.iterateAll()) {
+			if (!gui.getTextfield(pos).equals("")) {
+				gui.setEditable(pos, false);
 			}
 		}
 	}
-
-
 	
 	public boolean readTextFields() {
 		boolean isCorrect = true;
 		
-		for (int i = 0; i < 81; i++) {
-			Position pos = new Position(i % 9, i / 9);
-			if(emptyField.getTextfield(pos).equals("0")) {
-				emptyField.setColor(pos, COLOR_RED);
+		for (Position pos : Position.iterateAll()) {
+			if(gui.getTextfield(pos).equals("0")) {
+				gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 				isCorrect = false;
-			}
-			else if(emptyField.getTextfield(pos).equals("")) {
+			} else if(gui.getTextfield(pos).equals("")) {
 				playerField.set(pos, 0);
-				
-				
 			} else {
 
 				try {
-					playerField.set(pos, Integer.parseInt(emptyField.getTextfield(pos)));
+					playerField.set(pos, Integer.parseInt(gui.getTextfield(pos)));
 					if(playerField.get(pos) > 9) {
-						emptyField.setColor(pos, COLOR_RED);
+						gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 						isCorrect = false;
 					}
-				}catch(NumberFormatException e) {
-					emptyField.setColor(pos, COLOR_RED);
+				} catch(NumberFormatException e) {
+					gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 					isCorrect = false;
 				}
 			}
@@ -148,13 +130,11 @@ public class SudokuController {
 		boolean isValid = true;
 		isValid = readTextFields();
 		
-		for (int i = 0; i < 81; i++) {
-			Position pos = new Position(i % 9, i / 9);
-			if (emptyField.isEditable(pos) && !playerField.isCorrect(pos)) {
-				emptyField.setColor(pos, COLOR_RED);
+		for (Position pos : Position.iterateAll()) {
+			if (gui.isEditable(pos) && !playerField.isCorrect(pos)) {
+				gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 				isValid = false;
 			}
-			
 		}
 		if(!isValid) {
 			JOptionPane.showMessageDialog(null,"Bitte überprüfen Sie Ihre Eingabe.");

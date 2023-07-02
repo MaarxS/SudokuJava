@@ -8,6 +8,13 @@ public class Str8tsGenerator {
 	private Solver solver = new Solver();
 	private Random random = new Random();
 	
+	/**
+	 * Generates a solved Str8tsField and removes numbers according to the difficulty.
+	 * Returns both the partially filled field and the solved field. <br />
+	 * **NOTE**: This function takes very long (2s-15s) so it should not be called from the gui thread.
+	 * @param difficulty an integer with values 0: easy, 1: medium, 2: hard
+	 * @return A pair with a partially filled Str8tsField and a solved Str8tsField
+	 */
 	public Pair<Str8tsField, Str8tsField> generate(int difficulty) {
 		Str8tsField field = generateSolved();
 		Str8tsField unsolvedField = field.copy();

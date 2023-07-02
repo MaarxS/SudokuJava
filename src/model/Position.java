@@ -80,7 +80,7 @@ public class Position implements Iterable<Position> {
 	}
 
 	/** Return value is Index for an 1D Array. */
-	public int position1Dimensional() {	  
+	public int to1D() {	  
 		return x + y * 9;
 	}
 	

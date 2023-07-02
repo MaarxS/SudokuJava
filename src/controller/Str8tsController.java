@@ -1,18 +1,16 @@
 package controller;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 import model.Position;
 import model.Str8tsField;
 import view.Str8tsFieldGUI;
+import view.SudokuFieldGUI;
 
 
 public class Str8tsController extends SudokuController{
 
 	private Str8tsField playerField;
-	private static final Color COLOR_BLACK = new Color(0);
-
 
 	public Str8tsController(Str8tsField str8tsField, Str8tsField solvedField) {
 		super(str8tsField, solvedField);
@@ -22,12 +20,12 @@ public class Str8tsController extends SudokuController{
 	
 	public void setGUI(Str8tsFieldGUI str8tsFieldGUI) {
 		super.setGUI(str8tsFieldGUI);
-		emptyField = str8tsFieldGUI;
+		gui = str8tsFieldGUI;
 		for (int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
 			if (playerField.isBlack(pos)) {
-				emptyField.setColor(pos, COLOR_BLACK);
-				emptyField.setEditable(pos, false);
+				gui.setColor(pos, Str8tsFieldGUI.COLOR_BLACK);
+				gui.setEditable(pos, false);
 			}
 		}
 	}
@@ -40,9 +38,9 @@ public class Str8tsController extends SudokuController{
 	public void clearFieldOnClick(ActionEvent e) {
 		for(int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
-			if (emptyField.isEditable(pos)) {
-				emptyField.setTextfield(pos, "");
-				emptyField.setColor(pos, COLOR_BACKGROUND);
+			if (gui.isEditable(pos)) {
+				gui.setTextfield(pos, "");
+				gui.setColor(pos, SudokuFieldGUI.COLOR_BACKGROUND);
 				playerField.setBlack(pos, false);
 			}
 
