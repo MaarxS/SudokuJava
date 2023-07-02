@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import model.FieldGenerator;
 import model.Pair;
 import model.Str8tsField;
+import model.Str8tsGenerator;
 import model.SudokuField;
 import view.GUI;
 import view.Str8tsFieldGUI;
@@ -38,6 +39,7 @@ public class Controller {
 	}
 	
 	private void createNewField(boolean isNewFieldEmpty) {
+		int difficulty = mainGUI.getComboBoxIndex();
 		switch(mode)
 		{
 		case SUDOKU:
@@ -49,7 +51,6 @@ public class Controller {
 				solvedSudoku = null;
 			} else {
 				
-				int difficulty = mainGUI.getComboBoxIndex();
 				Pair<SudokuField, SudokuField> solvedAndUnsolved = fieldGenerator.generate(difficulty);
 				sudoku = solvedAndUnsolved.unsolved;
 				solvedSudoku = solvedAndUnsolved.solved;
@@ -62,11 +63,17 @@ public class Controller {
 			break;
 			
 		case STR8TS:
-			Str8tsField str8tsField = new Str8tsField();
-			if (!isNewFieldEmpty) {
-				fieldGenerator.generateSolvable(str8tsField);
+			Str8tsField str8tsField;
+			Str8tsField unsolvedField;
+			if (isNewFieldEmpty) {
+				str8tsField =  new Str8tsField();
+				unsolvedField = null;
+			} else {
+				Pair<Str8tsField, Str8tsField> fields = new Str8tsGenerator().generate(difficulty);
+				str8tsField = fields.solved;
+				unsolvedField = fields.unsolved;
 			}
-			Str8tsController str8tsController = new Str8tsController(str8tsField);
+			Str8tsController str8tsController = new Str8tsController(str8tsField, unsolvedField);
 			Str8tsFieldGUI gui = new Str8tsFieldGUI(str8tsController, isNewFieldEmpty);
 			str8tsController.setGUI(gui);
 			break;

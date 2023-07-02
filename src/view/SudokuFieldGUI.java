@@ -24,13 +24,15 @@ public class SudokuFieldGUI extends JFrame {
 	protected JPanel controlPanel;
 	protected JPanel titlePanel;
 	protected JLabel lblTitleField;
-	protected SudokuGUI sudoku;
+	protected TextFieldGridPanel fieldPanel;
 	
-
+	public static final Color COLOR_RED = new Color(148, 46, 46);
+	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
+	public static final Color COLOR_GREEN = new Color(11, 120, 11);
 
 	public SudokuFieldGUI(SudokuController fieldController, boolean addOn) {
 		
-		sudoku = new SudokuGUI();
+		fieldPanel = new TextFieldGridPanel();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
@@ -39,8 +41,6 @@ public class SudokuFieldGUI extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-
-		
 
 		controlPanel = new JPanel();
 		contentPane.add(controlPanel, BorderLayout.SOUTH);
@@ -67,8 +67,7 @@ public class SudokuFieldGUI extends JFrame {
 		lblTitleField.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(lblTitleField);
 		
-		
-		contentPane.add(sudoku, BorderLayout.CENTER);
+		contentPane.add(fieldPanel, BorderLayout.CENTER);
 		
 		if(!addOn) {
 			btnSolve.setText("Lösung überprüfen");
@@ -80,7 +79,6 @@ public class SudokuFieldGUI extends JFrame {
 		} else {
 			btnSolve.addActionListener(fieldController::solveOnClick);
 		}
-		
 	}
 
 	
@@ -90,25 +88,25 @@ public class SudokuFieldGUI extends JFrame {
 	
 
 	public void setTextfield(Position position, String text) {
-		sudoku.setTextfield(position, text);
+		fieldPanel.setText(position, text);
 	}
 	
 	public String getTextfield(Position position) {
-		return sudoku.getTextfield(position);
+		return fieldPanel.getText(position);
 	}
 	
 	public void setColor(Position position, Color color){
-		sudoku.setColor(position, color);
+		fieldPanel.setColor(position, color);
 	}
 	
 	public Color getColor(Position position){
-		return sudoku.getColor(position);
+		return fieldPanel.getColor(position);
 	}
 	public boolean isEditable(Position position) {
-		return sudoku.isEditable(position);
+		return fieldPanel.isEditable(position);
 	}
 	
 	public void setEditable(Position position, Boolean value) {
-		sudoku.setEditable(position, value);
+		fieldPanel.setEditable(position, value);
 	}
 }

@@ -76,7 +76,7 @@ public class Str8tsField implements Field {
 		// creating straights 
 		List<Integer> verticalStraight = new ArrayList<Integer>();
 		List<Integer> horizontalStraight = new ArrayList<Integer>();
-
+		
 		int i = pos.y;
 		int j = pos.x;
 		if (!isBlack(pos)) {
@@ -166,18 +166,14 @@ public class Str8tsField implements Field {
 	}
 
 	public String toString() {
-		final String ANSI_RESET = "\u001B[0m";
-//		final String ANSI_RED = "\u001B[31m";
-		final String ANSI_GREY = "\u001B[30m";
 		StringBuilder builder = new StringBuilder();
 		for (int y = 0; y < fields.length; y++) {
 			for (int x = 0; x < fields.length; x++) {
 				Position pos = new Position(x, y);
-				if (isCorrect(pos)) builder.append(ANSI_RESET);
-//				else builder.append(ANSI_RED);
-				if (!isEditable(pos)) builder.append(ANSI_GREY);
 				builder.append(fields[x][y] % 10);
-				builder.append(" ");
+				if (!isEditable(pos)) builder.append("!");
+				else if (!isCorrect(pos)) builder.append("?");
+				else builder.append(" ");
 			}
 			builder.append("\n");
 		}

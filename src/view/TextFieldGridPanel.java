@@ -3,8 +3,10 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -13,7 +15,7 @@ import javax.swing.JTextField;
 import model.Position;
 
 
-public class SudokuGUI extends JPanel{
+public class TextFieldGridPanel extends JPanel {
 	
 	protected JTextField[] tf = new JTextField[81];
 	protected JPanel[] panels = new JPanel[9];
@@ -21,7 +23,7 @@ public class SudokuGUI extends JPanel{
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
 	public static final Color COLOR_GREEN = new Color(11, 120, 11);
 	
-	public SudokuGUI() {
+	public TextFieldGridPanel() {
 		this.setLayout(new GridLayout(3, 3, 0, 0));
 		
 		for (int i = 0; i < 9; i++) {
@@ -63,33 +65,31 @@ public class SudokuGUI extends JPanel{
 		
 	}
 	
-	public void setTextfield(Position position, String text) {
-		tf[position.position1Dimensional()].setText(text);
+	public void setText(Position position, String text) {
+		tf[position.to1D()].setText(text);
 	}
 	
-	public String getTextfield(Position position) {
-		return tf[position.position1Dimensional()].getText();
+	public String getText(Position position) {
+		return tf[position.to1D()].getText();
 	}
 	
 	public void setColor(Position position, Color color){
-		tf[position.position1Dimensional()].setBackground(color);
+		tf[position.to1D()].setBackground(color);
 	}
 	
 	public Color getColor(Position position){
-		return tf[position.position1Dimensional()].getBackground();
+		return tf[position.to1D()].getBackground();
 	}
 	public boolean isEditable(Position position) {
-		return tf[position.position1Dimensional()].isEditable();
+		return tf[position.to1D()].isEditable();
 	}
 	
 	public void setEditable(Position position, Boolean value) {
-		tf[position.position1Dimensional()].setEditable(value);
-	}
-	public JTextField getTextFieldForListener(int index) {
-		return tf[index];
+		tf[position.to1D()].setEditable(value);
 	}
 
-	
-
+	public void addTextFieldMouseListener(Position pos, MouseListener listener) {
+		tf[pos.to1D()].addMouseListener(listener);
+	}
 	
 }
