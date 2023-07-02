@@ -14,8 +14,8 @@ public class Str8tsController extends SudokuController{
 	private static final Color COLOR_BLACK = new Color(0);
 
 
-	public Str8tsController(Str8tsField str8tsField) {
-		super(str8tsField, null);
+	public Str8tsController(Str8tsField str8tsField, Str8tsField solvedField) {
+		super(str8tsField, solvedField);
 		playerField = str8tsField;
 	}
 	

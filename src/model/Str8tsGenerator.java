@@ -8,16 +8,34 @@ public class Str8tsGenerator {
 	private Solver solver = new Solver();
 	private Random random = new Random();
 	
-	public Str8tsField generate(int difficulty) {
-		// TODO implement difficulty
+	public Pair<Str8tsField, Str8tsField> generate(int difficulty) {
 		Str8tsField field = generateSolved();
-		for (int i = 0; i < 65; i++) {
-			int x = random.nextInt(9);
-			int y = random.nextInt(9);
-			Position pos = new Position(x, y);
-			field.set(pos, 0);
+		Str8tsField unsolvedField = field.copy();
+
+		int count = 0;
+		int limit = 0;
+		switch (difficulty) {
+		case 1:
+			limit = 40;
+			break;
+		case 2:
+			limit = 50;
+			break;
+		default:
+			limit = 30;
+			break;
 		}
-		return field;
+		while (count < limit) {
+			int row = random.nextInt(9);
+			int col = random.nextInt(9);
+			Position pos = new Position(row, col);
+			if (unsolvedField.get(pos) != 0) {
+				unsolvedField.set(pos, 0);
+				count++;
+			}
+		}
+		
+		return new Pair<>(field, unsolvedField);
 	}
 	
 	/**
