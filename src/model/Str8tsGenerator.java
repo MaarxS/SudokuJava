@@ -88,7 +88,7 @@ public class Str8tsGenerator extends SwingWorker<Pair<Str8tsField, Str8tsField>,
 			}
 			removeShortStr8ts(field);
 			optField = solver.solve(field, MAX_STEPS);
-			setProgress(tries <= 100 ? tries : 99);
+			setProgress(tries < 100 ? tries : 99);
 		} while (optField.isEmpty());
 		field = optField.get();
 		
