@@ -3,12 +3,14 @@ package controller;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.Random;
+import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
 import model.Field;
 import model.Position;
 import model.Solver;
+import model.SolverThread;
 import view.SudokuFieldGUI;
 
 public class SudokuController {
@@ -18,6 +20,7 @@ public class SudokuController {
 	private Solver solver;
 	private Field playerField;
 	private Field solvedField;
+	private SolverThread thread;
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
@@ -28,6 +31,7 @@ public class SudokuController {
 		playerField = sudoku;
 		solver = new Solver();
 		solvedField = solvedSudoku;
+		thread = new SolverThread(solver, playerField);
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
@@ -43,6 +47,7 @@ public class SudokuController {
 	
 	
 	public void clearFieldOnClick(ActionEvent e) {
+		endSolving();
 		for(int i = 0; i < 81; i++) {
 			Position pos = new Position(i % 9, i / 9);
 			if (emptyField.isEditable(pos)) {
@@ -63,9 +68,19 @@ public class SudokuController {
 		if(!inputCorrect) {
 			return;
 		}
-		playerField = solver.solve(playerField);
-		setTextFields(playerField);
-		System.out.println(playerField);
+		
+		Executors.newSingleThreadExecutor().execute(() -> {
+			playerField = solver.solve(playerField);
+
+			setTextFields(playerField);
+			System.out.println(playerField);
+		});
+//		if(thread.getBlockOtherThreads())
+//		{
+//			return;
+//		}
+//		thread.run();
+//		playerField = thread.getSolvedField();
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
@@ -162,5 +177,8 @@ public class SudokuController {
 			JOptionPane.showMessageDialog(null,"Das gesamte Feld wurde richtig gelöst.");
 		}
 		return isValid;
+	}
+	public void endSolving() {
+		thread.setStopSolving(true);
 	}
 }

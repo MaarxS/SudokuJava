@@ -34,6 +34,7 @@ public class Str8tsController extends SudokuController{
 				emptyField.setTextfield(pos, "");
 				emptyField.setColor(pos, COLOR_BACKGROUND);
 				playerField.setBlack(pos, false);
+				playerField.set(pos, 0);
 			}
 
 		}

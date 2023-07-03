@@ -18,7 +18,7 @@ public class Controller {
 	private FieldGenerator fieldGenerator = new FieldGenerator();
 	private enum GameMode {
 		SUDOKU,
-		STR8TS,
+		STR8TS, 
 		KILLER;
 	}
 	private GameMode mode = GameMode.SUDOKU;
