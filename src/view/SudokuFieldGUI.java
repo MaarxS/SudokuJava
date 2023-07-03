@@ -6,7 +6,6 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -26,27 +25,23 @@ public class SudokuFieldGUI extends JFrame {
 	protected JPanel titlePanel;
 	protected JLabel lblTitleField;
 	protected TextFieldGridPanel fieldPanel;
-	
+
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
 	public static final Color COLOR_GREEN = new Color(11, 120, 11);
 
 	public SudokuFieldGUI(SudokuController fieldController, boolean addOn) {
-		
-		fieldPanel = new TextFieldGridPanel();
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
 		addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                int option = JOptionPane.showConfirmDialog(null, "Möchten Sie das Fenster schließen?", "Bestätigung", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
-                    dispose(); 
-                    fieldController.endSolving();
-                }
-            }
-        });
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+
+				dispose(); 
+				fieldController.endSolving();
+			}
+		});
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -68,22 +63,25 @@ public class SudokuFieldGUI extends JFrame {
 
 		JPanel panel_3 = new JPanel();
 		contentPane.add(panel_3, BorderLayout.EAST);
-		
+
 		titlePanel = new JPanel();
 		contentPane.add(titlePanel, BorderLayout.NORTH);
 		titlePanel.setLayout(new BorderLayout(0, 0));
-		
+
 		lblTitleField = new JLabel("Sudoku");
 		lblTitleField.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblTitleField.setHorizontalAlignment(SwingConstants.CENTER);
 		titlePanel.add(lblTitleField);
 		
+		fieldPanel = new TextFieldGridPanel();
 		contentPane.add(fieldPanel, BorderLayout.CENTER);
+
 		
+
 		if(!addOn) {
 			btnSolve.setText("Lösung überprüfen");
 			btnSolve.addActionListener(fieldController::showMistakesOnClick);
-			
+
 			JButton btnTipp = new JButton("Lösungstipp");
 			controlPanel.add(btnTipp);
 			btnTipp.addActionListener(fieldController::showTippOnClick);
@@ -92,31 +90,31 @@ public class SudokuFieldGUI extends JFrame {
 		}
 	}
 
-	
+
 	public void setTitle(String title) {
 		lblTitleField.setText(title);
 	}
-	
+
 
 	public void setTextfield(Position position, String text) {
 		fieldPanel.setText(position, text);
 	}
-	
+
 	public String getTextfield(Position position) {
 		return fieldPanel.getText(position);
 	}
-	
+
 	public void setColor(Position position, Color color){
 		fieldPanel.setColor(position, color);
 	}
-	
+
 	public Color getColor(Position position){
 		return fieldPanel.getColor(position);
 	}
 	public boolean isEditable(Position position) {
 		return fieldPanel.isEditable(position);
 	}
-	
+
 	public void setEditable(Position position, Boolean value) {
 		fieldPanel.setEditable(position, value);
 	}

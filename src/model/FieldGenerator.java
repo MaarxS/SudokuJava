@@ -6,15 +6,6 @@ import java.util.Random;
 
 public class FieldGenerator {
 
-	public static void main(String[] args) {
-		Field field = new SudokuField();
-		long nanos = System.nanoTime();
-
-		new FieldGenerator().generateRecursive(field, 0);
-		long elapsed = System.nanoTime() - nanos;
-		System.out.printf("%.3f%n", elapsed / 1000000f);
-		System.out.println(field);
-	}
 
 	private Random random = new Random();
 
@@ -111,8 +102,8 @@ public class FieldGenerator {
 			Position pos = new Position(row, col);
 			if (unsolvedSudoku.get(pos) != 0) {
 				unsolvedSudoku.set(pos, 0);
-				count++;
 			}
+			count++;
 		}
 
 		return new Pair<SudokuField, SudokuField>(unsolvedSudoku, solvedSudoku);
