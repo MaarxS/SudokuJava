@@ -23,7 +23,7 @@ public class Controller {
 	
 	private enum GameMode {
 		SUDOKU,
-		STR8TS,
+		STR8TS, 
 		KILLER;
 	}
 	private GameMode mode = GameMode.SUDOKU;

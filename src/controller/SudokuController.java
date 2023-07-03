@@ -2,12 +2,14 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.util.Random;
+import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
 import model.Field;
 import model.Position;
 import model.Solver;
+import model.SolverThread;
 import view.SudokuFieldGUI;
 
 public class SudokuController {
@@ -16,11 +18,13 @@ public class SudokuController {
 	private Solver solver;
 	private Field playerField;
 	private Field solvedField;
+	private SolverThread thread;
 	
 	public SudokuController(Field sudoku, Field solvedSudoku) {
 		playerField = sudoku;
 		solver = new Solver();
 		solvedField = solvedSudoku;
+		thread = new SolverThread(solver, playerField);
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
@@ -36,6 +40,7 @@ public class SudokuController {
 	
 	
 	public void clearFieldOnClick(ActionEvent e) {
+		endSolving();
 		for(Position pos : Position.iterateAll()) {
 			if (gui.isEditable(pos)) {
 				gui.setTextfield(pos, "");
@@ -54,9 +59,19 @@ public class SudokuController {
 		if(!inputCorrect) {
 			return;
 		}
-		playerField = solver.solve(playerField);
-		setTextFields(playerField);
-		System.out.println(playerField);
+		
+		Executors.newSingleThreadExecutor().execute(() -> {
+			playerField = solver.solve(playerField);
+
+			setTextFields(playerField);
+			System.out.println(playerField);
+		});
+//		if(thread.getBlockOtherThreads())
+//		{
+//			return;
+//		}
+//		thread.run();
+//		playerField = thread.getSolvedField();
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
@@ -142,5 +157,8 @@ public class SudokuController {
 			JOptionPane.showMessageDialog(null,"Das gesamte Feld wurde richtig gelöst.");
 		}
 		return isValid;
+	}
+	public void endSolving() {
+		thread.setStopSolving(true);
 	}
 }
