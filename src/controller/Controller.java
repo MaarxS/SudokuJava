@@ -59,7 +59,7 @@ public class Controller {
 				solvedSudoku = solvedAndUnsolved.solved;
 			}
 			
-			SudokuController sudokuController = new SudokuController(sudoku, solvedSudoku);
+			SudokuController<SudokuField> sudokuController = new SudokuController<>(sudoku, solvedSudoku);
 			SudokuFieldGUI sudokuGui = new SudokuFieldGUI(sudokuController, isNewFieldEmpty);
 			sudokuController.setGUI(sudokuGui);
 			break;

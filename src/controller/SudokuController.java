@@ -12,15 +12,15 @@ import model.Solver;
 import model.SolverThread;
 import view.SudokuFieldGUI;
 
-public class SudokuController {
+public class SudokuController<T extends Field> {
 	
 	protected SudokuFieldGUI gui;
 	private Solver solver;
-	private Field playerField;
-	private Field solvedField;
+	protected T playerField;
+	protected T solvedField;
 	private SolverThread thread;
 	
-	public SudokuController(Field sudoku, Field solvedSudoku) {
+	public SudokuController(T sudoku, T solvedSudoku) {
 		playerField = sudoku;
 		solver = new Solver();
 		solvedField = solvedSudoku;
