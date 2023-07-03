@@ -50,6 +50,11 @@ public class SudokuController<T extends Field> {
 		}
 	}
 	
+	public void cancelSolving(ActionEvent e) {
+		gui.setProgress(100);
+		// TODO
+	}
+	
 	public void solveOnClick(ActionEvent e) {
 		if(playerField.isSolved()) {
 			JOptionPane.showMessageDialog(null, "Es sind bereits alle Felder ausgefüllt!");
