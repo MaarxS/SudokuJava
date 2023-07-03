@@ -125,18 +125,21 @@ public class SudokuController<T extends Field> {
 			} else if(gui.getTextfield(pos).equals("")) {
 				playerField.set(pos, 0);
 			} else {
-
 				try {
-					playerField.set(pos, Integer.parseInt(gui.getTextfield(pos)));
-					if(playerField.get(pos) > 9) {
+					int value = Integer.parseInt(gui.getTextfield(pos));
+					if(value > 9 || value < 0) {
 						gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 						isCorrect = false;
+					} else {
+						playerField.set(pos, value);
 					}
 				} catch(NumberFormatException e) {
 					gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 					isCorrect = false;
 				}
+				
 			}
+			
 		}
 		return isCorrect;
 	}
