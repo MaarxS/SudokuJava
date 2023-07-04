@@ -10,25 +10,19 @@ import javax.swing.JOptionPane;
 
 import model.Field;
 import model.Position;
-import model.Solver;
 import model.SolverTask;
-import model.SolverThread;
 import view.SudokuFieldGUI;
 
 public class SudokuController<T extends Field> {
 	
 	protected SudokuFieldGUI gui;
-	private Solver solver;
 	protected T playerField;
 	protected T solvedField;
-	private SolverThread thread;
 	private SolverTask<T> solverTask;
 	
 	public SudokuController(T sudoku, T solvedSudoku) {
 		playerField = sudoku;
-		solver = new Solver();
 		solvedField = solvedSudoku;
-		thread = new SolverThread(solver, playerField);
 	}
 	
 	public void setGUI(SudokuFieldGUI frame) {
@@ -184,6 +178,5 @@ public class SudokuController<T extends Field> {
 		if (solverTask != null) {
 			solverTask.cancel(false);
 		}
-		thread.setStopSolving(true);
 	}
 }
