@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public class Solver {
 	
-	private UpdateListener updateListener = (pos, value) -> {};
+	private UpdateListener updateListener = (s) -> {};
 	
 	/** Updatelistener is called on every solving step.*/
 	public void setUpdateListener(UpdateListener listener) {
@@ -59,7 +59,7 @@ public class Solver {
 		for (int i = 1; i <= 9; i++) {
 			field.set(pos, i);
 			step.value++;
-			updateListener.onUpdate(pos, i);
+			updateListener.onUpdate(step.value);
 			if (field.isCorrect(pos)) {
 				if (maxSteps > 0 && step.value >= maxSteps) return true;
 				if (solveBacktracking(field, maxSteps, step)) {

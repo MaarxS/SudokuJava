@@ -1,14 +1,17 @@
 package controller;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.Random;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.swing.JOptionPane;
 
 import model.Field;
 import model.Position;
 import model.Solver;
+import model.SolverTask;
 import model.SolverThread;
 import view.SudokuFieldGUI;
 
@@ -19,6 +22,7 @@ public class SudokuController<T extends Field> {
 	protected T playerField;
 	protected T solvedField;
 	private SolverThread thread;
+	private SolverTask<T> solverTask;
 	
 	public SudokuController(T sudoku, T solvedSudoku) {
 		playerField = sudoku;
@@ -51,8 +55,7 @@ public class SudokuController<T extends Field> {
 	}
 	
 	public void cancelSolving(ActionEvent e) {
-		gui.setProgress(100);
-		// TODO
+		endSolving();
 	}
 	
 	public void solveOnClick(ActionEvent e) {
@@ -64,19 +67,29 @@ public class SudokuController<T extends Field> {
 		if(!inputCorrect) {
 			return;
 		}
-		
-		Executors.newSingleThreadExecutor().execute(() -> {
-			playerField = solver.solve(playerField);
+		if (solverTask == null || solverTask.isDone()) {
+			solverTask = new SolverTask<>(playerField);
+			solverTask.addPropertyChangeListener((evt) -> {
+				onLoadingStr8tsProgress(evt, solverTask);
+			});
+			solverTask.execute();
+		}
+	}
 
-			setTextFields(playerField);
-			System.out.println(playerField);
-		});
-//		if(thread.getBlockOtherThreads())
-//		{
-//			return;
-//		}
-//		thread.run();
-//		playerField = thread.getSolvedField();
+	private void onLoadingStr8tsProgress(PropertyChangeEvent evt, Future<T> field) {
+		if ("progress".equals(evt.getPropertyName())) {
+			int progress = (int) evt.getNewValue();
+			gui.setProgress(progress);
+			boolean loadingComplete = progress == 100;
+			if (loadingComplete) {
+				try {
+					playerField = field.get();
+					setTextFields(playerField);
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
@@ -167,6 +180,10 @@ public class SudokuController<T extends Field> {
 		return isValid;
 	}
 	public void endSolving() {
+		gui.setProgress(100);
+		if (solverTask != null) {
+			solverTask.cancel(false);
+		}
 		thread.setStopSolving(true);
 	}
 }

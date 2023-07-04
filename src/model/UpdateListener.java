@@ -2,5 +2,5 @@ package model;
 
 public interface UpdateListener {
 
-	public void onUpdate(Position pos, int value);
+	public void onUpdate(int step);
 }

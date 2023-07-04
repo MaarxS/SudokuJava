@@ -27,8 +27,8 @@ public class SudokuFieldGUI extends JFrame {
 	protected TextFieldGridPanel fieldPanel;
 	private JPanel centerPanel;
 	private JButton btnCancel;
+	private JButton btnClearFields;
 	private JProgressBar progressBar;
-	private boolean loading = false;
 	
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
@@ -55,7 +55,7 @@ public class SudokuFieldGUI extends JFrame {
 		controlPanel = new JPanel();
 		contentPane.add(controlPanel, BorderLayout.SOUTH);
 
-		JButton btnClearFields = new JButton("Felder löschen");
+		btnClearFields = new JButton("Felder löschen");
 		controlPanel.add(btnClearFields);
 		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
@@ -134,22 +134,22 @@ public class SudokuFieldGUI extends JFrame {
 	}
 	
 	/**
-	 * 
+	 * Shows a progress bar and replaces solve button with cancel button
+	 * if called with a number from 0 to 99. 
+	 * Hides the ProgressBar when called with 100.
 	 * @param progress a number from 0 to 100
 	 */
 	public void setProgress(int progress) {
-		if (loading && progress == 100) {
+		if (progress == 100) {
 			btnSolve.setVisible(true);
 			btnCancel.setVisible(false);
 			progressBar.setVisible(false);
 			progressBar.setIndeterminate(false);
-			loading = false;
-		} else if (!loading) {
+		} else if (!progressBar.isVisible()) {
 			btnSolve.setVisible(false);
 			btnCancel.setVisible(true);
 			progressBar.setValue(progress);
 			progressBar.setVisible(true);
-			loading = true;
 		} else {
 			if (progress == 99) {
 				progressBar.setIndeterminate(true);
