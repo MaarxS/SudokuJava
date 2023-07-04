@@ -57,16 +57,12 @@ public class Solver {
 	 * {@link #steps} is incremented every time a number is entered
 	 * @return true if its finished or stopped, false if its not solvable
 	 */
-	private boolean solveBacktracking(
-			Field field,
-			int maxSteps,
-			ValueHolder<Integer> step
-	) {
+	private boolean solveBacktracking(Field field, int maxSteps, ValueHolder<Integer> step) {
 		if (isCancelled.get()) {
 			return true;
 		}
 		Optional<Position> optionalPos = fieldWithLeastPossibilities(field);
-		System.out.println("solving");
+		
 		if (optionalPos.isEmpty()) { // finished solving
 			return true;
 		}
