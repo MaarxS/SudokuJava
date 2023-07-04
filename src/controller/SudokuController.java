@@ -75,7 +75,7 @@ public class SudokuController<T extends Field> {
 			int progress = (int) evt.getNewValue();
 			gui.setProgress(progress);
 			boolean loadingComplete = progress == 100;
-			if (loadingComplete) {
+			if (loadingComplete && !field.isCancelled()) {
 				try {
 					playerField = field.get();
 					setTextFields(playerField);

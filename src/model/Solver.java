@@ -1,14 +1,22 @@
 package model;
 
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Solver {
 	
-	private UpdateListener updateListener = (s) -> {};
+	private Consumer<Integer> updateListener = (s) -> {};
+	private Supplier<Boolean> isCancelled = () -> {return false;};
 	
 	/** Updatelistener is called on every solving step.*/
-	public void setUpdateListener(UpdateListener listener) {
+	public void setUpdateListener(Consumer<Integer> listener) {
 		updateListener = listener;
+	}
+	
+	/** Set the function to check if the solver is cancelled. */
+	public void setIsCancelled(Supplier<Boolean> function) {
+		isCancelled = function;
 	}
 	
 	public <T extends Field> T solve(T field) {
@@ -49,9 +57,16 @@ public class Solver {
 	 * {@link #steps} is incremented every time a number is entered
 	 * @return true if its finished or stopped, false if its not solvable
 	 */
-	private boolean solveBacktracking(Field field, int maxSteps, ValueHolder<Integer> step) {
+	private boolean solveBacktracking(
+			Field field,
+			int maxSteps,
+			ValueHolder<Integer> step
+	) {
+		if (isCancelled.get()) {
+			return true;
+		}
 		Optional<Position> optionalPos = fieldWithLeastPossibilities(field);
-
+		System.out.println("solving");
 		if (optionalPos.isEmpty()) { // finished solving
 			return true;
 		}
@@ -59,7 +74,7 @@ public class Solver {
 		for (int i = 1; i <= 9; i++) {
 			field.set(pos, i);
 			step.value++;
-			updateListener.onUpdate(step.value);
+			updateListener.accept(step.value);
 			if (field.isCorrect(pos)) {
 				if (maxSteps > 0 && step.value >= maxSteps) return true;
 				if (solveBacktracking(field, maxSteps, step)) {
@@ -94,4 +109,5 @@ public class Solver {
 		}
 		return count;
 	}
+
 }

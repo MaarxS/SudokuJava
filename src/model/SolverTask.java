@@ -13,6 +13,7 @@ public class SolverTask<T extends Field> extends SwingWorker<T, Integer> {
 			step /= 10000;
 			setProgress(step < 100 ? step : 99);
 		});
+		solver.setIsCancelled(() -> { return isCancelled(); });
 	}
 	
 	@Override
