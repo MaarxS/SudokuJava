@@ -1,6 +1,9 @@
 package controller;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import model.FieldGenerator;
 import model.Pair;
@@ -17,9 +20,10 @@ public class Controller {
 
 	private GUI mainGUI;
 	private FieldGenerator fieldGenerator = new FieldGenerator();
+	
 	private enum GameMode {
 		SUDOKU,
-		STR8TS,
+		STR8TS, 
 		KILLER;
 	}
 	private GameMode mode = GameMode.SUDOKU;
@@ -50,36 +54,51 @@ public class Controller {
 				sudoku = new SudokuField();
 				solvedSudoku = null;
 			} else {
-				
 				Pair<SudokuField, SudokuField> solvedAndUnsolved = fieldGenerator.generate(difficulty);
 				sudoku = solvedAndUnsolved.unsolved;
 				solvedSudoku = solvedAndUnsolved.solved;
-				
 			}
 			
-			SudokuController sudokuController = new SudokuController(sudoku, solvedSudoku);
+			SudokuController<SudokuField> sudokuController = new SudokuController<>(sudoku, solvedSudoku);
 			SudokuFieldGUI sudokuGui = new SudokuFieldGUI(sudokuController, isNewFieldEmpty);
 			sudokuController.setGUI(sudokuGui);
 			break;
 			
 		case STR8TS:
-			Str8tsField str8tsField;
-			Str8tsField unsolvedField;
 			if (isNewFieldEmpty) {
-				str8tsField =  new Str8tsField();
-				unsolvedField = null;
+				Str8tsController str8tsController = new Str8tsController(new Str8tsField(), null);
+				Str8tsFieldGUI gui = new Str8tsFieldGUI(str8tsController, isNewFieldEmpty);
+				str8tsController.setGUI(gui);
 			} else {
-				Pair<Str8tsField, Str8tsField> fields = new Str8tsGenerator().generate(difficulty);
-				str8tsField = fields.solved;
-				unsolvedField = fields.unsolved;
+				Str8tsGenerator str8tsGenerator = new Str8tsGenerator();
+				str8tsGenerator.setDifficulty(difficulty);
+				str8tsGenerator.addPropertyChangeListener((evt) -> {
+					onLoadingStr8tsProgress(evt, str8tsGenerator);
+				});
+				str8tsGenerator.execute();
 			}
-			Str8tsController str8tsController = new Str8tsController(str8tsField, unsolvedField);
-			Str8tsFieldGUI gui = new Str8tsFieldGUI(str8tsController, isNewFieldEmpty);
-			str8tsController.setGUI(gui);
 			break;
 		case KILLER:
 
 			break;
+		}
+	}
+	
+	private void onLoadingStr8tsProgress(PropertyChangeEvent evt, Future<Pair<Str8tsField, Str8tsField>> field) {
+		if ("progress".equals(evt.getPropertyName())) {
+			int progress = (int) evt.getNewValue();
+			mainGUI.setProgress(progress);
+			boolean loadingComplete = progress == 100;
+			if (loadingComplete) {
+				try {
+					Pair<Str8tsField, Str8tsField> fields = field.get();
+					Str8tsController str8tsController = new Str8tsController(fields.solved, fields.unsolved);
+					Str8tsFieldGUI gui = new Str8tsFieldGUI(str8tsController, false);
+					str8tsController.setGUI(gui);
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

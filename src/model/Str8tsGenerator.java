@@ -3,15 +3,33 @@ package model;
 import java.util.Optional;
 import java.util.Random;
 
-public class Str8tsGenerator {
+import javax.swing.SwingWorker;
+
+public class Str8tsGenerator extends SwingWorker<Pair<Str8tsField, Str8tsField>, Integer> {
 	
 	private Solver solver = new Solver();
 	private Random random = new Random();
+	private int difficulty = 0;
+	
+	/** Set the difficulty with an integer with values 0: easy, 1: medium, 2: hard. */
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+	}
+	
+	@Override
+	protected Pair<Str8tsField, Str8tsField> doInBackground() throws Exception {
+		return generate(difficulty);
+	}
+
+	@Override
+	protected void done() {
+		setProgress(100);
+	}
 	
 	/**
 	 * Generates a solved Str8tsField and removes numbers according to the difficulty.
 	 * Returns both the partially filled field and the solved field. <br />
-	 * **NOTE**: This function takes very long (2s-15s) so it should not be called from the gui thread.
+	 * **NOTE**: This function takes very long (2s-10s) so it should not be called from the gui thread.
 	 * @param difficulty an integer with values 0: easy, 1: medium, 2: hard
 	 * @return A pair with a partially filled Str8tsField and a solved Str8tsField
 	 */
@@ -46,9 +64,9 @@ public class Str8tsGenerator {
 	}
 	
 	/**
-	 * Generates a solved Field by randomly placing black squares and trying to solve it.
-	 * 
-	 * If the solver fails after MAX_STEPS it starts again.
+	 * Generates a solved Field by randomly placing black squares and trying to solve it.<br />
+	 * If the solver fails after MAX_STEPS it starts again.<br />
+	 * **NOTE**: This function takes very long (2s-10s) so it should not be called from the gui thread.
 	 * @returns a solved {@link Str8tsField}
 	 */
 	public Str8tsField generateSolved() {
@@ -70,6 +88,7 @@ public class Str8tsGenerator {
 			}
 			removeShortStr8ts(field);
 			optField = solver.solve(field, MAX_STEPS);
+			setProgress(tries < 100 ? tries : 99);
 		} while (optField.isEmpty());
 		field = optField.get();
 		

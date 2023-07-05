@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -26,6 +27,10 @@ public class GUI extends JFrame {
 	private JPanel contentPane;
 	private JLabel[] labelList = new JLabel[9];
 	private JComboBox comboB;
+	private JPanel panel_4;
+	private JButton btnCreate;
+	private JProgressBar progressBar;
+	private boolean loading = false;
 
 	
 
@@ -57,8 +62,9 @@ public class GUI extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(500, 100, 470, 220);
+		
 
 
 		contentPane = new JPanel();
@@ -157,11 +163,11 @@ public class GUI extends JFrame {
 		JPanel panel_19 = new JPanel();
 		panel_3.add(panel_19, BorderLayout.EAST);
 		
-		JPanel panel_4 = new JPanel();
+		panel_4 = new JPanel();
 		contentPane.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		
-		JButton btnCreate = new JButton("Erstellen");
+		btnCreate = new JButton("Erstellen");
 		btnCreate.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnCreate.addActionListener(controller::onClickCreate);
 		panel_4.add(btnCreate);
@@ -194,12 +200,36 @@ public class GUI extends JFrame {
 		menuBar.add(btnModeKiller);
 		
 		btnOpenEmpty.addActionListener(controller::emptyFieldButtonOnClick);
+		
+		progressBar = new JProgressBar(0, 100);
 	}
 	public void setLabelList(int index, String text) {
 		labelList[index].setText(text);
 	}
 	public int getComboBoxIndex() {
 		return comboB.getSelectedIndex();
+	}
+	public void setProgress(int progress) {
+		if (loading && progress == 100) {
+			panel_4.remove(progressBar);
+			panel_4.add(btnCreate);
+			panel_4.revalidate();
+			panel_4.repaint();
+			progressBar.setIndeterminate(false);
+			loading = false;
+		} else if (!loading) {
+			panel_4.remove(btnCreate);
+			panel_4.add(progressBar);
+			progressBar.setValue(progress);
+			loading = true;
+			panel_4.revalidate();
+		} else {
+			if (progress == 99) {
+				progressBar.setIndeterminate(true);
+			} else {
+				progressBar.setValue(progress);
+			}
+		}
 	}
 
 }

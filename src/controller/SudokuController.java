@@ -1,25 +1,27 @@
 package controller;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.swing.JOptionPane;
 
 import model.Field;
 import model.Position;
-import model.Solver;
+import model.SolverTask;
 import view.SudokuFieldGUI;
 
-public class SudokuController {
+public class SudokuController<T extends Field> {
 	
 	protected SudokuFieldGUI gui;
-	private Solver solver;
-	private Field playerField;
-	private Field solvedField;
+	protected T playerField;
+	protected T solvedField;
+	private SolverTask<T> solverTask;
 	
-	public SudokuController(Field sudoku, Field solvedSudoku) {
+	public SudokuController(T sudoku, T solvedSudoku) {
 		playerField = sudoku;
-		solver = new Solver();
 		solvedField = solvedSudoku;
 	}
 	
@@ -36,6 +38,7 @@ public class SudokuController {
 	
 	
 	public void clearFieldOnClick(ActionEvent e) {
+		endSolving();
 		for(Position pos : Position.iterateAll()) {
 			if (gui.isEditable(pos)) {
 				gui.setTextfield(pos, "");
@@ -43,6 +46,10 @@ public class SudokuController {
 				playerField.set(pos, 0);
 			}
 		}
+	}
+	
+	public void cancelSolving(ActionEvent e) {
+		endSolving();
 	}
 	
 	public void solveOnClick(ActionEvent e) {
@@ -54,9 +61,29 @@ public class SudokuController {
 		if(!inputCorrect) {
 			return;
 		}
-		playerField = solver.solve(playerField);
-		setTextFields(playerField);
-		System.out.println(playerField);
+		if (solverTask == null || solverTask.isDone()) {
+			solverTask = new SolverTask<>(playerField);
+			solverTask.addPropertyChangeListener((evt) -> {
+				onLoadingStr8tsProgress(evt, solverTask);
+			});
+			solverTask.execute();
+		}
+	}
+
+	private void onLoadingStr8tsProgress(PropertyChangeEvent evt, Future<T> field) {
+		if ("progress".equals(evt.getPropertyName())) {
+			int progress = (int) evt.getNewValue();
+			gui.setProgress(progress);
+			boolean loadingComplete = progress == 100;
+			if (loadingComplete && !field.isCancelled()) {
+				try {
+					playerField = field.get();
+					setTextFields(playerField);
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public void showTippOnClick(ActionEvent e) {
@@ -110,18 +137,21 @@ public class SudokuController {
 			} else if(gui.getTextfield(pos).equals("")) {
 				playerField.set(pos, 0);
 			} else {
-
 				try {
-					playerField.set(pos, Integer.parseInt(gui.getTextfield(pos)));
-					if(playerField.get(pos) > 9) {
+					int value = Integer.parseInt(gui.getTextfield(pos));
+					if(value > 9 || value < 0) {
 						gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 						isCorrect = false;
+					} else {
+						playerField.set(pos, value);
 					}
 				} catch(NumberFormatException e) {
 					gui.setColor(pos, SudokuFieldGUI.COLOR_RED);
 					isCorrect = false;
 				}
+				
 			}
+			
 		}
 		return isCorrect;
 	}
@@ -142,5 +172,11 @@ public class SudokuController {
 			JOptionPane.showMessageDialog(null,"Das gesamte Feld wurde richtig gelöst.");
 		}
 		return isValid;
+	}
+	public void endSolving() {
+		gui.setProgress(100);
+		if (solverTask != null) {
+			solverTask.cancel(false);
+		}
 	}
 }
