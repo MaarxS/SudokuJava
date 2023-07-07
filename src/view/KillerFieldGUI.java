@@ -1,6 +1,5 @@
 package view;
 
-<<<<<<< HEAD
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,10 +13,11 @@ import model.Position;
 
 public class KillerFieldGUI extends SudokuFieldGUI {
 
-	public static final Color COLOR_SELECTED = Color.BLUE;
+	public static final Color COLOR_SELECTED = new Color(63, 103, 138);
 	
 	public KillerFieldGUI(KillerController controller, boolean addOn) {
 		super(controller, addOn);
+		setSize(550, 450);
 		
 		lblTitleField.setText("Killer");
 		if(addOn) {
@@ -42,6 +42,7 @@ public class KillerFieldGUI extends SudokuFieldGUI {
 			}
 		}
 	}
+	
 
 	public String showNumberDialog() {
 		return JOptionPane.showInputDialog("Geben Sie die Summe der Gruppe ein:");

@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.SortedSet;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -159,4 +160,20 @@ public class SudokuFieldGUI extends JFrame {
 			}
 		}
 	}
+	
+	/**
+	 * Paints a Border around the given Positions.
+	 * @param positions the Positions to Paint a border around
+	 * @param title to title of the border
+	 */
+	public void paintBorderAround(SortedSet<Position> positions, String title) {
+		fieldPanel.paintBorderAround(positions, title);
+	}
+	
+	/** Remove all group Borders which where added with {@link #paintBorderAround(SortedSet, String)}.*/
+	public void clearBorders() {
+		fieldPanel.clearBorders();
+	}
+	
+	
 }

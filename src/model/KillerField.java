@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class KillerField implements Field {
 	// Value of the grids is calculated with mod 10
@@ -119,15 +121,28 @@ public class KillerField implements Field {
 	}
 	
 	public int getSum(int group) {
-		return sums[group];
+		return sums[group - 1];
 	}
 	
 	public void setSum(int group, int sum) {
-		sums[group] = sum;
+		sums[group - 1] = sum;
 	}
 	
-	public int[] getMembers(int group) {
-		
+	public int getGroupCount() {
+		for (int i = 0; i < sums.length; i++) {
+			if (sums[i] == 0) return i;
+		}
+		return sums.length;
+	}
+	
+	public List<Position> getMembers(int group) {
+		List<Position> list = new ArrayList<>();
+		for (Position pos : Position.iterateAll()) {
+			if (getGroup(pos) == group) {
+				list.add(pos);
+			}
+		}
+		return list;
 	}
 	@Override
 	public KillerField copy() {
