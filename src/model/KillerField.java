@@ -75,6 +75,9 @@ public class KillerField implements Field {
 		
 		//checking group 
 		int group = getGroup(pos);
+		if (group == 0) {
+			return true;
+		}
 		int sum = 0;
 		boolean complete = true;
 		for (int i = 0; i < 9; i++) {
@@ -99,8 +102,12 @@ public class KillerField implements Field {
 
 	@Override
 	public boolean isPossible(Position pos, int value) {
-		// TODO Auto-generated method stub
-		return false;
+		int temp = grid[pos.x][pos.y];
+		grid[pos.x][pos.y] = value;
+		boolean result = isCorrect(pos);
+		grid[pos.x][pos.y] = temp;
+		System.out.println(result);
+		return result;
 	}
 	
 	public int getGroup(Position pos) {
@@ -130,6 +137,19 @@ public class KillerField implements Field {
 	@Override
 	public boolean isSolved(){
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid.length; x++) {
+				builder.append(grid[x][y]);
+				builder.append(" ");
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 }
 	

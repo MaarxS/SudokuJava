@@ -44,7 +44,6 @@ public class FieldGenerator {
 		// choose random field and set it
 		Position pos = removeRandom(possible);
 		field.set(pos, number);
-
 		while (!generateRecursive(field, iteration + 1)) {
 			field.set(pos, 0); // remove last number
 			if (possible.size() == 0 || iteration % BACKTRACK_STEP_SIZE != 0) {
@@ -112,8 +111,32 @@ public class FieldGenerator {
 	}
 	public Pair<Field,Field> generateKiller(int difficulty) {
 		KillerField unsolvedKiller = new KillerField();
+		generateRecursive(unsolvedKiller, 0);
 		KillerField solvedKiller = unsolvedKiller.copy();
-		return new Pair<Field, Field>(unsolvedKiller, solvedKiller);
-	}
-	
+		
+		int count = 0;
+		int limit = 0;
+		switch (difficulty) {
+		case 1:
+			
+			limit = 60;
+			break;
+		case 2:
+			limit = 70;
+			break;
+		default:
+			limit = 50;
+			break;
+		}
+		while (count < limit) {
+			int row = random.nextInt(9);
+			int col = random.nextInt(9);
+			Position pos = new Position(row, col);
+			if (unsolvedKiller.get(pos) != 0) {
+				unsolvedKiller.set(pos, 0);
+			}
+			count++;
+		}
+		return new Pair<Field, Field>(unsolvedKiller, solvedKiller);	
+	}	
 }
