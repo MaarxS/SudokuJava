@@ -43,7 +43,7 @@ public class SudokuFieldGUI extends JFrame {
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
 				dispose(); 
-				fieldController.endSolving();
+				if (addOn) fieldController.endSolving();
 			}
 		});
 		contentPane = new JPanel();

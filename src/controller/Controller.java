@@ -5,12 +5,15 @@ import java.beans.PropertyChangeEvent;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import model.Field;
 import model.FieldGenerator;
+import model.KillerField;
 import model.Pair;
 import model.Str8tsField;
 import model.Str8tsGenerator;
 import model.SudokuField;
 import view.GUI;
+import view.KillerFieldGUI;
 import view.Str8tsFieldGUI;
 import view.SudokuFieldGUI;
 
@@ -54,9 +57,9 @@ public class Controller {
 				sudoku = new SudokuField();
 				solvedSudoku = null;
 			} else {
-				Pair<SudokuField, SudokuField> solvedAndUnsolved = fieldGenerator.generate(difficulty);
-				sudoku = solvedAndUnsolved.unsolved;
-				solvedSudoku = solvedAndUnsolved.solved;
+				Pair<Field, Field> solvedAndUnsolved = fieldGenerator.generate(difficulty);
+				sudoku = (SudokuField) solvedAndUnsolved.unsolved;
+				solvedSudoku = (SudokuField)  solvedAndUnsolved.solved;
 			}
 			
 			SudokuController<SudokuField> sudokuController = new SudokuController<>(sudoku, solvedSudoku);
@@ -79,7 +82,19 @@ public class Controller {
 			}
 			break;
 		case KILLER:
-
+			KillerField killer;
+			KillerField solvedKiller;
+			if (isNewFieldEmpty) {
+				killer = new KillerField();
+				solvedKiller = null;
+			} else {
+				Pair<Field, Field> solvedAndUnsolved = fieldGenerator.generateKiller(difficulty);
+				killer = (KillerField) solvedAndUnsolved.unsolved;
+				solvedKiller = (KillerField) solvedAndUnsolved.solved;
+			}
+			KillerController killerController = new KillerController(killer, solvedKiller);
+			KillerFieldGUI frame = new KillerFieldGUI(killerController, isNewFieldEmpty);
+			killerController.setGUI(frame);
 			break;
 		}
 	}

@@ -1,19 +1,30 @@
 package controller;
 
-import model.SudokuField;
-import view.KillerFieldGUI;
+import java.awt.event.ActionEvent;
 
-public class KillerController extends SudokuController{
+import model.KillerField;
+import model.Position;
+import view.SudokuFieldGUI;
 
-	public KillerController(SudokuField killer, boolean isNewFieldEmpty) {
-		super(killer, null);
-		try {
-			KillerFieldGUI frame = new KillerFieldGUI(this, isNewFieldEmpty);
-			frame.setVisible(true);
-		} catch (Exception event) {
-			event.printStackTrace();
+public class KillerController extends SudokuController<KillerField>{
+
+	public KillerController(KillerField killer, KillerField solvedKiller) {
+		super(killer, solvedKiller);
+	}
+	@Override
+	public void setGUI(SudokuFieldGUI killerFieldGUI) {
+		super.setGUI(killerFieldGUI);
+
+	}
+	@Override
+	public void clearFieldOnClick(ActionEvent e) {
+		for (Position pos : Position.iterateAll()) {
+			if (gui.isEditable(pos)) {
+				gui.setTextfield(pos, "");
+				gui.setColor(pos, SudokuFieldGUI.COLOR_BACKGROUND);
+				playerField.set(pos, 0);
+			}
 		}
-		setTextFields(killer);
 	}
 
 }
