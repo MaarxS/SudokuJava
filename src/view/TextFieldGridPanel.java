@@ -1,14 +1,16 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.SortedSet;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -19,6 +21,7 @@ public class TextFieldGridPanel extends JPanel {
 	
 	protected JTextField[] tf = new JTextField[81];
 	protected JPanel[] panels = new JPanel[9];
+	private BorderedPanel[] fieldPanel = new BorderedPanel[81];
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
 	public static final Color COLOR_GREEN = new Color(11, 120, 11);
@@ -37,6 +40,8 @@ public class TextFieldGridPanel extends JPanel {
 		int j = 0;
 		while (i < 81) {
 			Position pos = new Position(i % 9, i / 9);
+			fieldPanel[i] = new BorderedPanel();
+			fieldPanel[i].setLayout(new BorderLayout());
 			tf[i] = new JTextField();
 			tf[i].setHorizontalAlignment(JTextField.CENTER);
 			tf[i].setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -47,7 +52,8 @@ public class TextFieldGridPanel extends JPanel {
 					}
 				}
 			});
-			panels[j].add(tf[i]);
+			fieldPanel[i].add(tf[i]);
+			panels[j].add(fieldPanel[i]);
 			tf[i].setColumns(3);
 	
 			i++;
@@ -62,7 +68,6 @@ public class TextFieldGridPanel extends JPanel {
 				}
 			}
 		}
-		
 	}
 	
 	public void setText(Position position, String text) {
@@ -90,6 +95,29 @@ public class TextFieldGridPanel extends JPanel {
 
 	public void addTextFieldMouseListener(Position pos, MouseListener listener) {
 		tf[pos.to1D()].addMouseListener(listener);
+	}
+	
+	/**
+	 * Paints a Border around the given Positions.
+	 * @param positions the Positions to Paint a border around
+	 * @param title to title of the border
+	 */
+	public void paintBorderAround(SortedSet<Position> positions, String title) {
+		for (Position pos : positions) {
+			Position top = new Position(pos.x, pos.y - 1);
+			fieldPanel[pos.to1D()].setTopBorder(!positions.contains(top));
+			Position bottom = new Position(pos.x, pos.y + 1);
+			fieldPanel[pos.to1D()].setBottomBorder(!positions.contains(bottom));
+			Position left = new Position(pos.x - 1, pos.y);
+			fieldPanel[pos.to1D()].setLeftBorder(!positions.contains(left));
+			Position right = new Position(pos.x + 1, pos.y);
+			fieldPanel[pos.to1D()].setRightBorder(!positions.contains(right));
+		}
+		Position pos = positions.first();
+		JLabel label = new JLabel(title);
+		label.setFont(getFont().deriveFont(10f));
+		fieldPanel[pos.to1D()].add(label, BorderLayout.NORTH);
+
 	}
 	
 }

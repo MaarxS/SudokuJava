@@ -3,7 +3,7 @@ package model;
 import java.util.Iterator;
 
 /** Immutable class to hold x and y position. */
-public class Position implements Iterable<Position> {
+public class Position implements Iterable<Position>, Comparable<Position> {
 
 	/** The horizontal position starting from 0 from left to right. */
 	public final int x;
@@ -82,6 +82,26 @@ public class Position implements Iterable<Position> {
 	/** Return value is Index for an 1D Array. */
 	public int to1D() {	  
 		return x + y * 9;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Position) {
+			Position pos = (Position) obj;
+			return x == pos.x && y == pos.y;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return to1D();
+	}
+
+	@Override
+	public int compareTo(Position o) {
+		return Integer.compare(to1D(), o.to1D());
 	}
 	
 }
