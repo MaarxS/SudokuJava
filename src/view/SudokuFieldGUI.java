@@ -43,7 +43,7 @@ public class SudokuFieldGUI extends JFrame {
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
 				dispose(); 
-				if (addOn) fieldController.endSolving();
+				fieldController.endSolving();
 			}
 		});
 		contentPane = new JPanel();
@@ -59,7 +59,6 @@ public class SudokuFieldGUI extends JFrame {
 		controlPanel.add(btnClearFields);
 		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
-		btnSolve = new JButton("Sudoku lösen");
 
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
@@ -91,11 +90,13 @@ public class SudokuFieldGUI extends JFrame {
 
 		controlPanel.add(btnCancel);
 		btnCancel.setVisible(false);
+		JButton btnCheck = new JButton("Lösung überprüfen");
+		JButton btnTipp = new JButton("Lösungstipp");
+		btnSolve = new JButton("Sudoku lösen");
 		if(!addOn) {
-			JButton btnCheck = new JButton("Lösung überprüfen");
 			btnCheck.addActionListener(fieldController::showMistakesOnClick);
+			controlPanel.add(btnCheck);
 
-			JButton btnTipp = new JButton("Lösungstipp");
 			controlPanel.add(btnTipp);
 			btnTipp.addActionListener(fieldController::showTippOnClick);
 		} else {
