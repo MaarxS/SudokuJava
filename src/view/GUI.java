@@ -27,7 +27,7 @@ public class GUI extends JFrame {
 	private JPanel contentPane;
 	private JLabel[] labelList = new JLabel[9];
 	private JComboBox comboB;
-	private JPanel panel_4;
+	private JPanel controlPanel;
 	private JButton btnCreate;
 	private JProgressBar progressBar;
 	private boolean loading = false;
@@ -163,26 +163,26 @@ public class GUI extends JFrame {
 		JPanel panel_19 = new JPanel();
 		panel_3.add(panel_19, BorderLayout.EAST);
 		
-		panel_4 = new JPanel();
-		contentPane.add(panel_4);
-		panel_4.setLayout(new BorderLayout(0, 0));
+		controlPanel = new JPanel();
+		contentPane.add(controlPanel);
+		controlPanel.setLayout(new BorderLayout(0, 0));
 		
 		btnCreate = new JButton("Erstellen");
 		btnCreate.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnCreate.addActionListener(controller::onClickCreate);
-		panel_4.add(btnCreate);
+		controlPanel.add(btnCreate);
 		
 		JPanel panel_12 = new JPanel();
-		panel_4.add(panel_12, BorderLayout.NORTH);
+		controlPanel.add(panel_12, BorderLayout.NORTH);
 		
 		JPanel panel_13 = new JPanel();
-		panel_4.add(panel_13, BorderLayout.WEST);
+		controlPanel.add(panel_13, BorderLayout.WEST);
 		
 		JPanel panel_14 = new JPanel();
-		panel_4.add(panel_14, BorderLayout.EAST);
+		controlPanel.add(panel_14, BorderLayout.EAST);
 		
 		JPanel panel_15 = new JPanel();
-		panel_4.add(panel_15, BorderLayout.SOUTH);
+		controlPanel.add(panel_15, BorderLayout.SOUTH);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -211,18 +211,18 @@ public class GUI extends JFrame {
 	}
 	public void setProgress(int progress) {
 		if (loading && progress == 100) {
-			panel_4.remove(progressBar);
-			panel_4.add(btnCreate);
-			panel_4.revalidate();
-			panel_4.repaint();
+			controlPanel.remove(progressBar);
+			controlPanel.add(btnCreate);
+			controlPanel.revalidate();
+			controlPanel.repaint();
 			progressBar.setIndeterminate(false);
 			loading = false;
 		} else if (!loading) {
-			panel_4.remove(btnCreate);
-			panel_4.add(progressBar);
+			controlPanel.remove(btnCreate);
+			controlPanel.add(progressBar);
 			progressBar.setValue(progress);
 			loading = true;
-			panel_4.revalidate();
+			controlPanel.revalidate();
 		} else {
 			if (progress == 99) {
 				progressBar.setIndeterminate(true);

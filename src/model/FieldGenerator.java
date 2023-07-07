@@ -77,6 +77,8 @@ public class FieldGenerator {
 		int i = random.nextInt(list.size());
 		return list.remove(i);
 	}
+	
+	/* Sudoku mit vom Benutzer vorgegebener Schwierigkeit erstellen */
 	public Pair<SudokuField,SudokuField> generate(int difficulty) {
 		SudokuField unsolvedSudoku = new SudokuField();
 		generateRecursive(unsolvedSudoku, 0);
@@ -84,6 +86,7 @@ public class FieldGenerator {
 
 		int count = 0;
 		int limit = 0;
+		
 		switch (difficulty) {
 		case 1:
 			

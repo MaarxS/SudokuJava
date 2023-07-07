@@ -17,7 +17,7 @@ public class SudokuController<T extends Field> {
 	
 	protected SudokuFieldGUI gui;
 	protected T playerField;
-	protected T solvedField;
+	protected T solvedField;    
 	private SolverTask<T> solverTask;
 	
 	public SudokuController(T sudoku, T solvedSudoku) {
@@ -86,6 +86,7 @@ public class SudokuController<T extends Field> {
 		}
 	}
 	
+	/*Diese Methode deckt zufälliig ein Feld von der Lösung auf */
 	public void showTippOnClick(ActionEvent e) {
 		showMistakesOnClick(null);
 		if(playerField.isSolved()) {
@@ -119,6 +120,7 @@ public class SudokuController<T extends Field> {
 		}
 	}
 	
+	/* Methode sorgt dafür, dass der Nutzer keine vorgegeben Werte löschen kann*/
 	private void setInitalValuesUneditable() {
 		for (Position pos : Position.iterateAll()) {
 			if (!gui.getTextfield(pos).equals("")) {
@@ -126,7 +128,7 @@ public class SudokuController<T extends Field> {
 			}
 		}
 	}
-	
+	/* Benutzereingabe einlesen und auf Eingabefehler überprüfen */
 	public boolean readTextFields() {
 		boolean isCorrect = true;
 		
@@ -156,6 +158,7 @@ public class SudokuController<T extends Field> {
 		return isCorrect;
 	}
 	
+	/* Auf Logikfehler prüfen, anschließend alle Fehler anzeigen */
 	public boolean showMistakesOnClick(ActionEvent e) {
 		boolean isValid = true;
 		isValid = readTextFields();
@@ -173,6 +176,7 @@ public class SudokuController<T extends Field> {
 		}
 		return isValid;
 	}
+	
 	public void endSolving() {
 		gui.setProgress(100);
 		if (solverTask != null) {

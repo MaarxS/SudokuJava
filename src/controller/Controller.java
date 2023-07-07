@@ -11,6 +11,7 @@ import model.Str8tsField;
 import model.Str8tsGenerator;
 import model.SudokuField;
 import view.GUI;
+import view.KillerFieldGUI;
 import view.Str8tsFieldGUI;
 import view.SudokuFieldGUI;
 
@@ -79,7 +80,14 @@ public class Controller {
 			}
 			break;
 		case KILLER:
-
+			if (isNewFieldEmpty) {
+				KillerController killerController = new KillerController(new SudokuField(), null);
+				KillerFieldGUI frame = new KillerFieldGUI(killerController, isNewFieldEmpty);
+				killerController.setGUI(frame);
+			} else {
+				
+			}
+			
 			break;
 		}
 	}
