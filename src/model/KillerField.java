@@ -118,6 +118,10 @@ public class KillerField implements Field {
 	public void setSum(int group, int sum) {
 		sums[group] = sum;
 	}
+	
+	public int[] getMembers(int group) {
+		
+	}
 	@Override
 	public KillerField copy() {
 		return new KillerField(grid);
