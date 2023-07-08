@@ -123,6 +123,7 @@ public class FieldGenerator {
 		return new Pair<Field, Field>(unsolvedKiller, solvedKiller);
 	}
 
+	//generiert die Gruppen für Killer, fügt jeder Zelle einer Gruppe hinzu
 	public void FieldGroup() {
 		int y = 0;
 		int maxgroupSize;
@@ -130,12 +131,9 @@ public class FieldGenerator {
 		int fieldgroupsize = 0;
 
 		for (int x = 0; x < 9; x++) {
-			System.out.println("X" + x);
-			System.out.println("Y" + y);
 
 			if (grid[x][y] == 0) {
 				maxgroupSize = random.nextInt(5) + 1;
-				System.out.println("maxgroupSize: " + maxgroupSize);
 				fieldgroupsize = 0;
 				generateFieldGroup(fieldgroup, x, y, fieldgroupsize, maxgroupSize);
 				fieldgroup++;
@@ -149,12 +147,6 @@ public class FieldGenerator {
 			}
 		}
 
-		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) {
-				System.out.print(grid[i][j] + " ");
-			}
-			System.out.println();
-		}
 	}
 
 	public int generateFieldGroup(int fieldgroup, int x, int y, int fieldgroupsize, int maxgroupSize) {
@@ -169,7 +161,6 @@ public class FieldGenerator {
 
 		grid[x][y] = fieldgroup;
 		fieldgroupsize++;
-		System.out.println(fieldgroupsize);
 
 		// Generiere die benachbarten Zellen zufällig
 		int[][] neighbors = { { x - 1, y }, { x + 1, y }, { x, y - 1 }, { x, y + 1 } };
@@ -179,7 +170,6 @@ public class FieldGenerator {
 			int neighbor_x = neighbor[0];
 			int neighbor_y = neighbor[1];
 			fieldgroupsize = generateFieldGroup(fieldgroup, neighbor_x, neighbor_y, fieldgroupsize, maxgroupSize);
-
 		}
 		return fieldgroupsize;
 	}
@@ -196,16 +186,13 @@ public class FieldGenerator {
 
 	// erzeugt die summe der einzellnen Gruppen und speichert sie in ein Array
 	// index des Array entspricht der Grupp, beachte Gruppe 1 begint im Index 1
-	public void getsum() {
+	public void getsumgrp() {
 
 		int y = 0;
 
 		for (int grpNr = 1; grpNr < 80; grpNr++) {
 			y = 0;
 			for (int x = 0; x < 9; x++) {
-
-				System.out.println("X" + x);
-				System.out.println("Y" + y);
 
 				if (grid[x][y] == grpNr) {
 					grp[grpNr] += grid[x][y];
