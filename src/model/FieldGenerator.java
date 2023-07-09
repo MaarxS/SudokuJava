@@ -6,7 +6,6 @@ import java.util.Random;
 
 public class FieldGenerator {
 
-	private static final int[] grp = new int[81];
 	private Random random = new Random();
 
 	public Field generateSolvable(Field field) {
