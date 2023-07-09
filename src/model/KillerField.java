@@ -36,7 +36,7 @@ public class KillerField implements Field {
 	}
 	
 	public int get(Position pos) {
-		return grid[pos.x][pos.y];
+		return grid[pos.x][pos.y] % 10;
 	}
 
 	@Override
