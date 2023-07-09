@@ -21,6 +21,7 @@ public class KillerController extends SudokuController<KillerField>{
 	public void setGUI(SudokuFieldGUI killerFieldGUI) {
 		super.setGUI(killerFieldGUI);
 		gui = (KillerFieldGUI) killerFieldGUI;
+		paintGroups();
 	}
 	
 	public void onAddGroup(ActionEvent event) {
@@ -69,6 +70,7 @@ public class KillerController extends SudokuController<KillerField>{
 	@Override
 	public void clearFieldOnClick(ActionEvent e) {
 		super.clearFieldOnClick(e);
+		playerField = new KillerField();
 		gui.clearBorders();
 	}
 

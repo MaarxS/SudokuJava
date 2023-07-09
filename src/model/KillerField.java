@@ -7,19 +7,13 @@ public class KillerField implements Field {
 	// Value of the grids is calculated with mod 10
 	// Groups is calculated with div 10
 	private int[][] grid = new int[9][9];
-	private boolean[][] editable = new boolean[9][9];
 	private int[] sums = new int[100];
 	
-	
-	
-	
-	
 	public KillerField() {
-			for (int i = 0; i < grid.length; i++) {
-				for (int j = 0; j < grid[i].length; j++) {
-					grid[i][j] = 0;
-					editable[i][j] = true;
-				}
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				grid[i][j] = 0;
+			}
 		}
 	}
 	/** Constructor for copying this object.*/
@@ -41,8 +35,7 @@ public class KillerField implements Field {
 
 	@Override
 	public boolean isEditable(Position pos) {
-		// TODO Auto-generated method stub
-		return editable[pos.x][pos.y];
+		return true;
 	}
 
 	@Override
@@ -105,10 +98,9 @@ public class KillerField implements Field {
 	@Override
 	public boolean isPossible(Position pos, int value) {
 		int temp = grid[pos.x][pos.y];
-		grid[pos.x][pos.y] = value;
+		set(pos, value);
 		boolean result = isCorrect(pos);
 		grid[pos.x][pos.y] = temp;
-		System.out.println(result);
 		return result;
 	}
 	
@@ -146,7 +138,11 @@ public class KillerField implements Field {
 	}
 	@Override
 	public KillerField copy() {
-		return new KillerField(grid);
+		KillerField copy = new KillerField(grid);
+		for (int i = 1; i <= sums.length; i++) {
+			copy.setSum(i, getSum(i));
+		}
+		return copy;
 	}
 	
 	@Override
