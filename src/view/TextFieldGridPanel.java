@@ -117,7 +117,22 @@ public class TextFieldGridPanel extends JPanel {
 		JLabel label = new JLabel(title);
 		label.setFont(getFont().deriveFont(10f));
 		fieldPanel[pos.to1D()].add(label, BorderLayout.NORTH);
-
+		fieldPanel[pos.to1D()].revalidate();
+	}
+	
+	/** Remove all group Borders which where added with {@link #paintBorderAround(SortedSet, String)}.*/
+	public void clearBorders() {
+		for (Position pos : Position.iterateAll()) {
+			fieldPanel[pos.to1D()].setTopBorder(false);
+			fieldPanel[pos.to1D()].setLeftBorder(false);
+			fieldPanel[pos.to1D()].setRightBorder(false);
+			fieldPanel[pos.to1D()].setBottomBorder(false);
+			if (fieldPanel[pos.to1D()].getComponentCount() > 1) {
+				fieldPanel[pos.to1D()].remove(1);
+			}
+			fieldPanel[pos.to1D()].revalidate();
+			fieldPanel[pos.to1D()].repaint();
+		}
 	}
 	
 }
