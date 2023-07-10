@@ -81,12 +81,14 @@ public class FieldGenerator {
 
 	/* Sudoku mit vom Benutzer vorgegebener Schwierigkeit erstellen */
 	public Pair<Field, Field> generate(int difficulty) {
+
 		SudokuField unsolvedSudoku = new SudokuField();
 		generateRecursive(unsolvedSudoku, 0);
 		SudokuField solvedSudoku = unsolvedSudoku.copy();
 
 		int count = 0;
 		int limit = 0;
+		
 		switch (difficulty) {
 		case 1:
 

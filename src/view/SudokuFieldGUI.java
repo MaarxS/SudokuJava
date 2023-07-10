@@ -60,7 +60,6 @@ public class SudokuFieldGUI extends JFrame {
 		controlPanel.add(btnClearFields);
 		btnClearFields.addActionListener(fieldController::clearFieldOnClick);
 
-
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.WEST);
 
@@ -101,6 +100,7 @@ public class SudokuFieldGUI extends JFrame {
 			controlPanel.add(btnTipp);
 			btnTipp.addActionListener(fieldController::showTippOnClick);
 		} else {
+			btnSolve = new JButton("Sudoku lösen");
 			controlPanel.add(btnSolve);
 			btnSolve.addActionListener(fieldController::solveOnClick);
 		}

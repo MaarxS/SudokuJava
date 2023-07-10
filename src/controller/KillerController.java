@@ -17,6 +17,7 @@ public class KillerController extends SudokuController<KillerField>{
 	public KillerController(KillerField killer, KillerField solvedKiller) {
 		super(killer, solvedKiller);
 	}
+
 	@Override
 	public void setGUI(SudokuFieldGUI killerFieldGUI) {
 		super.setGUI(killerFieldGUI);

@@ -48,12 +48,14 @@ public class KillerField implements Field {
 		// checking row
 		for (int i = 0; i < 9; i++) {
 			if (i != pos.y && value != 0 && value == (grid[pos.x][i] % 10)) {
+
 				return false;
 			}
 		}
 		// checking column
 		for (int j = 0; j < 9; j++) {
 				if (j != pos.x && value != 0 && value == (grid[j][pos.y] % 10)) {
+
 					return false;
 				}
 		}
