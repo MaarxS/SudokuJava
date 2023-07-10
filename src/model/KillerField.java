@@ -1,83 +1,86 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class KillerField implements Field {
 	// Value of the grids is calculated with mod 10
 	// Groups is calculated with div 10
 	private int[][] grid = new int[9][9];
-	private boolean[][] editable = new boolean[9][9];
 	private int[] sums = new int[100];
 	
-	
-	
-	
-	
 	public KillerField() {
-			for (int i = 0; i < grid.length; i++) {
-				for (int j = 0; j < grid[i].length; j++) {
-					grid[i][j] = 0;
-					editable[i][j] = true;
-				}
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				grid[i][j] = 0;
+			}
+		}
+	}
+	/** Constructor for copying this object.*/
+	private KillerField(int[][] fields) {
+		for (int x = 0; x < 9; x++) {
+			for (int y = 0; y < 9; y++) {
+				this.grid[x][y] = fields[x][y];
+			}
 		}
 	}
 	
-	public void set(int x, int y, int value) {
-		grid[x][y] = value + (grid[x][y] / 10) * 10;
+	public void set(Position pos, int value) {
+		grid[pos.x][pos.y] = value + (grid[pos.x][pos.y] / 10) * 10;
 	}
 	
-	public int get(int x, int y) {
-		return grid[x][y];
+	public int get(Position pos) {
+		return grid[pos.x][pos.y] % 10;
 	}
 
 	@Override
-	public void setEditable(int x, int y, boolean isEditable) {
-		// TODO Auto-generated method stub
-		editable[x][y] = isEditable;
+	public boolean isEditable(Position pos) {
+		return true;
 	}
 
 	@Override
-	public boolean isEditable(int x, int y) {
+	public boolean isCorrect(Position pos) {
 		// TODO Auto-generated method stub
-		return editable[x][y];
-	}
-
-	@Override
-	public boolean isCorrect(int x, int y) {
-		// TODO Auto-generated method stub
-		int value = grid[x][y] % 10;
+		int value = grid[pos.x][pos.y] % 10;
 		if (value == 0) {
 			return true;
 		}
 		// checking row
 		for (int i = 0; i < 9; i++) {
-			if (i != y && value != 0 && value == (grid[x][i] % 10)) {
+			if (i != pos.y && value != 0 && value == (grid[pos.x][i] % 10)) {
+
 				return false;
 			}
 		}
 		// checking column
 		for (int j = 0; j < 9; j++) {
-				if (j != x && value != 0 && value == (grid[j][y] % 10)) {
+				if (j != pos.x && value != 0 && value == (grid[j][pos.y] % 10)) {
+
 					return false;
 				}
 		}
 		// checking cells
-		int cellX = (x / 3) * 3;
-			int cellY = (y / 3) * 3;
+		int cellX = (pos.x / 3) * 3;
+			int cellY = (pos.y / 3) * 3;
 			for (int i = cellX; i < cellX + 3; i++) {
 				for (int j = cellY; j < cellY + 3; j++) {
-					if (i != x && j != y && (grid[i][j] % 10) == value) {
+					if (i != pos.x && j != pos.y && (grid[i][j] % 10) == value) {
 						return false;
 						}
 				}
 			}
 		
 		//checking group 
-		int group = getGroup(x,y);
+		int group = getGroup(pos);
+		if (group == 0) {
+			return true;
+		}
 		int sum = 0;
 		boolean complete = true;
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (group == getGroup(i,j)) {
+				Position groupPosition = new Position(i, j);
+				if (group == getGroup(groupPosition)) {
 					if ((grid[i][j] % 10) != 0) {
 						sum += grid[i][j] % 10;
 					} else {
@@ -95,25 +98,71 @@ public class KillerField implements Field {
 		}
 
 	@Override
-	public boolean isPossible(int x, int y, int value) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isPossible(Position pos, int value) {
+		int temp = grid[pos.x][pos.y];
+		set(pos, value);
+		boolean result = isCorrect(pos);
+		grid[pos.x][pos.y] = temp;
+		return result;
 	}
 	
-	public int getGroup(int x, int y) {
-		return grid[x][y] / 10;
+	public int getGroup(Position pos) {
+		return grid[pos.x][pos.y] / 10;
 	}
 	
-	public void setGroup(int x, int y, int group) {
-		grid[x][y] = Integer.valueOf(String.valueOf(group) + String.valueOf(grid[x][y] % 10));
+	public void setGroup(Position pos, int group) {
+		grid[pos.x][pos.y] = Integer.valueOf(String.valueOf(group) + String.valueOf(grid[pos.x][pos.y] % 10));
 	}
 	
 	public int getSum(int group) {
-		return sums[group];
+		return sums[group - 1];
 	}
 	
 	public void setSum(int group, int sum) {
-		sums[group] = sum;
+		sums[group - 1] = sum;
+	}
+	
+	public int getGroupCount() {
+		for (int i = 0; i < sums.length; i++) {
+			if (sums[i] == 0) return i;
+		}
+		return sums.length;
+	}
+	
+	public List<Position> getMembers(int group) {
+		List<Position> list = new ArrayList<>();
+		for (Position pos : Position.iterateAll()) {
+			if (getGroup(pos) == group) {
+				list.add(pos);
+			}
+		}
+		return list;
+	}
+	@Override
+	public KillerField copy() {
+		KillerField copy = new KillerField(grid);
+		for (int i = 1; i <= sums.length; i++) {
+			copy.setSum(i, getSum(i));
+		}
+		return copy;
+	}
+	
+	@Override
+	public boolean isSolved(){
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int y = 0; y < grid.length; y++) {
+			for (int x = 0; x < grid.length; x++) {
+				builder.append(grid[x][y]);
+				builder.append(" ");
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 }
 	
