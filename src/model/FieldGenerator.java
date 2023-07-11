@@ -6,13 +6,17 @@ import java.util.Random;
 
 public class FieldGenerator {
 
+	private final int FIELDS_IN_ROW = 9;
+	private final int FIELDS_IN_COLUMN = 9;
+	private final int MAX_GRPOUP_SIZE = 5;
+
 	private Random random = new Random();
 
 	public Field generateSolvable(Field field) {
 		generateRecursive(field, 0);
 		for (int i = 0; i < 80; i++) {
-			int x = random.nextInt(9);
-			int y = random.nextInt(9);
+			int x = random.nextInt(FIELDS_IN_ROW);
+			int y = random.nextInt(FIELDS_IN_COLUMN);
 			Position pos = new Position(x, y);
 			field.set(pos, 0);
 		}
@@ -23,8 +27,8 @@ public class FieldGenerator {
 		for (int number = 1; number <= 9; number++) {
 			Position pos;
 			do {
-				int x = random.nextInt(9);
-				int y = random.nextInt(9);
+				int x = random.nextInt(FIELDS_IN_ROW);
+				int y = random.nextInt(FIELDS_IN_COLUMN);
 				pos = new Position(x, y);
 			} while (field.get(pos) != 0);
 			field.set(pos, number);
@@ -59,8 +63,8 @@ public class FieldGenerator {
 
 	private List<Position> possibleFields(Field field, int value) {
 		List<Position> list = new ArrayList<>();
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
+		for (int x = 0; x < FIELDS_IN_ROW; x++) {
+			for (int y = 0; y < FIELDS_IN_COLUMN; y++) {
 				Position pos = new Position(x, y);
 				if (field.get(pos) != 0)
 					continue;
@@ -88,7 +92,7 @@ public class FieldGenerator {
 
 		int count = 0;
 		int limit = 0;
-		
+
 		switch (difficulty) {
 		case 1:
 
@@ -102,8 +106,8 @@ public class FieldGenerator {
 			break;
 		}
 		while (count < limit) {
-			int row = random.nextInt(9);
-			int col = random.nextInt(9);
+			int row = random.nextInt(FIELDS_IN_ROW);
+			int col = random.nextInt(FIELDS_IN_COLUMN);
 			Position pos = new Position(row, col);
 			if (unsolvedSudoku.get(pos) != 0) {
 				unsolvedSudoku.set(pos, 0);
@@ -122,12 +126,12 @@ public class FieldGenerator {
 		for (Position pos : Position.iterateAll()) {
 			unsolvedKiller.setGroup(pos, groups[pos.x][pos.y]);
 		}
-		
+
 		List<Integer> sums = calculateSums(unsolvedKiller);
 		for (int i = 1; i < sums.size(); i++) {
 			unsolvedKiller.setSum(i, sums.get(i));
 		}
-		
+
 		KillerField solvedKiller = unsolvedKiller.copy();
 
 		int count = 0;
@@ -144,38 +148,39 @@ public class FieldGenerator {
 			break;
 		}
 		while (count < limit) {
-			int row = random.nextInt(9);
-			int col = random.nextInt(9);
+			int row = random.nextInt(FIELDS_IN_ROW);
+			int col = random.nextInt(FIELDS_IN_COLUMN);
 			Position pos = new Position(row, col);
 			if (unsolvedKiller.get(pos) != 0) {
 				unsolvedKiller.set(pos, 0);
 				count++;
 			}
 		}
-		return new Pair<Field, Field>(unsolvedKiller, solvedKiller);	
+		return new Pair<Field, Field>(unsolvedKiller, solvedKiller);
 	}
 
-	//generiert die Gruppen für Killer, fügt jeder Zelle einer Gruppe hinzu
+	// generiert die Gruppen für Killer, fügt jeder Zelle einer Gruppe hinzu
 	private int[][] createFieldGroups() {
+
 		int y = 0;
 		int maxgroupSize;
 		int fieldgroup = 1;
 		int fieldgroupsize = 0;
-		int[][] grid = new int[9][9];
+		int[][] grid = new int[FIELDS_IN_ROW][FIELDS_IN_COLUMN];
 
-		for (int x = 0; x < 9; x++) {
+		for (int x = 0; x < FIELDS_IN_ROW; x++) {
 
 			if (grid[x][y] == 0) {
-				maxgroupSize = random.nextInt(5) + 1;
+				maxgroupSize = random.nextInt(MAX_GRPOUP_SIZE) + 1;
 				fieldgroupsize = 0;
 				generateFieldGroup(grid, fieldgroup, x, y, fieldgroupsize, maxgroupSize);
 				fieldgroup++;
 			}
-			if (x >= 8) {
+			if (x >= FIELDS_IN_ROW - 1) {
 				y++;
 				x = -1;
-				if (y > 8) {
-					x = 10;
+				if (y > FIELDS_IN_COLUMN - 1) {
+					break;
 				}
 			}
 		}
@@ -183,7 +188,7 @@ public class FieldGenerator {
 	}
 
 	private int generateFieldGroup(int[][] grid, int fieldgroup, int x, int y, int fieldgroupsize, int maxgroupSize) {
-		if (x < 0 || x >= 9 || y < 0 || y >= 9 || fieldgroupsize >= maxgroupSize) {
+		if (x < 0 || x >= FIELDS_IN_ROW || y < 0 || y >= FIELDS_IN_COLUMN || fieldgroupsize >= maxgroupSize) {
 			// Die Rekursion wird beendet, wenn die Grenzen des Feldes erreicht sind oder
 			// die MaximamGruppengröße erreicht ist
 			return fieldgroupsize;
@@ -216,12 +221,13 @@ public class FieldGenerator {
 			array[i] = temp;
 		}
 	}
-	
+
 	private List<Integer> calculateSums(KillerField field) {
 		List<Integer> sums = new ArrayList<>();
 		for (Position pos : Position.iterateAll()) {
 			int groupNr = field.getGroup(pos);
-			while (sums.size() <= groupNr) sums.add(0);
+			while (sums.size() <= groupNr)
+				sums.add(0);
 			sums.set(groupNr, sums.get(groupNr) + field.get(pos));
 		}
 		return sums;
