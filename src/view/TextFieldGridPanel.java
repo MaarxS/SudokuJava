@@ -19,17 +19,23 @@ import model.Position;
 
 public class TextFieldGridPanel extends JPanel {
 	
-	protected JTextField[] tf = new JTextField[81];
-	protected JPanel[] panels = new JPanel[9];
-	private BorderedPanel[] fieldPanel = new BorderedPanel[81];
+	private final int FIELDS_IN_3_GROUPS = 27;
+	private final int GROUPS_IN_ROW = 3;
+	private final int FIELDS_IN_ROW = 9;
+	private final int TOTAL_FIELDS = 81;
+	
+	protected JTextField[] tf = new JTextField[TOTAL_FIELDS];
+	protected JPanel[] panels = new JPanel[FIELDS_IN_ROW];
+	private BorderedPanel[] fieldPanel = new BorderedPanel[TOTAL_FIELDS];
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
 	public static final Color COLOR_GREEN = new Color(11, 120, 11);
+
 	
 	public TextFieldGridPanel() {
 		this.setLayout(new GridLayout(3, 3, 0, 0));
 		
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < GROUPS_IN_ROW * 3; i++) {
 			panels[i] = new JPanel();
 			panels[i].setBorder(BorderFactory.createEtchedBorder());
 			panels[i].setLayout(new GridLayout(3, 3, 0, 0));
@@ -38,8 +44,8 @@ public class TextFieldGridPanel extends JPanel {
 		}
 		int i = 0;
 		int j = 0;
-		while (i < 81) {
-			Position pos = new Position(i % 9, i / 9);
+		while (i < TOTAL_FIELDS) {
+			Position pos = new Position(i % FIELDS_IN_ROW, i / FIELDS_IN_ROW);
 			fieldPanel[i] = new BorderedPanel();
 			fieldPanel[i].setLayout(new BorderLayout());
 			tf[i] = new JTextField();
@@ -54,17 +60,18 @@ public class TextFieldGridPanel extends JPanel {
 			});
 			fieldPanel[i].add(tf[i]);
 			panels[j].add(fieldPanel[i]);
-			tf[i].setColumns(3);
+			tf[i].setColumns(GROUPS_IN_ROW);
 	
 			i++;
-			if (i % 3 == 0) {
+			/*Sorgt dafür, das die Felder in der Richtigen Reihenfolge in die 9 Gruppenpannels eingefügt werden (von links oben nach rechts unten) */
+			if (i % GROUPS_IN_ROW == 0) {
 				j++;
-				if (j == 3 && i < 27) {
+				if (j == GROUPS_IN_ROW && i < FIELDS_IN_3_GROUPS) {
 					j = 0;
-				} else if (j == 6 && i < 54) {
-					j = 3;
-				} else if (j == 9 && i < 81) {
-					j = 6;
+				} else if (j == GROUPS_IN_ROW * 2 && i < FIELDS_IN_3_GROUPS * 2) {
+					j = GROUPS_IN_ROW;
+				} else if (j == GROUPS_IN_ROW * 3 && i < FIELDS_IN_3_GROUPS * 3) {
+					j = GROUPS_IN_ROW * 2;
 				}
 			}
 		}
