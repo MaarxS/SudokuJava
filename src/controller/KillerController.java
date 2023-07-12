@@ -67,12 +67,5 @@ public class KillerController extends SudokuController<KillerField>{
 			gui.paintBorderAround(groupMembers, String.valueOf(playerField.getSum(i)));
 		}
 	}
-	
-	@Override
-	public void clearFieldOnClick(ActionEvent e) {
-		super.clearFieldOnClick(e);
-		playerField = new KillerField();
-		gui.clearBorders();
-	}
 
 }

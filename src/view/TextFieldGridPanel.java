@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,23 +14,32 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 
 import model.Position;
 
 
 public class TextFieldGridPanel extends JPanel {
 	
-	protected JTextField[] tf = new JTextField[81];
-	protected JPanel[] panels = new JPanel[9];
-	private BorderedPanel[] fieldPanel = new BorderedPanel[81];
+	private final int FIELDS_IN_3_GROUPS = 27;
+	private final int GROUPS_IN_ROW = 3;
+	private final int FIELDS_IN_ROW = 9;
+	private final int TOTAL_FIELDS = 81;
+	
+	protected JTextField[] tf = new JTextField[TOTAL_FIELDS];
+	protected JPanel[] panels = new JPanel[FIELDS_IN_ROW];
+	private BorderedPanel[] fieldPanel = new BorderedPanel[TOTAL_FIELDS];
 	public static final Color COLOR_RED = new Color(148, 46, 46);
 	public static final Color COLOR_BACKGROUND = new Color(70, 73, 75);
 	public static final Color COLOR_GREEN = new Color(11, 120, 11);
+	public static final Color COLOR_GROUP = new Color(209, 113, 4);
 	
 	public TextFieldGridPanel() {
 		this.setLayout(new GridLayout(3, 3, 0, 0));
 		
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < GROUPS_IN_ROW * 3; i++) {
 			panels[i] = new JPanel();
 			panels[i].setBorder(BorderFactory.createEtchedBorder());
 			panels[i].setLayout(new GridLayout(3, 3, 0, 0));
@@ -38,13 +48,18 @@ public class TextFieldGridPanel extends JPanel {
 		}
 		int i = 0;
 		int j = 0;
-		while (i < 81) {
-			Position pos = new Position(i % 9, i / 9);
+		while (i < TOTAL_FIELDS) {
+			Position pos = new Position(i);
 			fieldPanel[i] = new BorderedPanel();
 			fieldPanel[i].setLayout(new BorderLayout());
+			fieldPanel[i].setColor(COLOR_GROUP);
+			fieldPanel[i].setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));// add padding
 			tf[i] = new JTextField();
+			tf[i].setMargin(new Insets(0, 1, 0, 0));
+			tf[i].setLayout(new BorderLayout());
+			tf[i].setBorder(BorderFactory.createEtchedBorder());
 			tf[i].setHorizontalAlignment(JTextField.CENTER);
-			tf[i].setFont(new Font("Tahoma", Font.BOLD, 11));
+			tf[i].setFont(new Font("Tahoma", Font.BOLD, 14));
 			tf[i].addMouseListener(new MouseAdapter(){		
 				public void mousePressed(MouseEvent e){
 					if (getColor(pos).equals(COLOR_RED) || getColor(pos).equals(COLOR_GREEN)) {
@@ -54,17 +69,18 @@ public class TextFieldGridPanel extends JPanel {
 			});
 			fieldPanel[i].add(tf[i]);
 			panels[j].add(fieldPanel[i]);
-			tf[i].setColumns(3);
+			tf[i].setColumns(GROUPS_IN_ROW);
 	
 			i++;
-			if (i % 3 == 0) {
+			/*Sorgt dafür, das die Felder in der Richtigen Reihenfolge in die 9 Gruppenpannels eingefügt werden (von links oben nach rechts unten) */
+			if (i % GROUPS_IN_ROW == 0) {
 				j++;
-				if (j == 3 && i < 27) {
+				if (j == GROUPS_IN_ROW && i < FIELDS_IN_3_GROUPS) {
 					j = 0;
-				} else if (j == 6 && i < 54) {
-					j = 3;
-				} else if (j == 9 && i < 81) {
-					j = 6;
+				} else if (j == GROUPS_IN_ROW * 2 && i < FIELDS_IN_3_GROUPS * 2) {
+					j = GROUPS_IN_ROW;
+				} else if (j == GROUPS_IN_ROW * 3 && i < FIELDS_IN_3_GROUPS * 3) {
+					j = GROUPS_IN_ROW * 2;
 				}
 			}
 		}
@@ -112,11 +128,13 @@ public class TextFieldGridPanel extends JPanel {
 			fieldPanel[pos.to1D()].setLeftBorder(!positions.contains(left));
 			Position right = new Position(pos.x + 1, pos.y);
 			fieldPanel[pos.to1D()].setRightBorder(!positions.contains(right));
+			fieldPanel[pos.to1D()].repaint();
 		}
 		Position pos = positions.first();
 		JLabel label = new JLabel(title);
-		label.setFont(getFont().deriveFont(10f));
-		fieldPanel[pos.to1D()].add(label, BorderLayout.NORTH);
+		label.setFont(getFont().deriveFont(11f));
+		label.setForeground(COLOR_GROUP);
+		tf[pos.to1D()].add(label, BorderLayout.NORTH);
 		fieldPanel[pos.to1D()].revalidate();
 	}
 	
@@ -127,8 +145,8 @@ public class TextFieldGridPanel extends JPanel {
 			fieldPanel[pos.to1D()].setLeftBorder(false);
 			fieldPanel[pos.to1D()].setRightBorder(false);
 			fieldPanel[pos.to1D()].setBottomBorder(false);
-			if (fieldPanel[pos.to1D()].getComponentCount() > 1) {
-				fieldPanel[pos.to1D()].remove(1);
+			if (tf[pos.to1D()].getComponentCount() > 0) {
+				tf[pos.to1D()].remove(0);
 			}
 			fieldPanel[pos.to1D()].revalidate();
 			fieldPanel[pos.to1D()].repaint();

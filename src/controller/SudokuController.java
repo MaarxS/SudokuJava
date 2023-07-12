@@ -19,6 +19,8 @@ public class SudokuController<T extends Field> {
 	protected T playerField;
 	protected T solvedField;    
 	private SolverTask<T> solverTask;
+	private final int FIELDS_IN_ROW = 9;
+	private final int TOTAL_FIELDS = 81;
 	
 	public SudokuController(T sudoku, T solvedSudoku) {
 		playerField = sudoku;
@@ -97,8 +99,8 @@ public class SudokuController<T extends Field> {
 		int index;
 		Position pos;
 		do {
-			index = random.nextInt(81);
-			pos = new Position(index % 9, index / 9);
+			index = random.nextInt(TOTAL_FIELDS);
+			pos = new Position(index % FIELDS_IN_ROW, index / FIELDS_IN_ROW);
 		} while (!gui.getTextfield(pos).equals("") || !gui.isEditable(pos));
 		gui.setColor(pos, SudokuFieldGUI.COLOR_GREEN);
 		
