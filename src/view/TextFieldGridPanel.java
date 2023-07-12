@@ -45,10 +45,11 @@ public class TextFieldGridPanel extends JPanel {
 		int i = 0;
 		int j = 0;
 		while (i < TOTAL_FIELDS) {
-			Position pos = new Position(i % FIELDS_IN_ROW, i / FIELDS_IN_ROW);
+			Position pos = new Position(i);
 			fieldPanel[i] = new BorderedPanel();
 			fieldPanel[i].setLayout(new BorderLayout());
 			tf[i] = new JTextField();
+			tf[i].setLayout(new BorderLayout());
 			tf[i].setHorizontalAlignment(JTextField.CENTER);
 			tf[i].setFont(new Font("Tahoma", Font.BOLD, 11));
 			tf[i].addMouseListener(new MouseAdapter(){		
@@ -123,7 +124,7 @@ public class TextFieldGridPanel extends JPanel {
 		Position pos = positions.first();
 		JLabel label = new JLabel(title);
 		label.setFont(getFont().deriveFont(10f));
-		fieldPanel[pos.to1D()].add(label, BorderLayout.NORTH);
+		tf[pos.to1D()].add(label, BorderLayout.NORTH);
 		fieldPanel[pos.to1D()].revalidate();
 	}
 	
@@ -134,8 +135,8 @@ public class TextFieldGridPanel extends JPanel {
 			fieldPanel[pos.to1D()].setLeftBorder(false);
 			fieldPanel[pos.to1D()].setRightBorder(false);
 			fieldPanel[pos.to1D()].setBottomBorder(false);
-			if (fieldPanel[pos.to1D()].getComponentCount() > 1) {
-				fieldPanel[pos.to1D()].remove(1);
+			if (tf[pos.to1D()].getComponentCount() > 0) {
+				tf[pos.to1D()].remove(0);
 			}
 			fieldPanel[pos.to1D()].revalidate();
 			fieldPanel[pos.to1D()].repaint();
