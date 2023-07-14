@@ -127,9 +127,9 @@ public class Controller {
 
 	public void modeStr8OnClick(ActionEvent e) {
 		mode = GameMode.STR8TS;
-		mainGUI.setLabelList(0, "Str8 Rechner");
-		mainGUI.setLabelList(1, "Str8 lösen lassen");
-		mainGUI.setLabelList(2, "Str8 erstellen");
+		mainGUI.setLabelList(0, "Str8ts Rechner");
+		mainGUI.setLabelList(1, "Str8ts lösen lassen");
+		mainGUI.setLabelList(2, "Str8ts erstellen");
 	}
 
 
