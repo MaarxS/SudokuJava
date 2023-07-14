@@ -6,7 +6,11 @@ import java.util.List;
 public class KillerField implements Field {
 	// Value of the grids is calculated with mod 10
 	// Groups is calculated with div 10
-	private int[][] grid = new int[9][9];
+	private final int FIELDS_IN_ROW = 9;
+	private final int FIELDS_IN_COLUMN = 9;
+	private final int FIELDS_IN_CELL_ROW = 3;
+	private final int FIELDS_IN_CELL_COLUMN = 3;
+	private int[][] grid = new int[FIELDS_IN_ROW][FIELDS_IN_COLUMN];
 	private int[] sums = new int[100];
 	
 	public KillerField() {
@@ -18,8 +22,8 @@ public class KillerField implements Field {
 	}
 	/** Constructor for copying this object.*/
 	private KillerField(int[][] fields) {
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
+		for (int x = 0; x < FIELDS_IN_ROW; x++) {
+			for (int y = 0; y < FIELDS_IN_COLUMN; y++) {
 				this.grid[x][y] = fields[x][y];
 			}
 		}
@@ -46,24 +50,24 @@ public class KillerField implements Field {
 			return true;
 		}
 		// checking row
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < FIELDS_IN_ROW; i++) {
 			if (i != pos.y && value != 0 && value == (grid[pos.x][i] % 10)) {
 
 				return false;
 			}
 		}
 		// checking column
-		for (int j = 0; j < 9; j++) {
+		for (int j = 0; j < FIELDS_IN_COLUMN; j++) {
 				if (j != pos.x && value != 0 && value == (grid[j][pos.y] % 10)) {
 
 					return false;
 				}
 		}
 		// checking cells
-		int cellX = (pos.x / 3) * 3;
-			int cellY = (pos.y / 3) * 3;
-			for (int i = cellX; i < cellX + 3; i++) {
-				for (int j = cellY; j < cellY + 3; j++) {
+		int cellX = (pos.x / FIELDS_IN_CELL_ROW) * FIELDS_IN_CELL_ROW;
+			int cellY = (pos.y / FIELDS_IN_CELL_COLUMN) * FIELDS_IN_CELL_COLUMN;
+			for (int i = cellX; i < cellX + FIELDS_IN_CELL_ROW; i++) {
+				for (int j = cellY; j < cellY + FIELDS_IN_CELL_COLUMN; j++) {
 					if (i != pos.x && j != pos.y && (grid[i][j] % 10) == value) {
 						return false;
 						}
@@ -77,8 +81,8 @@ public class KillerField implements Field {
 		}
 		int sum = 0;
 		boolean complete = true;
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < FIELDS_IN_ROW; i++) {
+			for (int j = 0; j < FIELDS_IN_COLUMN; j++) {
 				Position groupPosition = new Position(i, j);
 				if (group == getGroup(groupPosition)) {
 					if ((grid[i][j] % 10) != 0) {

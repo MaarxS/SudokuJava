@@ -9,7 +9,10 @@ public class Str8tsField implements Field {
 	// Double digits are black fields
 	// Value of the black fields is calculated with mod 10
 	// 0 means blank fields
-	private int[][] fields = new int[9][9];
+	private final int FIELDS_IN_ROW = 9;
+	private final int FIELDS_IN_COLUMN = 9;
+	private final int FIELDS_IN_GRID = 81;
+	private int[][] fields = new int[FIELDS_IN_ROW][FIELDS_IN_COLUMN];
 		
 	public Str8tsField() {
 		for (int i = 0; i < fields.length; i++) {
@@ -21,8 +24,8 @@ public class Str8tsField implements Field {
 	
 	/** Constructor for copying this object.*/
 	private Str8tsField(int[][] fields) {
-		for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 9; y++) {
+		for (int x = 0; x < FIELDS_IN_ROW; x++) {
+			for (int y = 0; y < FIELDS_IN_COLUMN; y++) {
 				this.fields[x][y] = fields[x][y];
 			}
 		}
@@ -62,13 +65,13 @@ public class Str8tsField implements Field {
 	public boolean isCorrect(Position pos) {
 		int digit = fields[pos.x][pos.y];
 		// checking row
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < FIELDS_IN_ROW; i++) {
 			if (i != pos.y && digit != 0 && digit == (fields[pos.x][i] % 10)) {
 				return false;
 			}
 		}
 		// checking column
-		for (int j = 0; j < 9; j++) {
+		for (int j = 0; j < FIELDS_IN_COLUMN; j++) {
 				if (j != pos.x && digit != 0 && digit == (fields[j][pos.y] % 10)) {
 					return false;
 				}
@@ -81,7 +84,7 @@ public class Str8tsField implements Field {
 		int j = pos.x;
 		if (!isBlack(pos)) {
 			horizontalStraight.add(fields[pos.x][pos.y]);
-			while (i < 8) {
+			while (i < FIELDS_IN_ROW - 1) {
 				if (!isBlack(new Position(pos.x, i+1))) {
 					horizontalStraight.add(fields[pos.x][i+1]);
 					i++;
@@ -99,7 +102,7 @@ public class Str8tsField implements Field {
 				}
 			}
 			verticalStraight.add(fields[pos.x][pos.y]);
-			while (j < 8){
+			while (j < FIELDS_IN_COLUMN -1){
 				if (!isBlack(new Position(j+1, pos.y))) {
 				verticalStraight.add(fields[j+1][pos.y]);
 				j++;
@@ -187,7 +190,7 @@ public class Str8tsField implements Field {
 	
 	@Override
 	public boolean isSolved() {
-		for(int i = 0; i < 81; i++) {
+		for(int i = 0; i < FIELDS_IN_GRID; i++) {
 			Position pos = new Position(i % 9, i / 9);
 			if(fields[pos.x][pos.y] == 0 && !isBlack(pos)) {
 				return false;
